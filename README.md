@@ -25,6 +25,13 @@ Many configs and aliases are copied from [mathiasbynens/dotfiles](https://github
 ## Requirements
 [rcm](https://github.com/thoughtbot/rcm)
 
+## Installation on OSX
+```
+$ brew tap thoughtbot/formulae
+$ brew install rcm
+$ rcup -d ~/.dotfiles -x LICENSE -x README.md -x ssh
+```
+
 ## Recommended shell
 Please try `fish` :)! It is much more pleasant than bash.
 
