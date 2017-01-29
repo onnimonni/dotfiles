@@ -173,6 +173,7 @@ pdf
 phantomjs
 phinx
 php
+phpcs
 phpdotenv
 phpunit
 plugin
