@@ -16,7 +16,7 @@ function fish_config_dir
 end
 
 # Use files from this folder and from homebrew /usr/local/sbin
-set PATH ~/.dotfiles/bin ~/.npm-packages/bin/ /usr/local/sbin $PATH
+set PATH $PATH ~/.dotfiles/bin ~/.npm-packages/bin/ /usr/local/sbin
 
 set FDIR (fish_config_dir)
 
