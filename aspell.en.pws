@@ -71,6 +71,7 @@ dockerignore
 dotfiles
 dropin
 dustpress
+entrypoint
 env
 envs
 envsubst
