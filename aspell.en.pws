@@ -71,6 +71,7 @@ dockerfile
 dockerignore
 dotfiles
 dropin
+drush
 dustpress
 entrypoint
 env
