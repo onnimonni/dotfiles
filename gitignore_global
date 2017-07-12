@@ -22,3 +22,9 @@ Thumbs.db
 # Ignore sql dumps in git always. This is for security.
 ##
 *.sql
+
+# Ignore Visual Studio Code config folders
+.vscode/
+
+# Ignore PHPStorm config
+.idea/
