@@ -29,6 +29,11 @@ if test -f ~/.gpg-agent-info
   end
 end
 
+# Set Path for Golang
+set -x GOPATH "$HOME/go"
+set -x GOBIN "$GOPATH/bin"
+set -x PATH $PATH $GOBIN
+
 # Add aliases
 ### Added sublime editor as main editor
 set SUBL "/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
