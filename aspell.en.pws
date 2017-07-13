@@ -220,6 +220,7 @@ svn
 symlink
 symlinked
 symlinks
+tcp
 terraform
 textarea
 timestamp
