@@ -1,0 +1,63 @@
+{
+	"title": "Personal karabiner bindings for @onnimonni",
+	"rules": [
+		{
+			"description": "Change caps_lock to backspace",
+			"manipulators": [
+				{
+					"type": "basic",
+					"from": {
+						"key_code": "caps_lock",
+						"modifiers": {
+							"optional": [
+								"any"
+							]
+						}
+					},
+					"to": [
+						{
+							"key_code": "backspace"
+						}
+					]
+				}
+			]
+		},
+		{
+			"description": "Switch places of right_cmd and right_control",
+			"manipulators": [
+				{
+					"type": "basic",
+					"from": {
+						"key_code": "right_command",
+						"modifiers": {
+							"optional": [
+								"any"
+							]
+						}
+					},
+					"to": [
+						{
+							"key_code": "right_option"
+						}
+					]
+				},
+				{
+					"type": "basic",
+					"from": {
+						"key_code": "right_option",
+						"modifiers": {
+							"optional": [
+								"any"
+							]
+						}
+					},
+					"to": [
+						{
+							"key_code": "right_command"
+						}
+					]
+				}
+			]
+		}
+	]
+}
