@@ -23,7 +23,6 @@ brew install rcm aspell wifi-password fish node docker gpg2 thefuck cowsay  # La
 # Install PHP7
 brew tap homebrew/versions
 brew tap homebrew/homebrew-php
-brew unlink php56
 brew install php70
 
 # Install Composer
