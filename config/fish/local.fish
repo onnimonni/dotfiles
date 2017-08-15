@@ -53,6 +53,8 @@ alias dl "cd ~/Downloads"
 alias dt "cd ~/Desktop"
 alias p "cd ~/Projects"
 
+alias wpscan "docker run --rm wpscanteam/wpscan"
+
 # Empty the Trash on all mounted volumes and the main HDD.
 # Also, clear Apple’s System Logs to improve shell startup speed.
 # Finally, clear download history from quarantine. https://mths.be/bum
