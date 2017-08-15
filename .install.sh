@@ -34,7 +34,7 @@ brew install openssh --with-keychain-support
 
 # Install pygmentize and ansible through pip
 sudo easy_install pip
-sudo pip install pygments ansible --upgrade
+sudo pip install pygments ansible --upgrade --ignore-installed six
 
 # Install travis gem for .travis.yml syntax checking
 gem install travis --no-rdoc --no-ri
