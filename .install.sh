@@ -25,8 +25,8 @@ brew tap homebrew/homebrew-php
 brew install php71
 brew install composer
 
-# Install hub github helper
-brew install hub
+# Install miscellaneous helpers
+brew install hub awscli terraform
 
 # Replace OSX utilities with newer ones
 brew tap homebrew/dupes
