@@ -26,6 +26,10 @@
   # View the current working tree status using the short format
   s = status -s
 
+  # Shows history of git
+  history = log --graph --pretty=format:'%C(magenta)%h%Creset -%C(red)%d%Creset %s %C(dim green)(%cr) %C(cyan)<%an>%Creset' --abbrev-commit
+  h = log --graph --pretty=format:'%C(magenta)%h%Creset -%C(red)%d%Creset %s %C(dim green)(%cr) %C(cyan)<%an>%Creset' --abbrev-commit
+
   # View the current remotes
   r = remote -v
 
