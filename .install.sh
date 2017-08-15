@@ -53,8 +53,10 @@ brew cask install google-chrome firefox \
 # These will also allow to enter number with homerow space+{asdfghjkl}
 ##
 
-# Install settings from my github repository
-open karabiner://karabiner/assets/complex_modifications/import?url=https%3A%2F%2Fgithub.com%2Fonnimonni%2Fdotfiles%2Fblob%2Fmaster%2Fkarabiner%2Felements.json
+# Install custom karabiner settings from the dotfiles repository
+if [ -f ~/.dotfiles/karabiner/elements.json ]; then
+	open karabiner://karabiner/assets/complex_modifications/import?url=file%3A%2F%2F%2FUsers%2F$USER%2F.dotfiles%2Fkarabiner%2Felements.json
+fi
 
 ##
 # Install OnniDvorak-QWERTY-CMD custom keyboard layout
