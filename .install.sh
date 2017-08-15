@@ -20,6 +20,9 @@ brew tap thoughtbot/formulae
 brew tap caskroom/cask
 brew install rcm aspell wifi-password fish node docker gpg2 thefuck cowsay  # Last one is must have
 
+# Activate dotfiles for the first time
+rcup -d ~/.dotfiles -x UNLICENSE -x README.md -x osx -x plist -x init
+
 # Install PHP7.1 and composer
 brew tap homebrew/homebrew-php
 brew install php71
@@ -45,9 +48,6 @@ brew cask install google-chrome firefox \
                   slack skype hipchat telegram \
                   vlc \
                   karabiner-elements spectacle flux
-
-# Activate dotfiles for the first time
-rcup -d ~/.dotfiles -x UNLICENSE -x README.md -x osx -x plist -x init
 
 ##
 # Activate Karabiner-Elements settings
