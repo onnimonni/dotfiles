@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 # Helper function
 function command_exists () {
@@ -17,8 +16,7 @@ fi
 
 # Install utilities
 brew tap thoughtbot/formulae
-brew tap caskroom/cask
-brew install rcm aspell wifi-password fish node docker gpg2 thefuck cowsay  # Last one is must have
+brew install rcm aspell wifi-password fish node gpg2 thefuck cowsay  # Last one is must have
 
 # Activate dotfiles for the first time
 rcup -d ~/.dotfiles -x UNLICENSE -x README.md -x osx -x plist -x init
@@ -32,7 +30,6 @@ brew install composer
 brew install hub awscli terraform
 
 # Replace OSX utilities with newer ones
-brew tap homebrew/dupes
 brew install openssh --with-keychain-support
 
 # Install pygmentize and ansible through pip
@@ -45,6 +42,7 @@ gem install travis --no-rdoc --no-ri
 # Install useful applications for developers using cask
 brew cask install google-chrome firefox \
                   iterm2 virtualbox gpgtools vagrant vagrant-manager \
+                  docker \
                   slack skype hipchat telegram \
                   vlc \
                   karabiner-elements spectacle flux
