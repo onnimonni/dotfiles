@@ -8,7 +8,7 @@
         {
             "complex_modifications": {
                 "parameters": {
-                    "basic.to_if_alone_timeout_milliseconds": 1000
+                    "basic.to_if_alone_timeout_milliseconds": 700
                 },
                 "rules": [
                     {
@@ -172,8 +172,112 @@
                                 "type": "basic"
                             }
                         ]
+                    },
+                    {
+                        "description": "Change spacebar + homerow = numbers",
+                        "manipulators": [
+                            {
+                              "description":"Spacebar + A = 1",
+                              "type": "basic",
+                              "from":{
+                                  "key_code":"a",
+                                  "modifiers":{ "mandatory":["right_shift"]}
+                              },
+                              "to":[{"key_code":"1"}]
+                            },
+                            {
+                              "description":"Spacebar + S = 2",
+                              "type": "basic",
+                              "from":{
+                                  "key_code":"s",
+                                  "modifiers":{ "mandatory":["right_shift"]}
+                              },
+                              "to":[{"key_code":"2"}]
+                            },
+                            {
+                              "description":"Spacebar + D = 3",
+                              "type": "basic",
+                              "from":{
+                                  "key_code":"d",
+                                  "modifiers":{ "mandatory":["right_shift"]}
+                              },
+                              "to":[{"key_code":"3"}]
+                            },
+                            {
+                              "description":"Spacebar + F = 4",
+                              "type": "basic",
+                              "from":{
+                                  "key_code":"f",
+                                  "modifiers":{ "mandatory":["right_shift"]}
+                              },
+                              "to":[{"key_code":"4"}]
+                            },
+                            {
+                              "description":"Spacebar + G = 5",
+                              "type": "basic",
+                              "from":{
+                                  "key_code":"g",
+                                  "modifiers":{ "mandatory":["right_shift"]}
+                              },
+                              "to":[{"key_code":"5"}]
+                            },
+                            {
+                              "description":"Spacebar + H = 6",
+                              "type": "basic",
+                              "from":{
+                                  "key_code":"h",
+                                  "modifiers":{ "mandatory":["right_shift"]}
+                              },
+                              "to":[{"key_code":"6"}]
+                            },
+                            {
+                              "description":"Spacebar + J = 7",
+                              "type": "basic",
+                              "from":{
+                                  "key_code":"j",
+                                  "modifiers":{ "mandatory":["right_shift"]}
+                              },
+                              "to":[{"key_code":"7"}]
+                            },
+                            {
+                              "description":"Spacebar + K = 8",
+                              "type": "basic",
+                              "from":{
+                                  "key_code":"k",
+                                  "modifiers":{ "mandatory":["right_shift"]}
+                              },
+                              "to":[{"key_code":"8"}]
+                            },
+                            {
+                              "description":"Spacebar + L = 9",
+                              "type": "basic",
+                              "from":{
+                                  "key_code":"l",
+                                  "modifiers":{ "mandatory":["right_shift"]}
+                              },
+                              "to":[{"key_code":"9"}]
+                            },
+                            {
+                              "description":"Spacebar + semicolon = 0",
+                              "type": "basic",
+                              "from":{
+                                  "key_code":"semicolon",
+                                  "modifiers":{ "mandatory":["right_shift"]}
+                              },
+                              "to":[{"key_code":"0"}]
+                            },
+                            {
+                              "description":"Spacebar as capslock",
+                              "type":"basic",
+                              "from":{
+                                  "key_code":"spacebar",
+                                  "modifiers":{"optional":["any"]}
+                              },
+                              "to":[{"key_code":"right_shift"}],
+                              "to_if_alone":[{"key_code":"spacebar"}]
+                            }
+                        ]
                     }
-
                 ]
             },
             "devices": [],
