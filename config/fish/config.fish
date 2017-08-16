@@ -38,8 +38,10 @@ source $FDIR/colors.fish
 # Use remote hacks if connection is not local and local hacks otherwise
 if test -d $SSH_CONNECTION
   source $FDIR/local.fish
-  # Don't store secrets in git
-  source ~/.secrets.fish
+  # Don't store secrets in git use additional file for them
+  if test -f ~/.secrets.fish
+    source ~/.secrets.fish
+  end
 else
   source $FDIR/remote.fish
 end

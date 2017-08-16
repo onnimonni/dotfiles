@@ -75,6 +75,9 @@ sudo cp ~/.dotfiles/init/onnimonni-Dvorak-QWERTY-CMD.keylayout /Library/Keyboard
 # Create the custom folder for golang binaries
 mkdir -p ~/go/bin
 
+# Create folder for todo.txt
+mkdir -p ~/todo
+
 ##
 # Shell
 ##

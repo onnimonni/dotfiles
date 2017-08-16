@@ -34,12 +34,18 @@ set -x GOPATH "$HOME/go"
 set -x GOBIN "$GOPATH/bin"
 set -x PATH $PATH $GOBIN
 
+# Set LD path for gpg2
+set -x LD_LIBRARY_PATH /usr/local/lib
+
 # Add aliases
 ### Added sublime editor as main editor
 set SUBL "/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
 
 ### Sometimes I mistake if I'm in remote or not
 alias rmate '/usr/local/bin/subl'
+
+### Todo.txt
+alias t todo.sh
 
 # Set default editor
 set -U EDITOR "/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl -n -w"
