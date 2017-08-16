@@ -16,10 +16,13 @@ fi
 
 # Install utilities
 brew tap thoughtbot/formulae
-brew install rcm aspell wifi-password fish node gpg2 thefuck cowsay  # Last one is must have
+brew install rcm aspell wifi-password fish node gpg2 thefuck cowsay pwgen # Last one is must have
 
 # Activate dotfiles for the first time
-rcup -d ~/.dotfiles -x UNLICENSE -x README.md -x osx -x plist -x init
+rcup -d ~/.dotfiles -x UNLICENSE -x README.md -x osx -x plist -x init -x karabiner
+
+# Symlink whole karabiner folder from config
+ln -sfn ~/.dotfiles/karabiner ~/.config/karabiner 
 
 # Install PHP7.1 and composer
 brew tap homebrew/homebrew-php
@@ -45,7 +48,8 @@ brew cask install google-chrome firefox \
                   docker \
                   slack skype hipchat telegram \
                   vlc \
-                  karabiner-elements spectacle flux
+                  karabiner-elements spectacle flux \
+                  keybase
 
 ##
 # Activate Karabiner-Elements settings
@@ -63,6 +67,13 @@ fi
 ##
 sudo cp ~/.dotfiles/init/onnimonni-Dvorak-QWERTY-CMD /Library/Keyboard\ Layouts/
 sudo cp ~/.dotfiles/init/onnimonni-Dvorak-QWERTY-CMD.keylayout /Library/Keyboard\ Layouts/
+
+##
+# Miscellaneous
+##
+
+# Create the custom folder for golang binaries
+mkdir -p ~/go/bin
 
 ##
 # Shell
