@@ -93,6 +93,116 @@
                         ]
                     },
                     {
+                        "description": "Change fn+{u,o} to page up/down",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "u",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "fn"
+                                        ],
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "page_up"
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "o",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "fn"
+                                        ],
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "page_down"
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Change fn+{m,period} to home/end",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "m",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "fn"
+                                        ],
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "home"
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "period",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "fn"
+                                        ],
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "end"
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Change fn+, to enter",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "comma",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "fn"
+                                        ],
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "return_or_enter"
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
                         "description": "Change fn+awsd to arrow keys",
                         "manipulators": [
                             {
@@ -177,131 +287,328 @@
                         "description": "Change spacebar + homerow = numbers",
                         "manipulators": [
                             {
-                              "description":"Spacebar + A = 1",
-                              "type": "basic",
-                              "from":{
-                                  "key_code":"a",
-                                  "modifiers":{ "mandatory":["right_shift"]}
-                              },
-                              "to":[{"key_code":"1"}]
+                                "description": "Spacebar + A = 1",
+                                "from": {
+                                    "key_code": "a",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "right_shift"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "1"
+                                    }
+                                ],
+                                "type": "basic"
                             },
                             {
-                              "description":"Spacebar + S = 2",
-                              "type": "basic",
-                              "from":{
-                                  "key_code":"s",
-                                  "modifiers":{ "mandatory":["right_shift"]}
-                              },
-                              "to":[{"key_code":"2"}]
+                                "description": "Spacebar + S = 2",
+                                "from": {
+                                    "key_code": "s",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "right_shift"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "2"
+                                    }
+                                ],
+                                "type": "basic"
                             },
                             {
-                              "description":"Spacebar + D = 3",
-                              "type": "basic",
-                              "from":{
-                                  "key_code":"d",
-                                  "modifiers":{ "mandatory":["right_shift"]}
-                              },
-                              "to":[{"key_code":"3"}]
+                                "description": "Spacebar + D = 3",
+                                "from": {
+                                    "key_code": "d",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "right_shift"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "3"
+                                    }
+                                ],
+                                "type": "basic"
                             },
                             {
-                              "description":"Spacebar + F = 4",
-                              "type": "basic",
-                              "from":{
-                                  "key_code":"f",
-                                  "modifiers":{ "mandatory":["right_shift"]}
-                              },
-                              "to":[{"key_code":"4"}]
+                                "description": "Spacebar + F = 4",
+                                "from": {
+                                    "key_code": "f",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "right_shift"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "4"
+                                    }
+                                ],
+                                "type": "basic"
                             },
                             {
-                              "description":"Spacebar + G = 5",
-                              "type": "basic",
-                              "from":{
-                                  "key_code":"g",
-                                  "modifiers":{ "mandatory":["right_shift"]}
-                              },
-                              "to":[{"key_code":"5"}]
+                                "description": "Spacebar + G = 5",
+                                "from": {
+                                    "key_code": "g",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "right_shift"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "5"
+                                    }
+                                ],
+                                "type": "basic"
                             },
                             {
-                              "description":"Spacebar + H = 6",
-                              "type": "basic",
-                              "from":{
-                                  "key_code":"h",
-                                  "modifiers":{ "mandatory":["right_shift"]}
-                              },
-                              "to":[{"key_code":"6"}]
+                                "description": "Spacebar + H = 6",
+                                "from": {
+                                    "key_code": "h",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "right_shift"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "6"
+                                    }
+                                ],
+                                "type": "basic"
                             },
                             {
-                              "description":"Spacebar + J = 7",
-                              "type": "basic",
-                              "from":{
-                                  "key_code":"j",
-                                  "modifiers":{ "mandatory":["right_shift"]}
-                              },
-                              "to":[{"key_code":"7"}]
+                                "description": "Spacebar + J = 7",
+                                "from": {
+                                    "key_code": "j",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "right_shift"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "7"
+                                    }
+                                ],
+                                "type": "basic"
                             },
                             {
-                              "description":"Spacebar + K = 8",
-                              "type": "basic",
-                              "from":{
-                                  "key_code":"k",
-                                  "modifiers":{ "mandatory":["right_shift"]}
-                              },
-                              "to":[{"key_code":"8"}]
+                                "description": "Spacebar + K = 8",
+                                "from": {
+                                    "key_code": "k",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "right_shift"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "8"
+                                    }
+                                ],
+                                "type": "basic"
                             },
                             {
-                              "description":"Spacebar + L = 9",
-                              "type": "basic",
-                              "from":{
-                                  "key_code":"l",
-                                  "modifiers":{ "mandatory":["right_shift"]}
-                              },
-                              "to":[{"key_code":"9"}]
+                                "description": "Spacebar + L = 9",
+                                "from": {
+                                    "key_code": "l",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "right_shift"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "9"
+                                    }
+                                ],
+                                "type": "basic"
                             },
                             {
-                              "description":"Spacebar + semicolon = 0",
-                              "type": "basic",
-                              "from":{
-                                  "key_code":"semicolon",
-                                  "modifiers":{ "mandatory":["right_shift"]}
-                              },
-                              "to":[{"key_code":"0"}]
+                                "description": "Spacebar + semicolon = 0",
+                                "from": {
+                                    "key_code": "semicolon",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "right_shift"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "0"
+                                    }
+                                ],
+                                "type": "basic"
                             },
                             {
-                              "description":"Spacebar as capslock",
-                              "type":"basic",
-                              "from":{
-                                  "key_code":"spacebar",
-                                  "modifiers":{"optional":["any"]}
-                              },
-                              "to":[{"key_code":"right_shift"}],
-                              "to_if_alone":[{"key_code":"spacebar"}]
+                                "description": "Spacebar as capslock",
+                                "from": {
+                                    "key_code": "spacebar",
+                                    "modifiers": {
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "right_shift"
+                                    }
+                                ],
+                                "to_if_alone": [
+                                    {
+                                        "key_code": "spacebar"
+                                    }
+                                ],
+                                "type": "basic"
                             }
                         ]
                     }
                 ]
             },
             "devices": [],
-            "fn_function_keys": {
-                "f1": "display_brightness_decrement",
-                "f10": "mute",
-                "f11": "volume_decrement",
-                "f12": "volume_increment",
-                "f2": "display_brightness_increment",
-                "f3": "mission_control",
-                "f4": "launchpad",
-                "f5": "illumination_decrement",
-                "f6": "illumination_increment",
-                "f7": "rewind",
-                "f8": "play_or_pause",
-                "f9": "fastforward"
-            },
+            "fn_function_keys": [
+                {
+                    "from": {
+                        "key_code": "f1"
+                    },
+                    "to": {
+                        "key_code": "display_brightness_decrement"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "f2"
+                    },
+                    "to": {
+                        "key_code": "display_brightness_increment"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "f3"
+                    },
+                    "to": {
+                        "key_code": "mission_control"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "f4"
+                    },
+                    "to": {
+                        "key_code": "launchpad"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "f5"
+                    },
+                    "to": {
+                        "key_code": "illumination_decrement"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "f6"
+                    },
+                    "to": {
+                        "key_code": "illumination_increment"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "f7"
+                    },
+                    "to": {
+                        "key_code": "rewind"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "f8"
+                    },
+                    "to": {
+                        "key_code": "play_or_pause"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "f9"
+                    },
+                    "to": {
+                        "key_code": "fastforward"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "f10"
+                    },
+                    "to": {
+                        "key_code": "mute"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "f11"
+                    },
+                    "to": {
+                        "key_code": "volume_decrement"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "f12"
+                    },
+                    "to": {
+                        "key_code": "volume_increment"
+                    }
+                }
+            ],
             "name": "Default profile",
             "selected": true,
-            "simple_modifications": {
-                "caps_lock": "delete_or_backspace",
-                "right_command": "right_option",
-                "right_option": "right_command"
-            },
+            "simple_modifications": [
+                {
+                    "from": {
+                        "key_code": "caps_lock"
+                    },
+                    "to": {
+                        "key_code": "delete_or_backspace"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "right_command"
+                    },
+                    "to": {
+                        "key_code": "right_option"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "right_option"
+                    },
+                    "to": {
+                        "key_code": "right_command"
+                    }
+                }
+            ],
             "virtual_hid_keyboard": {
                 "caps_lock_delay_milliseconds": 0,
                 "keyboard_type": "ansi"
