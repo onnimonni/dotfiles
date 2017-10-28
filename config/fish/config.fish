@@ -18,6 +18,11 @@ end
 # Use files from this folder and from homebrew /usr/local/sbin
 set PATH $PATH ~/.dotfiles/bin /usr/local/sbin
 
+# Add yarn modules
+if test -d ~/.config/yarn/global/node_modules/.bin
+    set PATH ~/.config/yarn/global/node_modules/.bin $PATH
+end
+
 # Add npm libraries to the end of path
 if test -d ~/.npm-packages/bin/
     set PATH $PATH ~/.npm-packages/bin/

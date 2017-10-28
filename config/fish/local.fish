@@ -29,6 +29,11 @@ if test -f ~/.gpg-agent-info
   end
 end
 
+# Use rbenv
+if type -q rbenv
+  status --is-interactive; and source (rbenv init -|psub)
+end
+
 # Set Path for Golang
 set -x GOPATH "$HOME/go"
 set -x GOBIN "$GOPATH/bin"
