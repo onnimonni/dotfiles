@@ -22,7 +22,7 @@ brew install rcm aspell wifi-password fish node gpg2 thefuck cowsay pwgen # Last
 rcup -d ~/.dotfiles -x UNLICENSE -x README.md -x osx -x plist -x init -x karabiner
 
 # Symlink whole karabiner folder from config
-ln -sfn ~/.dotfiles/karabiner ~/.config/karabiner 
+ln -sfn ~/.dotfiles/karabiner ~/.config/karabiner
 
 # Install PHP7.1 and composer
 brew tap homebrew/homebrew-php
@@ -93,6 +93,21 @@ chsh -s /usr/local/bin/fish
 
 # Launch locate daemon
 sudo launchtl load -w /System/Library/LaunchDaemons/com.apple.locate.plist
+
+
+##
+# MacOS Configs
+##
+for f in ~/.dotfiles/.osx-defaults/*.plist
+do
+ echo "Processing $f"
+ filename=$(basename $f)
+ config_name=$(basename $f .plist)
+
+ # Import the configs into osx
+ defaults import $config_name $filename
+done
+
 
 echo "INSTALLATION IS COMPLETE!"
 echo "OPTIONAL FINAL STEP:"
