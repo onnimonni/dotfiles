@@ -17,6 +17,9 @@ alias j "jobs"
 # If you forgot that this is not zsh
 alias where "which -a"
 
+# Lock screen and leave processes running in the background
+alias lock "pmset displaysleepnow"
+
 # OSX has strange conventions, use linux conventions instead
 alias sha256sum "shasum --algorithm 256"
 
