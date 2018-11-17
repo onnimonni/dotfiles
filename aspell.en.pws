@@ -46,6 +46,7 @@ behaviour
 blockinfile
 blockquote
 blockquotes
+boolean
 bugfix
 capistrano
 capybara
