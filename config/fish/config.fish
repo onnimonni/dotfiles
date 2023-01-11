@@ -16,7 +16,7 @@ function fish_config_dir
 end
 
 # Use files from this folder and from homebrew /usr/local/sbin
-set PATH $PATH ~/.dotfiles/bin /usr/local/sbin
+set PATH /opt/homebrew/bin $PATH ~/.dotfiles/bin /usr/local/sbin
 
 # Add yarn modules
 if test -d ~/.config/yarn/global/node_modules/.bin

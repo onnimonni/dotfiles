@@ -15,10 +15,6 @@ end
 
 # Custom prompt: Show current branch in shell
 function fish_prompt
-  # Fill up z database on every prompt
-  # docs: https://github.com/sjl/z-fish
-  z --add "$PWD"
-
   # Quite nice source for colors: http://colours.neilorangepeel.com/
   echo -n (whoami)
   set_color "#FFDAB9" #peachpuff

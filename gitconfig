@@ -1,7 +1,9 @@
 [user]
   name = Onni Hakala
   email = onni@keksi.io
-	signingkey = 9B373DD4
+	signingKey = /Users/onnimonni/.ssh/secretive.pub
+[gpg]
+	format = ssh
 [commit]
   gpgsign = true
 [tag]
@@ -190,7 +192,7 @@
 
 [url "git@github.com:"]
 
-  insteadOf = "gh:"
+	insteadOf = https://github.com/
   pushInsteadOf = "github:"
   pushInsteadOf = "git://github.com/"
 
@@ -207,9 +209,13 @@
 [url "git://gist.github.com/"]
 
   insteadOf = "gist:"
-[gpg]
-	program = gpg2
 
 [include]
 	# File for secrets
     path = $HOME/.dotfiles/gitsecrets
+[credential "https://github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential

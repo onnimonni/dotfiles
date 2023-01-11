@@ -1,56 +1,6 @@
-##
-# Start or re-use a gpg-agent.
-##
-#
-# Assumes gpg-agent writes its environment info in ~/.gpg-agent-info.
-#
-# Sets the gpg-agent environment stuff as universal variables, so it
-# takes effect across all shells.
-
-function __refresh_gpg_agent_info -d "Re-load ~/.gpg-agent-info into environment"
-  cat ~/.gpg-agent-info | sed 's/=/ /' | while read key value
-    set -e $key
-    set -U -x $key "$value"
-  end
-end
-
-if not set -q -x GPG_AGENT_INFO
-  gpg-agent --daemon >/dev/null
-end
-
-if test -f ~/.gpg-agent-info
-  __refresh_gpg_agent_info
-
-  gpg-connect-agent /bye ^/dev/null
-  if test $status -eq 1
-    pkill -U $USER gpg-agent
-    gpg-agent --daemon >/dev/null
-    __refresh_gpg_agent_info
-  end
-end
-
-# Use rbenv
-if type -q rbenv
-  status --is-interactive; and source (rbenv init -|psub)
-end
-
-# Set Path for Golang
-set -x GOPATH "$HOME/go"
-set -x GOBIN "$GOPATH/bin"
-set -x PATH $PATH $GOBIN
-
-# Set LD path for gpg2
-set -x LD_LIBRARY_PATH /usr/local/lib
-
 # Add aliases
 ### Added sublime editor as main editor
 set SUBL "/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
-
-### Sometimes I mistake if I'm in remote or not
-alias rmate '/usr/local/bin/subl'
-
-### Todo.txt
-alias t todo.sh
 
 # Set default editor
 set -U EDITOR "/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl -n -w"
@@ -118,33 +68,4 @@ function fdc --description 'Change Finder to current directory'
     end try
     tell application "Finder" to activate'
   end
-end
-
-##
-# Add more words to spell checking
-##
-function edit-spelling --description "Edit aspell current dictionary"
-  edit ~/.aspell.en.pws
-end
-
-# Add to spell checking word list
-function add-spelling --description 'Adds words into aspell spell check dictionary'
-  for arg in $argv
-      echo $arg >> ~/.dotfiles/aspell.en.pws
-  end
-
-  # Move temporarely
-  /bin/mv ~/.dotfiles/aspell.en.pws ~/.dotfiles/aspell.en.pws.bak
-
-  # Remove duplicates from dictionary
-  head -n 1 ~/.dotfiles/aspell.en.pws.bak >> ~/.dotfiles/aspell.en.pws
-  tail -n +2 ~/.dotfiles/aspell.en.pws.bak | sort | uniq -i >> ~/.dotfiles/aspell.en.pws
-
-  # Remove temporary file
-  rm -f ~/.dotfiles/aspell.en.pws.bak > /dev/null
-
-  # Immediately save them in git
-  set -lx DDIR $HOME/.dotfiles/
-  git --git-dir=$DDIR/.git --work-tree=$DDIR \
-      commit aspell.en.pws -m "Added words: '$argv' to spell checking"
 end
