@@ -80,6 +80,10 @@ defaults write com.apple.finder "AppleShowAllFiles" -bool "true"
 defaults write com.apple.finder "FXPreferredViewStyle" -string "Nlsv"
 killall Finder
 
+# Save screenshots to the desktop
+mkdir "${HOME}/Desktop/Screenshots"
+defaults write com.apple.screencapture location -string "${HOME}/Desktop/Screenshots"
+
 for f in ~/.dotfiles/.macos-defaults/*.plist
 do
  echo "Processing $f"
