@@ -11,7 +11,15 @@ if ! command_exists brew; then
 fi
 
 # Install utilities
-brew install rcm fish pwgen asdf mas gh
+brew install \
+  rcm \    # To setup the dotfiles
+  fish \   # The shell to replace zsh
+  pwgen \  # To generate passwords
+  asdf \   # Version manager for everything
+  mas \    # Install applications from App Store with command line
+  gh \     # Control Github with command line
+  colima \ # Replaces Docker for Mac Desktop app
+  docker   # docker cli to interact with the docker
 
 # Enable fish for current user without asking password again
 sudo chsh -s /opt/homebrew/bin/fish $USER
@@ -48,13 +56,6 @@ mas install 1365531024 # 1blocker
 # Install OnniDvorak custom keyboard layout
 ##
 sudo cp ~/.dotfiles/init/onnimonni-Dvorak-QWERTY-CMD.keylayout /Library/Keyboard\ Layouts/
-
-##
-# Shell
-##
-
-# Enable fish
-sudo chsh -s /opt/homebrew/bin/fish $USER
 
 ##
 # Daemons

@@ -69,3 +69,10 @@ function fdc --description 'Change Finder to current directory'
     tell application "Finder" to activate'
   end
 end
+
+
+switch (uname)
+case Darwin
+  # Use Colima to run docker
+  set -x DOCKER_HOST unix://$HOME/.colima/default/docker.sock
+end
