@@ -307,6 +307,17 @@
 			<key>Text</key>
 			<string></string>
 		</dict>
+		<key>0x7f-0x80000-0x33</key>
+		<dict>
+			<key>Action</key>
+			<integer>11</integer>
+			<key>Label</key>
+			<string></string>
+			<key>Text</key>
+			<string>0x17</string>
+			<key>Version</key>
+			<integer>1</integer>
+		</dict>
 	</dict>
 </dict>
 </plist>
