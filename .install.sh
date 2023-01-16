@@ -20,7 +20,9 @@ brew install \
   gh \     # Control Github with command line
   colima \ # Replaces Docker for Mac Desktop app
   docker \ # docker cli to interact with the docker
-  libpq    # psql client
+  libpq  \  # psql client
+  betterzip # Zip utility which can show zip contents with quicklook (hitting spacebar in finder)
+
 
 # Enable fish for current user without asking password again
 sudo chsh -s /opt/homebrew/bin/fish $USER
@@ -80,6 +82,20 @@ defaults write com.apple.finder "AppleShowAllFiles" -bool "true"
 # Show list view of files
 defaults write com.apple.finder "FXPreferredViewStyle" -string "Nlsv"
 killall Finder
+
+
+##
+# Betterzip Quicklook options
+##
+defaults write com.macitbetter.betterzip QLcD -bool true
+defaults write com.macitbetter.betterzip QLcK -bool true
+defaults write com.macitbetter.betterzip QLcP -bool true
+defaults write com.macitbetter.betterzip QLcS -bool true
+
+defaults write com.macitbetter.betterzip QLshowHiddenFiles -bool true
+defaults write com.macitbetter.betterzip QLshowPackageContents -bool true
+defaults write com.macitbetter.betterzip QLtarLimit -string "1024"
+
 
 # Save screenshots to the desktop
 mkdir "${HOME}/Desktop/Screenshots"
