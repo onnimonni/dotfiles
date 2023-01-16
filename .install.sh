@@ -19,7 +19,8 @@ brew install \
   mas \    # Install applications from App Store with command line
   gh \     # Control Github with command line
   colima \ # Replaces Docker for Mac Desktop app
-  docker   # docker cli to interact with the docker
+  docker \ # docker cli to interact with the docker
+  libpq    # psql client
 
 # Enable fish for current user without asking password again
 sudo chsh -s /opt/homebrew/bin/fish $USER
