@@ -21,8 +21,11 @@ brew install \
   colima \ # Replaces Docker for Mac Desktop app
   docker \ # docker cli to interact with the docker
   libpq  \  # psql client
+  qlstephen \ # Quicklook tool to show contents of files without extension (eg README)
   betterzip # Zip utility which can show zip contents with quicklook (hitting spacebar in finder)
 
+# Trust qlstephen
+xattr -cr ~/Library/QuickLook/QLStephen.qlgenerator
 
 # Enable fish for current user without asking password again
 sudo chsh -s /opt/homebrew/bin/fish $USER
