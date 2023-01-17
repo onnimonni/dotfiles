@@ -53,7 +53,8 @@ brew install --cask 1password-cli \
                     karabiner-elements \
                     typora \
                     rectangle \
-                    maccy
+                    maccy \
+                    lunar
 
 # Install few software from Apple store as well
 mas install 1365531024 # 1blocker 
