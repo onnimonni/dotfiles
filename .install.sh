@@ -21,6 +21,7 @@ brew install \
   gh \     # Control Github with command line
   colima \ # Replaces Docker for Mac Desktop app
   docker \ # docker cli to interact with the docker
+  docker-compose \ # this is not automatically installed with colima
   libpq  \  # psql client
   qlstephen \ # Quicklook tool to show contents of files without extension (eg README)
   betterzip # Zip utility which can show zip contents with quicklook (hitting spacebar in finder)
