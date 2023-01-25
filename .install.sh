@@ -37,6 +37,12 @@ sudo chsh -s /opt/homebrew/bin/fish $USER
 # Activate dotfiles for the first time
 rcup -d ~/.dotfiles -x UNLICENSE -x README.md
 
+# Install asdf plugins
+for tool in nodejs python poetry terraform ruby elixir
+    /opt/homebrew/bin/asdf plugin add $tool
+end
+
+
 # Symlink whole karabiner folder from config
 ln -sfn ~/.dotfiles/karabiner ~/.config/karabiner
 
