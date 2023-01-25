@@ -49,3 +49,11 @@ end
 
 # Remove temporary variable afterwise
 unset FDIR
+
+# Add fish completions from homebrew
+if test -d /opt/homebrew/share/fish/vendor_completions.d
+    source /opt/homebrew/share/fish/vendor_completions.d/*.fish
+end
+if test -d /opt/homebrew/share/fish/vendor_functions.d
+    source /opt/homebrew/share/fish/vendor_functions.d/*.fish
+end

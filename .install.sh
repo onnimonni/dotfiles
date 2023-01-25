@@ -14,6 +14,7 @@ fi
 brew install \
   rcm \    # To setup the dotfiles
   fish \   # The shell to replace zsh
+  fisher \ # Install plugins to fish shell
   pwgen \  # To generate passwords
   asdf \   # Version manager for everything
   mas \    # Install applications from App Store with command line
@@ -29,6 +30,9 @@ xattr -cr ~/Library/QuickLook/QLStephen.qlgenerator
 
 # Enable fish for current user without asking password again
 sudo chsh -s /opt/homebrew/bin/fish $USER
+
+# Install z history helper
+/opt/homebrew/bin/fish -c "fisher install jethrokuan/z"
 
 # Activate dotfiles for the first time
 rcup -d ~/.dotfiles -x UNLICENSE -x README.md
