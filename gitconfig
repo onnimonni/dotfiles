@@ -9,7 +9,7 @@
 [tag]
   gpgsign = true
 [core]
-  editor = subl -n -w
+  editor = code -n -w
 [filter "media"]
   clean = git media clean %f
   smudge = git media smudge %f
