@@ -50,6 +50,13 @@ end
 # Remove temporary variable afterwise
 unset FDIR
 
+# Use asdf installed with homebrew
+if type -q brew
+  if type -q asdf
+    source (brew --prefix asdf)/libexec/asdf.fish
+  end
+end
+
 # Add fish completions from homebrew
 if test -d /opt/homebrew/share/fish/vendor_completions.d
     source /opt/homebrew/share/fish/vendor_completions.d/*.fish
