@@ -26,6 +26,29 @@ brew install \
   qlstephen \ # Quicklook tool to show contents of files without extension (eg README)
   betterzip # Zip utility which can show zip contents with quicklook (hitting spacebar in finder)
 
+# Install few apps that are nice
+brew install --cask \
+    1password-cli \
+    google-chrome \
+    secretive \
+    visual-studio-code \
+    android-studio \
+    spotify \
+    vlc \
+    discord \
+    slack \
+    telegram \
+    whatsapp \
+    iterm2 \
+    finicky \
+    karabiner-elements \
+    typora \
+    rectangle \
+    maccy \
+    lunar
+
+# Install few software from Apple store as well
+mas install 1365531024 # 1blocker 
 # Trust qlstephen
 xattr -cr ~/Library/QuickLook/QLStephen.qlgenerator
 
@@ -43,32 +66,8 @@ for tool in nodejs python poetry terraform ruby elixir
     /opt/homebrew/bin/asdf plugin add $tool
 end
 
-
 # Symlink whole karabiner folder from config
 ln -sfn ~/.dotfiles/karabiner ~/.config/karabiner
-
-# Install useful applications for developers using cask
-brew install --cask 1password-cli \
-                    google-chrome \
-                    secretive \
-                    visual-studio-code \
-                    android-studio \
-                    spotify \
-                    vlc \
-                    discord \
-                    slack \
-                    telegram \
-                    whatsapp \
-                    iterm2 \
-                    finicky \
-                    karabiner-elements \
-                    typora \
-                    rectangle \
-                    maccy \
-                    lunar
-
-# Install few software from Apple store as well
-mas install 1365531024 # 1blocker 
 
 ##
 # Install OnniDvorak custom keyboard layout
