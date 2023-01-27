@@ -62,7 +62,7 @@ sudo chsh -s /opt/homebrew/bin/fish $USER
 rcup -d ~/.dotfiles -x UNLICENSE -x README.md
 
 # Install asdf plugins
-for tool in nodejs python poetry terraform ruby elixir
+for tool in nodejs python poetry terraform ruby elixir gcloud
     /opt/homebrew/bin/asdf plugin add $tool
 end
 
