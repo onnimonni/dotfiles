@@ -75,14 +75,6 @@ ln -sfn ~/.dotfiles/karabiner ~/.config/karabiner
 sudo cp ~/.dotfiles/init/onnimonni-Dvorak-QWERTY-CMD.keylayout /Library/Keyboard\ Layouts/
 
 ##
-# Daemons
-##
-
-# Launch locate daemon
-sudo launchtl load -w /System/Library/LaunchDaemons/com.apple.locate.plist
-
-
-##
 # MacOS Configs
 ##
 

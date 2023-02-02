@@ -14,6 +14,12 @@ alias ll "ls -lah"
 alias h "history"
 alias j "jobs"
 
+switch (uname)
+case Darwin # Macos
+  # Locate is quite shitty in MacOS: https://discussions.apple.com/thread/252219481
+  alias locate "mdfind"
+end
+
 # If you forgot that this is not zsh
 alias where "which -a"
 
