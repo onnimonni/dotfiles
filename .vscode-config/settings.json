@@ -1,0 +1,6 @@
+{
+    "editor.accessibilitySupport": "off",
+    "window.zoomLevel": 2,
+    "keyboard.dispatch": "keyCode",
+    "workbench.startupEditor": "none"
+}
