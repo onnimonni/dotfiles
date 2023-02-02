@@ -15,7 +15,9 @@ module.exports = {
         match: [
           "google.com/*", // match google.com urls
           "*.google.com/*", // match google.com subdomains
-          "*.cloud.google.com", // Use GCP with chrome
+          "*.cloud.google.com/*", // Use GCP with chrome
+          "github.com/*",
+          "*.app.netsuite.com/*"
         ],
         browser: "Google Chrome"
       }
