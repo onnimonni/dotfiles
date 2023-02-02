@@ -187,6 +187,8 @@
   default = matching
   # Make `git push` push relevant annotated tags when pushing branches out.
   followTags = true
+  # Allow pushing/pulling directly from correct branch on remote
+	autoSetupRemote = true
 
 # URL shorthands
 
