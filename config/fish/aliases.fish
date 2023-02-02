@@ -20,6 +20,8 @@ case Darwin # Macos
   alias locate "mdfind"
 end
 
+alias backup-vscode "cp /Users/onnimonni/Library/Application\ Support/Code/User/*.json .vscode-config/"
+
 # If you forgot that this is not zsh
 alias where "which -a"
 

@@ -108,6 +108,12 @@ defaults write com.macitbetter.betterzip QLtarLimit -string "1024"
 # Use ⌘+⌥+space to activate the software
 defaults write com.fiplab.copyclip2 HotKeyModifierKey -integer 1572864
 
+##
+# VSCode
+##
+# Install settings & keybindings
+cp .vscode-config/*.json /Users/onnimonni/Library/Application\ Support/Code/User/
+
 # Save screenshots to the desktop
 mkdir "${HOME}/Desktop/Screenshots"
 defaults write com.apple.screencapture location -string "${HOME}/Desktop/Screenshots"
