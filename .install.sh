@@ -44,7 +44,7 @@ brew install --cask \
     karabiner-elements \
     typora \
     rectangle \
-    maccy \
+    copyclip \
     lunar
 
 # Install few software from Apple store as well
@@ -62,7 +62,7 @@ sudo chsh -s /opt/homebrew/bin/fish $USER
 rcup -d ~/.dotfiles -x UNLICENSE -x README.md
 
 # Install asdf plugins
-for tool in nodejs python poetry terraform ruby elixir gcloud
+for tool in nodejs python poetry terraform ruby elixir gcloud golang
     /opt/homebrew/bin/asdf plugin add $tool
 end
 
@@ -110,6 +110,11 @@ defaults write com.macitbetter.betterzip QLshowHiddenFiles -bool true
 defaults write com.macitbetter.betterzip QLshowPackageContents -bool true
 defaults write com.macitbetter.betterzip QLtarLimit -string "1024"
 
+##
+# CopyClip 2
+##
+# Use ⌘+⌥+space to activate the software
+defaults write com.fiplab.copyclip2 HotKeyModifierKey -integer 1572864
 
 # Save screenshots to the desktop
 mkdir "${HOME}/Desktop/Screenshots"
@@ -136,3 +141,5 @@ echo "GO: System Preferences -> Keyboard \
 -> Input Sources -> search 'onni' -> activate onnimonni-Dvorak"
 
 echo "Then create a new ssh key in Secretive and add it to Github"
+
+echo "Then run $ security find-generic-password -w -s 'CopyClip 2 License' -a 'onni@koodimonni.fi' and activate CopyClip"
