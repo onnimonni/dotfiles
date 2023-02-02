@@ -10,45 +10,9 @@ if ! command_exists brew; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
-# Install utilities
-brew install \
-  rcm \    # To setup the dotfiles
-  fish \   # The shell to replace zsh
-  fisher \ # Install plugins to fish shell
-  pwgen \  # To generate passwords
-  asdf \   # Version manager for everything
-  mas \    # Install applications from App Store with command line
-  gh \     # Control Github with command line
-  colima \ # Replaces Docker for Mac Desktop app
-  docker \ # docker cli to interact with the docker
-  docker-compose \ # this is not automatically installed with colima
-  libpq  \  # psql client
-  qlstephen \ # Quicklook tool to show contents of files without extension (eg README)
-  betterzip # Zip utility which can show zip contents with quicklook (hitting spacebar in finder)
-
-# Install few apps that are nice
-brew install --cask \
-    1password-cli \
-    google-chrome \
-    secretive \
-    visual-studio-code \
-    android-studio \
-    spotify \
-    vlc \
-    discord \
-    slack \
-    telegram \
-    whatsapp \
-    iterm2 \
-    finicky \
-    karabiner-elements \
-    typora \
-    rectangle \
-    copyclip \
-    lunar
-
-# Install few software from Apple store as well
-mas install 1365531024 # 1blocker 
+# Install utilities from Brewfile
+brew bundle
+ 
 # Trust qlstephen
 xattr -cr ~/Library/QuickLook/QLStephen.qlgenerator
 
