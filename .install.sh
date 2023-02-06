@@ -103,5 +103,9 @@ echo "GO: System Preferences -> Keyboard \
 -> Input Sources -> search 'onni' -> activate onnimonni-Dvorak"
 
 echo "Then create a new ssh key in Secretive and add it to Github"
+echo "To enable login with gcloud you need to add the public files here:"
+echo "$ ssh-add -L > .dotfiles/ssh/google_compute_engine.pub"
+echo "And to login to GCP you need to"
+echo "$ gcloud compute os-login ssh-keys add --key-file ~/.dotfiles/ssh/google_compute_engine.pub"
 
 echo "Then run $ security find-generic-password -w -s 'CopyClip 2 License' -a 'onni@koodimonni.fi' and activate CopyClip"

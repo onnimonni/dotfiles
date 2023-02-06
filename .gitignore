@@ -1,1 +1,5 @@
 .DS_Store
+
+# This file should contain the output of $ ssh-add -L from secretive
+# and it's different in each computer
+ssh/google_compute_engine.pub
