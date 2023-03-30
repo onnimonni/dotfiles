@@ -4,8 +4,8 @@ module.exports = {
     defaultBrowser: "Safari",
     rewrite: [
       {
-        // Redirect all urls to use https
-        match: ({ url }) => url.protocol === "http",
+        // Redirect all urls to use https except localhost
+        match: ({ url }) => url.protocol === "http" && !finicky.matchHostnames(['localhost']),
         url: { protocol: "https" }
       }
     ],
