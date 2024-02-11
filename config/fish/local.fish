@@ -54,7 +54,7 @@ function update-to-latest --description 'Updates MacOS, Homebrew & asdf'
 
   # ASDF plugins
   echo "rtx upgrade"
-  #rtx upgrade
+  rtx upgrade
 end
 
 ##
