@@ -45,9 +45,6 @@
   # `git di $number` shows the diff between the state `$number` revisions ago and the current state
   di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
 
-  # Pull in remote changes for the current repository and all its submodules
-  p = !"git pull; git submodule foreach git pull origin master"
-
   # Clone a repository including all submodules
   c = clone --recursive
 
@@ -59,6 +56,9 @@
 
   # push current branch to origin
   po = push origin HEAD
+
+  # Show recent branches
+  b = "!r() { refbranch=$1 count=$2; git for-each-ref --sort=-committerdate refs/heads --format='%(refname:short)|%(HEAD)%(color:yellow)%(refname:short)|%(color:bold green)%(committerdate:relative)|%(color:blue)%(subject)|%(color:magenta)%(authorname)%(color:reset)' --color=always --count=${count:-20} | while read line; do branch=$(echo \"$line\" | awk 'BEGIN { FS = \"|\" }; { print $1 }' | tr -d '*'); ahead=$(git rev-list --count \"${refbranch:-origin/master}..${branch}\"); behind=$(git rev-list --count \"${branch}..${refbranch:-origin/master}\"); colorline=$(echo \"$line\" | sed 's/^[^|]*|//'); echo \"$ahead|$behind|$colorline\" | awk -F'|' -vOFS='|' '{$5=substr($5,1,70)}1' ; done | ( echo \"ahead|behind||branch|lastcommit|message|author\\n\" && cat) | column -ts'|';}; r"
 
   # Switch to a branch, creating it if necessary
   go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
@@ -113,6 +113,24 @@
       git branch -D pr/$1 && \
       git commit --amend -m \"$(git log -1 --pretty=%B)\n\nCloses #$1.\"; \
     fi \
+  }; f"
+
+  # Usage: git paircode onni.hakala -am "Commit message"
+  # This adds "Co-authored-by: Onni Hakala <onni.hakala@swappie.com>" to the commit
+  paircode = "!f() { \
+    declare companyDomain=swappie.com; \
+    declare username=$1 \
+    declare capitalizedName=$(echo $1 | tr '.' ' ' | awk '{ for(i=1;i<=NF;i++) { $i=toupper(substr($i,1,1)) substr($i,2)} } 1'); \
+    git commit \
+      --trailer \"Co-authored-by: $capitalizedName <$username@$companyDomain>\" \
+      \"${@:2}\"; \
+  }; f"
+
+  # Pulls current branch for main repo and all submodules
+  pl = "!f() { \
+    declare currentBranch=$(git rev-parse --abbrev-ref HEAD); \
+    git pull origin $currentBranch && \
+    git submodule foreach git pull origin $currentBranch; \
   }; f"
 
 [apply]
