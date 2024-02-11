@@ -50,11 +50,17 @@ end
 # Remove temporary variable afterwise
 unset FDIR
 
-# Use asdf installed with homebrew
-if type -q brew
-  if type -q asdf
-    source (brew --prefix asdf)/libexec/asdf.fish
-  end
+# TODO: rtx doesn't give nice warnings that certain new thing is not installed like asdf does
+# Use rtx (asdf clone) installed with homebrew
+#if type -q brew
+#  if type -q rtx
+#    rtx activate | source
+#  end
+#end
+
+# Use direnv to automatically load .env
+if type -q direnv
+  direnv hook fish | source
 end
 
 # Add fish completions from homebrew

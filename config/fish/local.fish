@@ -1,12 +1,10 @@
 # Add aliases
 ### Added sublime editor as main editor
-set SUBL "/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
-
 # Set default editor
-set -U EDITOR "/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl -n -w"
-set -U KUBE_EDITOR "/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl -n -w"
-set -U VISUAL "/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl -n -w"
-set -U HOMEBREW_EDITOR "/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl -n -w"
+set -U EDITOR "code"
+set -U KUBE_EDITOR "$EDITOR --wait"
+set -U VISUAL $EDITOR
+set -U HOMEBREW_EDITOR $EDITOR
 
 # Shortcuts
 alias d "cd ~/Documents/Dropbox"
@@ -30,6 +28,34 @@ alias chromekill "ps ux | grep '[C]hrome Helper --type=renderer' | grep -v exten
 
 # Trim new lines and copy to clipboard
 alias cb "tr -d '\n' | pbcopy"
+
+# Some builds in MacOs seem to need this
+# Source: https://github.com/smashedtoatoms/asdf-postgres
+set -Ux HOMEBREW_PREFIX (brew --prefix)
+
+##
+# Update everything
+##
+function update-to-latest --description 'Updates MacOS, Homebrew & asdf'
+  echo "Checking MacOS updates first"
+  # Update MacOS
+  if softwareupdate -l 2>&1 | grep 'No new software available.'
+    echo "Skipping MacOS updates"
+  else
+    echo "Installing MacOS updates requires sudo and restart"
+    sudo softwareupdate --install --all --restart --verbose
+  end
+
+  # Homebrew installed stuff
+  echo "brew update"
+  brew update
+  echo "brew upgrade --no-quarantine # Heroic needs the no-quarantine"
+  brew upgrade --no-quarantine
+
+  # ASDF plugins
+  echo "rtx upgrade"
+  #rtx upgrade
+end
 
 ##
 # Change to current finder folder
