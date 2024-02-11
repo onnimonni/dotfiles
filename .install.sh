@@ -12,23 +12,26 @@ fi
 
 # Install utilities from Brewfile
 brew bundle
- 
+
+# Install Copilot on cli
+gh extension install github/gh-copilot
+
 # Trust qlstephen
 xattr -cr ~/Library/QuickLook/QLStephen.qlgenerator
 
+# Install fish with homebrew
+brew install fisher
 # Enable fish for current user without asking password again
 sudo chsh -s /opt/homebrew/bin/fish $USER
 
 # Install z history helper
 /opt/homebrew/bin/fish -c "fisher install jethrokuan/z"
 
+# Install asdf helper
+/opt/homebrew/bin/fish -c "fisher install rstacruz/fish-asdf"
+
 # Activate dotfiles for the first time
 rcup -d ~/.dotfiles -x UNLICENSE -x README.md
-
-# Install asdf plugins
-for tool in nodejs python poetry terraform ruby elixir gcloud golang
-    /opt/homebrew/bin/asdf plugin add $tool
-end
 
 # Symlink whole karabiner folder from config
 ln -sfn ~/.dotfiles/karabiner ~/.config/karabiner
