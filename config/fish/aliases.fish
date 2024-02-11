@@ -18,6 +18,12 @@ switch (uname)
 case Darwin # Macos
   # Locate is quite shitty in MacOS: https://discussions.apple.com/thread/252219481
   alias locate "mdfind"
+
+  # Force public Wifi login if it didn't open automatically
+  function login-public-wifi
+    killall -HUP mDNSResponder
+    open -a Safari http://captive.apple.com/hotspot-detect.html
+  end
 end
 
 alias backup-vscode "cp /Users/onnimonni/Library/Application\ Support/Code/User/*.json .vscode-config/"
