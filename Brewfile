@@ -1,38 +1,47 @@
 tap "homebrew/bundle"
 tap "homebrew/cask"
+tap "homebrew/cask-drivers"
 tap "homebrew/core"
+tap "homebrew/services"
+tap "tbckr/tap"
 brew "openssl@3"
-# Version manager of version managers
 brew "asdf"
-# Some python packages require this
-brew "openssl@1.1"
-# Replaces Docker for Mac Desktop app
+brew "aspell"
 brew "colima"
-# Docker CLI and Compose need now to be installed separately
+brew "direnv"
 brew "docker"
 brew "docker-compose"
-# The shell to replace zsh shell
 brew "fish"
-# Install plugins to fish shell
 brew "fisher"
-# Some unit tests at Swappie need this
+brew "flyctl"
 brew "geckodriver"
-# Github cli
 brew "gh"
-# Postgres C shared libriaries + psql client
+brew "gnu-sed"
+brew "gnupg"
+brew "httpie"
+brew "iperf3"
+brew "jq"
 brew "libpq"
-# Installing From Appstore with Command line
 brew "mas"
-# Generates Passwords
+brew "openssl@1.1"
+brew "pinentry-mac"
+brew "postgresql@14", restart_service: true
+brew "pv"
 brew "pwgen"
-# To setup the dotfiles
 brew "rcm"
+brew "speedtest-cli"
+brew "squashfs"
+brew "tailwindcss"
 brew "tree"
+brew "vips"
+brew "watch"
+brew "wifi-password"
+brew "tbckr/tap/sgpt"
 cask "1password"
 cask "1password-cli"
 cask "android-studio"
-# Zip utility which can show zip contents with quicklook (hitting spacebar in finder)
 cask "betterzip"
+cask "chromedriver"
 cask "copyclip"
 cask "crossover"
 cask "discord"
@@ -43,11 +52,13 @@ cask "google-chrome"
 cask "heroic"
 cask "iterm2"
 cask "karabiner-elements"
-# Control External Monitor Brightness
+cask "krisp"
+cask "livebook"
 cask "lunar"
-# Render Markdown files in Quicklook
+cask "netnewswire"
+cask "notion"
+cask "qflipper"
 cask "qlmarkdown"
-# Quicklook tool to show contents of files without extension (eg README)
 cask "qlstephen"
 cask "rectangle"
 cask "secretive"
@@ -56,12 +67,49 @@ cask "slack"
 cask "spotify"
 cask "syntax-highlight"
 cask "typora"
+cask "uhk-agent"
 cask "ukelele"
 cask "visual-studio-code"
 cask "vlc"
 cask "whatsapp"
 mas "1Blocker", id: 1365531024
 mas "Amphetamine", id: 937984704
+mas "Baking Soda", id: 1601151613
 mas "DigiDoc4 Client", id: 1370791134
+mas "Gifski", id: 1351639930
+mas "Numbers", id: 409203825
+mas "Pages", id: 409201541
+mas "Surfshark", id: 1437809329
 mas "Telegram", id: 747648890
+mas "VictronConnect", id: 1084677271
+mas "Vinegar", id: 1591303229
 mas "Web eID", id: 1576665083
+vscode "adpyke.vscode-sql-formatter"
+vscode "bmalehorn.vscode-fish"
+vscode "bradlc.vscode-tailwindcss"
+vscode "dotjoshjohnson.xml"
+vscode "eamodio.gitlens"
+vscode "editorconfig.editorconfig"
+vscode "esbenp.prettier-vscode"
+vscode "github.copilot"
+vscode "github.copilot-chat"
+vscode "github.vscode-github-actions"
+vscode "hashicorp.terraform"
+vscode "lexical-lsp.lexical"
+vscode "ms-azuretools.vscode-docker"
+vscode "ms-python.debugpy"
+vscode "ms-python.isort"
+vscode "ms-python.python"
+vscode "ms-python.vscode-pylance"
+vscode "ms-toolsai.jupyter"
+vscode "ms-toolsai.jupyter-keymap"
+vscode "ms-toolsai.jupyter-renderers"
+vscode "ms-toolsai.vscode-jupyter-cell-tags"
+vscode "ms-toolsai.vscode-jupyter-slideshow"
+vscode "ms-vscode-remote.remote-containers"
+vscode "ms-vsliveshare.vsliveshare"
+vscode "phoenixframework.phoenix"
+vscode "pucelle.vscode-css-navigation"
+vscode "shopify.ruby-lsp"
+vscode "tamasfe.even-better-toml"
+vscode "waderyan.gitblame"
