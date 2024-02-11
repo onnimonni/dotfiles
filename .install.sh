@@ -45,6 +45,11 @@ sudo cp ~/.dotfiles/init/onnimonni-Dvorak-QWERTY-CMD.keylayout /Library/Keyboard
 # MacOS Configs
 ##
 
+# Make the spacing in the menu icons smaller so they don't hide under the notch
+# Source: https://apple.stackexchange.com/a/465674/74811
+defaults -currentHost write -globalDomain NSStatusItemSpacing -int 6
+defaults -currentHost write -globalDomain NSStatusItemSelectionPadding -int 6
+
 # Hide the dock by default and display it in snappy way
 defaults write com.apple.dock "autohide" -bool "true"
 defaults write com.apple.dock "autohide-delay" -float "0.1"
