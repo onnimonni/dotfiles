@@ -17,7 +17,8 @@ module.exports = {
           "*.google.com/*", // match google.com subdomains
           "*.cloud.google.com/*", // Use GCP with chrome
           "github.com/*",
-          "*.app.netsuite.com/*"
+          "*.app.netsuite.com/*",
+          "swappie.*" // Login to Swappie systems with Chrome
         ],
         browser: "Google Chrome"
       }
