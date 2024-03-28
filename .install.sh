@@ -1,13 +1,25 @@
-#!/bin/bash
+#!/bin/zsh
+
+# Stop on first error
+set -e
 
 # Helper function
 function command_exists () {
   command -v "$1" >/dev/null 2>&1
 }
 
+if softwareupdate -l 2>&1 | grep 'No new software available.'
+  echo "Skipping MacOS updates"
+else
+  echo "Installing MacOS updates requires sudo and restart"
+  sudo softwareupdate --install --all --restart --verbose
+end
+
 # Install homebrew which also installs macos commandline tools
 if ! command_exists brew; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  (echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> /Users/onnimonni/.zprofile
+  eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
 # Install utilities from Brewfile
@@ -19,8 +31,6 @@ gh extension install github/gh-copilot
 # Trust qlstephen
 xattr -cr ~/Library/QuickLook/QLStephen.qlgenerator
 
-# Install fish with homebrew
-brew install fisher
 # Enable fish for current user without asking password again
 sudo chsh -s /opt/homebrew/bin/fish $USER
 
@@ -39,7 +49,7 @@ ln -sfn ~/.dotfiles/karabiner ~/.config/karabiner
 ##
 # Install OnniDvorak custom keyboard layout
 ##
-sudo cp ~/.dotfiles/init/onnimonni-Dvorak-QWERTY-CMD.keylayout /Library/Keyboard\ Layouts/
+sudo cp ~/.dotfiles/init/*.keylayout /Library/Keyboard\ Layouts/
 
 ##
 # MacOS Configs
@@ -87,7 +97,7 @@ defaults write com.fiplab.copyclip2 HotKeyModifierKey -integer 1572864
 cp .vscode-config/*.json /Users/onnimonni/Library/Application\ Support/Code/User/
 
 # Save screenshots to the desktop
-mkdir "${HOME}/Desktop/Screenshots"
+mkdir -p "${HOME}/Desktop/Screenshots"
 defaults write com.apple.screencapture location -string "${HOME}/Desktop/Screenshots"
 
 for f in ~/.dotfiles/.macos-defaults/*.plist
