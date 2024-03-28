@@ -30,5 +30,11 @@ $ bash ~/.dotfiles/.install.sh
 $ update-dotfiles
 ```
 
+## Update the brewfile from homebrew
+```
+$ cd ~/.dotfiles
+$ brew bundle dump --force
+```
+
 ## UNLICENSE
 Use this package as you want to. Sharing is caring!
