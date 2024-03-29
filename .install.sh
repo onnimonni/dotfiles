@@ -96,6 +96,18 @@ defaults write com.macitbetter.betterzip QLtarLimit -string "1024"
 defaults write com.fiplab.copyclip2 HotKeyModifierKey -integer 1572864
 
 ##
+# Vivid
+##
+defaults write com.goodsnooze.vivid SUHasLaunchedBefore -bool true
+defaults write com.goodsnooze.vivid userHasValidLicense -bool true
+defaults write com.goodsnooze.vivid SUAutomaticallyUpdate -bool true
+defaults write com.goodsnooze.vivid SUEnableAutomaticChecks -bool true
+defaults write com.goodsnooze.vivid seenOnboarding -bool true
+defaults write com.goodsnooze.vivid seenV2Onboarding -bool true
+defaults write com.goodsnooze.vivid launchType -string "Launch and Enable"
+open -a "Vivid"
+
+##
 # VSCode
 ##
 # Install settings & keybindings
@@ -107,7 +119,6 @@ defaults write com.apple.screencapture location -string "${HOME}/Desktop/Screens
 
 # This software needs to be open when the defaults are imported in the next steps
 open -a Rectangle
-open -a iTerm2
 
 # Import defaults settings from different software
 # You can create these like this and then removing extra options
@@ -128,6 +139,22 @@ open -a "CopyClip 2"
 # Updates all values imported with defaults
 # Source: https://apple.stackexchange.com/questions/201816/how-do-i-change-mission-control-shortcuts-from-the-command-line#comment653985_443412
 /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+
+open -a iTerm2
+osascript <<EOD
+tell application "iTerm"
+    activate
+    tell current window
+        set newTab to (create tab with default profile command "cd ${HOME}/.dotfiles")
+        tell current tab
+            select
+        end tell
+        tell current session
+            write text "# open Settings -> Keys -> Presets and import ${HOME}/.dotfiles/.macos-defaults/iterm2.itermkeymap"
+        end tell
+    end tell
+end tell
+EOD
 
 echo "INSTALLATION IS COMPLETE!"
 echo "OPTIONAL FINAL STEPS:"
