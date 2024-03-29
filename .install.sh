@@ -105,6 +105,13 @@ cp .vscode-config/*.json /Users/onnimonni/Library/Application\ Support/Code/User
 mkdir -p "${HOME}/Desktop/Screenshots"
 defaults write com.apple.screencapture location -string "${HOME}/Desktop/Screenshots"
 
+# This software needs to be open when the defaults are imported in the next steps
+open -a Rectangle
+open -a iTerm2
+
+# Import defaults settings from different software
+# You can create these like this and then removing extra options
+# defaults export com.fiplab.copyclip2 - > .dotfiles/.macos-defaults/com.fiplab.copyclip2.plist
 for f in ~/.dotfiles/.macos-defaults/*.plist
 do
  echo "Processing $f"
@@ -115,20 +122,26 @@ do
  defaults import $config_name $filename
 done
 
+# Start the clipboard management software
+open -a "CopyClip 2"
+
 # Updates all values imported with defaults
 # Source: https://apple.stackexchange.com/questions/201816/how-do-i-change-mission-control-shortcuts-from-the-command-line#comment653985_443412
 /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
 
 echo "INSTALLATION IS COMPLETE!"
-echo "OPTIONAL FINAL STEP:"
+echo "OPTIONAL FINAL STEPS:"
 echo "Activate onnimonni-Dvorak keyboard layout from"
 echo "GO: System Preferences -> Keyboard \
 -> Input Sources -> search 'onni' -> activate onnimonni-Dvorak"
 
 echo "Then create a new ssh key in Secretive and add it to Github"
 echo "To enable login with gcloud you need to add the public files here:"
-echo "$ ssh-add -L > .dotfiles/ssh/google_compute_engine.pub"
+echo "$ ssh-add -L > ~/.ssh/google_compute_engine.pub"
+echo "$ ssh-add -L > ~/.ssh/secretive.pub"
+echo "$ gh auth refresh -h github.com -s admin:public_key"
+echo "$ gh ssh-key add ~/.ssh/secretive.pub"
 echo "And to login to GCP you need to"
-echo "$ gcloud compute os-login ssh-keys add --key-file ~/.dotfiles/ssh/google_compute_engine.pub"
+echo "$ gcloud compute os-login ssh-keys add --key-file ~/.ssh/google_compute_engine.pub"
 
 echo "Then run $ security find-generic-password -w -s 'CopyClip 2 License' -a 'onni@koodimonni.fi' and activate CopyClip"
