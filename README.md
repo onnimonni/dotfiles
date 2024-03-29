@@ -12,6 +12,9 @@ I hope someday I will learn to play [vimgolf](http://www.vimgolf.com/) but until
 
 ## Installation on fresh MacOS
 ```
+# Ensure that you run the latest MacOS available
+$ softwareupdate -l 2>&1 | grep 'No new software available.' || sudo softwareupdate --install --all --restart --verbose
+
 # Install Xcode Command line tools to get git
 $ xcode-select --install
 
@@ -38,4 +41,4 @@ $ brew bundle dump --force
 ```
 
 ## UNLICENSE
-Use this package as you want to. Sharing is caring!
+Use these dotfiles as you want to. Sharing is caring!
