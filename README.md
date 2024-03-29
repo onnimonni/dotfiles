@@ -10,13 +10,14 @@ I hope someday I will learn to play [vimgolf](http://www.vimgolf.com/) but until
 - Custom keyboard mappings with [karabiner-elements](https://karabiner-elements.pqrs.org)
 - This includes my own keyboard layout based on Dvorak ( I implemented small tweaks for finnish language ).
 
-## Requirements
-[rcm](https://github.com/thoughtbot/rcm)
-
-## Installation on MacOS
+## Installation on fresh MacOS
 ```
+# Install Xcode Command line tools to get git
+$ xcode-select --install
+
+# Clone the dotfiles and run the installation script
 $ git clone https://github.com/onnimonni/dotfiles ~/.dotfiles
-$ bash ~/.dotfiles/.install.sh
+$ ~/.dotfiles/.install.sh
 ```
 
 # After installation config
@@ -30,7 +31,7 @@ $ bash ~/.dotfiles/.install.sh
 $ update-dotfiles
 ```
 
-## Update the brewfile from homebrew
+## Update the latest brew installations from homebrow to Brewfile
 ```
 $ cd ~/.dotfiles
 $ brew bundle dump --force

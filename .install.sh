@@ -23,6 +23,7 @@ if ! command_exists brew; then
 fi
 
 # Install utilities from Brewfile
+export HOMEBREW_CASK_OPTS="--no-quarantine" # Disable gatekeeper popup for casks
 brew bundle
 
 # Install Copilot on cli
@@ -54,6 +55,10 @@ sudo cp ~/.dotfiles/init/*.keylayout /Library/Keyboard\ Layouts/
 ##
 # MacOS Configs
 ##
+
+# Source: https://macos-defaults.com/keyboard/applefnusagetype.html
+# Don't do anything when pressing the fn/globe key
+defaults write com.apple.HIToolbox AppleFnUsageType -int "0"
 
 # Make the spacing in the menu icons smaller so they don't hide under the notch
 # Source: https://apple.stackexchange.com/a/465674/74811

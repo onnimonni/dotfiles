@@ -32,6 +32,7 @@ alias cb "tr -d '\n' | pbcopy"
 # Some builds in MacOs seem to need this
 # Source: https://github.com/smashedtoatoms/asdf-postgres
 set -Ux HOMEBREW_PREFIX (brew --prefix)
+set -Ux HOMEBREW_CASK_OPTS "--no-quarantine" # Don't quarantine casks by default
 
 ##
 # Update everything
