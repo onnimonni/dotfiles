@@ -42,7 +42,7 @@ sudo chsh -s /opt/homebrew/bin/fish $USER
 /opt/homebrew/bin/fish -c "fisher install rstacruz/fish-asdf"
 
 # Activate dotfiles for the first time
-rcup -d ~/.dotfiles -x UNLICENSE -x README.md
+rcup -d ~/.dotfiles -x UNLICENSE -x README.md -x Brewfile
 
 # Symlink whole karabiner folder from config
 ln -sfn ~/.dotfiles/karabiner ~/.config/karabiner
