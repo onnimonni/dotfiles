@@ -1,6 +1,6 @@
 [user]
   name = Onni Hakala
-  email = onni@keksi.io
+  email = onni@flaky.build
 	signingKey = /Users/onnimonni/.ssh/secretive.pub
 [gpg]
 	format = ssh
