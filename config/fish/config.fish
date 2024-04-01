@@ -36,7 +36,6 @@ end
 set FDIR (fish_config_dir)
 
 source $FDIR/aliases.fish
-source $FDIR/hacks.fish
 source $FDIR/prompt.fish
 source $FDIR/colors.fish
 source $FDIR/yubikey.fish
@@ -70,3 +69,6 @@ end
 if test -d /opt/homebrew/share/fish/vendor_functions.d
     source /opt/homebrew/share/fish/vendor_functions.d/*.fish
 end
+
+# Needs to happen at last
+source $FDIR/hacks.fish
