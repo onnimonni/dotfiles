@@ -76,6 +76,39 @@ defaults write com.apple.finder "AppleShowAllFiles" -bool "true"
 defaults write com.apple.finder "FXPreferredViewStyle" -string "Nlsv"
 killall Finder
 
+##
+# Custom Keyboard shortcuts
+##
+
+# Source: https://github.com/krikchaip/dotfiles/blob/ffdb64222b6980a3c327084c6c21d59ddf25161b/home/.chezmoiscripts/run_onchange_system-settings.sh#L203
+#** XML template for com.apple.symbolichotkeys -> AppleSymbolicHotKeys
+function key-disable() {
+  local TEMPLATE="<dict><key>enabled</key><false/></dict>"
+  echo "$TEMPLATE"
+}
+
+#** XML template for com.apple.symbolichotkeys -> AppleSymbolicHotKeys
+function key-combo() {
+  local TEMPLATE="
+    <dict>
+      <key>enabled</key><true/>
+      <key>value</key><dict>
+        <key>type</key><string>standard</string>
+        <key>parameters</key>
+        <array>
+          <integer>$1</integer>
+          <integer>$2</integer>
+          <integer>$3</integer>
+        </array>
+      </dict>
+    </dict>
+  "
+  echo "$TEMPLATE"
+}
+
+#** Keyboard > Keyboard Shortcuts... > Keyboard > Move focus to next window = option + tab
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 27 "$(key-combo 65535 48 524288)"
+
 
 ##
 # Betterzip Quicklook options
