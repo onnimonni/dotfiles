@@ -58,7 +58,19 @@ sudo cp ~/.dotfiles/init/*.keylayout /Library/Keyboard\ Layouts/
 
 # Source: https://macos-defaults.com/keyboard/applefnusagetype.html
 # Don't do anything when pressing the fn/globe key
-defaults write com.apple.HIToolbox AppleFnUsageType -int "0"
+defaults write com.apple.HIToolbox AppleFnUsageType -bool false
+
+# Disable "Do you want to enable Dication?" prompt after tapping ctrl or fn twice?
+# https://apple.stackexchange.com/questions/365048/disable-dictation-from-command-line
+defaults write com.apple.HIToolbox AppleDictationAutoEnable -bool false
+
+# Disable automatic period substitution by double-tapping space.
+defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
+
+defaults write com.apple.HIToolbox AppleCurrentKeyboardLayoutInputSourceID -string "org.unknown.keylayout.ONNIDVORAK-QWERTYCMD"
+defaults write com.apple.HIToolbox AppleEnabledInputSources -array-add '{ InputSourceKind = "Keyboard Layout"; "KeyboardLayout ID" = 16383; "KeyboardLayout Name" = "ONNIDVORAK-QWERTYCMD"; }'
+
+killall 'cfprefsd'
 
 # Make the spacing in the menu icons smaller so they don't hide under the notch
 # Source: https://apple.stackexchange.com/a/465674/74811
