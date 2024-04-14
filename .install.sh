@@ -159,7 +159,7 @@ open -a "Vivid"
 cp .vscode-config/*.json /Users/onnimonni/Library/Application\ Support/Code/User/
 
 # Open files with VSCode by default
-for language in "ts" "js" "html" "css"
+for language in "ts" "js" "css"
 do
   echo duti -s com.microsoft.VSCode .$language all
 done
