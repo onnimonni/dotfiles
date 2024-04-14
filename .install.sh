@@ -158,8 +158,11 @@ open -a "Vivid"
 # Install settings & keybindings
 cp .vscode-config/*.json /Users/onnimonni/Library/Application\ Support/Code/User/
 
-# Open TypeScript files with VSCode
-duti -s com.microsoft.VSCode .ts all
+# Open files with VSCode by default
+for language in "ts" "js" "html" "css"
+do
+  echo duti -s com.microsoft.VSCode .$language all
+done
 
 # Save screenshots to the desktop
 mkdir -p "${HOME}/Desktop/Screenshots"
