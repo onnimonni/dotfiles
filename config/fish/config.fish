@@ -19,6 +19,12 @@ end
 fish_add_path /opt/homebrew/bin
 fish_add_path ~/.dotfiles/bin
 fish_add_path /usr/local/sbin
+# PNPM packages
+set -gx PNPM_HOME ~/Library/pnpm
+fish_add_path PNPM_HOME
+
+# Rust builded binaries
+fish_add_path ~/.cargo/bin
 
 # Postgres client
 if test -d /opt/homebrew/opt/libpq/bin

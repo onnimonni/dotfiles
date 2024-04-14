@@ -158,6 +158,9 @@ open -a "Vivid"
 # Install settings & keybindings
 cp .vscode-config/*.json /Users/onnimonni/Library/Application\ Support/Code/User/
 
+# Open TypeScript files with VSCode
+duti -s com.microsoft.VSCode .ts all
+
 # Save screenshots to the desktop
 mkdir -p "${HOME}/Desktop/Screenshots"
 defaults write com.apple.screencapture location -string "${HOME}/Desktop/Screenshots"
