@@ -56,6 +56,9 @@ sudo cp ~/.dotfiles/init/*.keylayout /Library/Keyboard\ Layouts/
 # MacOS Configs
 ##
 
+# Show bluetooth settings in menubar to make it easier to connect to headphones
+defaults -currentHost write com.apple.controlcenter.plist Bluetooth -int 18
+
 # Source: https://macos-defaults.com/keyboard/applefnusagetype.html
 # Don't do anything when pressing the fn/globe key
 defaults write com.apple.HIToolbox AppleFnUsageType -bool false
