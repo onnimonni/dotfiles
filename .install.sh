@@ -38,8 +38,8 @@ sudo chsh -s /opt/homebrew/bin/fish $USER
 # Install z history helper
 /opt/homebrew/bin/fish -c "fisher install jethrokuan/z"
 
-# Install asdf helper
-/opt/homebrew/bin/fish -c "fisher install rstacruz/fish-asdf"
+# Install mise auto completion
+/opt/homebrew/bin/fish -c "mise use -g usage"
 
 # Activate dotfiles for the first time
 rcup -d ~/.dotfiles -x UNLICENSE -x README.md -x Brewfile

@@ -26,6 +26,9 @@ fish_add_path PNPM_HOME
 # Rust builded binaries
 fish_add_path ~/.cargo/bin
 
+# PNPM
+fish_add_path ~/Library/pnpm
+
 # Postgres client
 if test -d /opt/homebrew/opt/libpq/bin
     fish_add_path /opt/homebrew/opt/libpq/bin
@@ -55,17 +58,16 @@ end
 # Remove temporary variable afterwise
 unset FDIR
 
-# TODO: rtx doesn't give nice warnings that certain new thing is not installed like asdf does
-# Use rtx (asdf clone) installed with homebrew
-#if type -q brew
-#  if type -q rtx
-#    rtx activate | source
-#  end
-#end
+# Use mise (asdf clone) installed with homebrew
+if type -q brew
+  if type -q mise
+    mise activate | source
+  end
+end
 
-# Use direnv to automatically load .env
-if type -q direnv
-  direnv hook fish | source
+# Add custom completions
+if test -d ~/.config/fish/completions/
+  source ~/.config/fish/completions/*.fish
 end
 
 # Add fish completions from homebrew

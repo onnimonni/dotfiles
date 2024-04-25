@@ -19,9 +19,6 @@ alias wpscan "docker run --rm wpscanteam/wpscan"
 # Finally, clear download history from quarantine. https://mths.be/bum
 alias emptytrash "sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo rm -rfv /private/var/log/asl/*.asl; sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'"
 
-# Get OS X Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
-alias update 'sudo softwareupdate -i -a; brew update; brew upgrade --all; brew cleanup; npm install npm -g; npm update -g; sudo gem update --system; sudo gem update'
-
 # Kill all the tabs in Chrome to free up memory
 # [C] explained: http://www.commandlinefu.com/commands/view/402/exclude-grep-from-your-grepped-output-of-ps-alias-included-in-description
 alias chromekill "ps ux | grep '[C]hrome Helper --type=renderer' | grep -v extension-process | tr -s ' ' | cut -d ' ' -f2 | xargs kill"
@@ -53,9 +50,9 @@ function update-to-latest --description 'Updates MacOS, Homebrew & asdf'
   echo "brew upgrade --no-quarantine # Heroic needs the no-quarantine"
   brew upgrade --no-quarantine
 
-  # ASDF plugins
-  echo "rtx upgrade"
-  rtx upgrade
+  # Mise (asdf clone) plugins
+  echo "mise (asdf clone) upgrade"
+  mise upgrade
 end
 
 ##
