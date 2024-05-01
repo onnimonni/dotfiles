@@ -1,5 +1,29 @@
-// Use https://finicky-kickstart.now.sh to generate basic configuration
-// Learn more about configuration options: https://github.com/johnste/finicky/wiki/Configuration
+// See more https://github.com/pablouser1/ProxiTok/wiki/Public-instances
+const TIKTOK_PROXIES = [
+  "proxitok.pabloferreiro.es", // Official
+  "proxitok.pussthecat.org",
+  "tok.habedieeh.re",
+  "proxitok.esmailelbob.xyz",
+  "proxitok.privacydev.net",
+  "tok.artemislena.eu",
+  "tok.adminforge.de",
+  "tt.vern.cc",
+  "cringe.whatever.social",
+  "proxitok.lunar.icu",
+  "proxitok.privacy.com.de",
+  "cringe.seitan-ayoub.lol",
+  "cringe.datura.network",
+  "tt.opnxng.com",
+  "proxitok.tinfoil-hat.net",
+  "tiktok.wpme.pl",
+  "proxitok.r4fo.com",
+  "proxitok.belloworld.it",
+]
+// Function to select random TikTok proxy
+const selectRandomTikTokProxy = () => {
+  return TIKTOK_PROXIES[Math.floor(Math.random() * TIKTOK_PROXIES.length)]
+}
+
 module.exports = {
     defaultBrowser: "Safari",
     rewrite: [
@@ -7,6 +31,18 @@ module.exports = {
         // Redirect all urls to use https except localhost
         match: ({ url }) => url.protocol === "http" && !finicky.matchHostnames(['localhost']),
         url: { protocol: "https" }
+      },
+      {
+        // Redirect Tiktok video links to use Proxitok public proxies
+        match: ({ url }) => (url.host.endsWith("tiktok.com") && url.pathname.startsWith('/@')) || url.host.endsWith("vm.tiktok.com"),
+        url: ({ url }) => {
+          return {
+            protocol: "https",
+            host: selectRandomTikTokProxy(),
+            // Prepend pathname with /@placeholder/video to match ProkiTok urls
+            pathname: (url.pathname.startsWith('/@') ? url.pathname : `/@placeholder/video${url.pathname}`)
+          }
+        }
       }
     ],
     handlers: [
