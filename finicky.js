@@ -8,7 +8,7 @@ module.exports = {
     },
     {
       // Redirect Tiktok video links to use Proxitok public proxies
-      match: ({ url }) => (url.host.endsWith("tiktok.com") && url.pathname.startsWith('/@')) || url.host.endsWith("vm.tiktok.com"),
+      match: ({ url }) => url.host.endsWith("tiktok.com"),
       url: ({ url }) => {
         // See more https://github.com/pablouser1/ProxiTok/wiki/Public-instances
         const selectRandomTikTokProxy = () => {
@@ -33,11 +33,18 @@ module.exports = {
           ]
           return TIKTOK_PROXIES[Math.floor(Math.random() * TIKTOK_PROXIES.length)]
         }
+        const tikTokUrlToProxitok = (url) => {
+          if (url.pathname.startsWith('/@'))
+            return url.pathname
+          if (url.pathname.startsWith('/t/'))
+            return url.pathname.replace('/t/', "/@placeholder/video/")
+          return `/@placeholder/video${url.pathname}`
+        }
         return {
           protocol: "https",
           host: selectRandomTikTokProxy(),
           // Prepend pathname with /@placeholder/video to match ProkiTok urls
-          pathname: (url.pathname.startsWith('/@') ? url.pathname : `/@placeholder/video${url.pathname}`)
+          pathname: tikTokUrlToProxitok(url)
         }
       }
     }
