@@ -58,7 +58,9 @@ module.exports = {
         "*.cloud.google.com/*", // Use GCP with chrome
         "github.com/*",
         "*.app.netsuite.com/*",
-        "swappie.*" // Login to Swappie systems with Chrome
+        "swappie.*", // Login to Swappie systems with Chrome
+        // Use Drizzle studio with Chrome since chrome plugin is so good
+        "local.drizzle.studio"
       ],
       browser: "Google Chrome"
     }
