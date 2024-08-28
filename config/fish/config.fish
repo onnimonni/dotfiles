@@ -17,6 +17,7 @@ end
 
 # Use files from this folder and from homebrew /usr/local/sbin
 fish_add_path /opt/homebrew/bin
+fish_add_path /opt/homebrew/sbin
 fish_add_path ~/.dotfiles/bin
 fish_add_path /usr/local/sbin
 # PNPM packages
