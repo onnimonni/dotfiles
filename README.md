@@ -20,7 +20,13 @@ $ xcode-select --install
 
 # Clone the dotfiles and run the installation script
 $ git clone https://github.com/onnimonni/dotfiles ~/.dotfiles
+
 $ ~/.dotfiles/.install.sh
+```
+
+## To update Nix flake
+```
+darwin-rebuild switch --flake .#simple
 ```
 
 # After installation config

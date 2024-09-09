@@ -22,6 +22,15 @@ if ! command_exists brew; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
+# Install nix
+if ! command_exists nix; then
+  curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+fi
+
+# Setup MacOS with nix
+nix run nix-darwin -- switch --flake .#simple
+
+
 # Install utilities from Brewfile
 export HOMEBREW_CASK_OPTS="--no-quarantine" # Disable gatekeeper popup for casks
 brew bundle

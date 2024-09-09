@@ -15,6 +15,9 @@ function fish_config_dir
     end
 end
 
+# Add nix toolchain to path
+fish_add_path /run/current-system/sw/bin
+
 # Use files from this folder and from homebrew /usr/local/sbin
 fish_add_path /opt/homebrew/bin
 fish_add_path /opt/homebrew/sbin
