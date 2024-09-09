@@ -25,8 +25,9 @@ $ ~/.dotfiles/.install.sh
 ```
 
 ## To update Nix flake
+I followed this tutorial to get started with [Nix on MacOS](https://nixcademy.com/posts/nix-on-macos/).
 ```
-darwin-rebuild switch --flake .#simple
+$ darwin-rebuild switch --flake .#simple
 ```
 
 # After installation config
