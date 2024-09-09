@@ -15,6 +15,9 @@ else
   sudo softwareupdate --install --all --restart --verbose
 end
 
+# Install rosetta to be able to use and build intel binaries
+softwareupdate --install-rosetta --agree-to-license
+
 # Install homebrew which also installs macos commandline tools
 if ! command_exists brew; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -28,7 +31,7 @@ if ! command_exists nix; then
 fi
 
 # Setup MacOS with nix
-nix run nix-darwin -- switch --flake .#simple
+nix run nix-darwin -- switch --flake .
 
 
 # Install utilities from Brewfile

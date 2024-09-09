@@ -16,7 +16,9 @@ function fish_config_dir
 end
 
 # Add nix toolchain to path
-fish_add_path /run/current-system/sw/bin
+#fish_add_path /run/current-system/sw/bin
+#source /nix/var/nix/profiles/default/etc/profile.d/*.fish
+#set -gx NIX_PATH ~/.nix-defexpr/channels
 
 # Use files from this folder and from homebrew /usr/local/sbin
 fish_add_path /opt/homebrew/bin
