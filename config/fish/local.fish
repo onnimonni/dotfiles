@@ -69,6 +69,14 @@ function cdf --description 'Change to directory which is open in Finder'
   end
 end
 
+##
+# Utility to wait until port is open
+##
+function wait-port-open --description 'Wait for port to open'
+  while not echo '{"hostUp": true}' | nc -w 10 $argv > /dev/null
+      sleep 1
+  end
+end
 
 ##
 # cd to current finder folder (inverse of cdf)
