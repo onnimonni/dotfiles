@@ -79,6 +79,9 @@ defaults write com.apple.HIToolbox AppleFnUsageType -bool false
 # https://apple.stackexchange.com/questions/365048/disable-dictation-from-command-line
 defaults write com.apple.HIToolbox AppleDictationAutoEnable -bool false
 
+# Disable automatically unzipping zip files and opening downloaded files with safari
+defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
+
 # Disable automatic period substitution by double-tapping space.
 defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
 
