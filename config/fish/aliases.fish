@@ -96,7 +96,8 @@ alias sniff "sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
 alias httpdump "sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
 
 # .DS_Store is so evil
-alias scp "rsync -avz --exclude '.DS_Store'"
+# Stop overriding the scp alias just in case if some software need it
+#alias scp "rsync -avz --exclude '.DS_Store'"
 alias rsync "rsync --exclude '.DS_Store'"
 
 # Canonical hex dump; some systems have this symlinked

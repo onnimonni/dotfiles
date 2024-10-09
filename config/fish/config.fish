@@ -84,5 +84,7 @@ if test -d /opt/homebrew/share/fish/vendor_functions.d
     source /opt/homebrew/share/fish/vendor_functions.d/*.fish
 end
 
+# FIXME: Whaaaaaaaaaaat?????? This file seems to break nixos-anywhere disko by breaking "nix copy" command WTF
+# This seems to be caused because we unsit the $FDIR above already?
 # Needs to happen at last
-source $FDIR/hacks.fish
+#source $FDIR/hacks.fish
