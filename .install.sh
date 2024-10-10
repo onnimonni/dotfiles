@@ -47,8 +47,11 @@ xattr -cr ~/Library/QuickLook/QLStephen.qlgenerator
 # Enable fish for current user without asking password again
 sudo chsh -s /opt/homebrew/bin/fish $USER
 
-# Install z history helper
-/opt/homebrew/bin/fish -c "fisher install jethrokuan/z"
+# Install fish plugins with fisher
+for plugin in "jethrokuan/z" "lilyball/nix-env.fish" "oh-my-fish/plugin-bang-bang"
+do
+  /opt/homebrew/bin/fish -c "fisher install $plugin"
+done
 
 # Install mise auto completion
 /opt/homebrew/bin/fish -c "mise use -g usage"
