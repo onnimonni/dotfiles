@@ -48,7 +48,7 @@ xattr -cr ~/Library/QuickLook/QLStephen.qlgenerator
 sudo chsh -s /opt/homebrew/bin/fish $USER
 
 # Install fish plugins with fisher
-for plugin in "jethrokuan/z" "lilyball/nix-env.fish" "oh-my-fish/plugin-bang-bang"
+for plugin in "jethrokuan/z" "lilyball/nix-env.fish" "oh-my-fish/plugin-bang-bang" "PatrickF1/fzf.fish"
 do
   /opt/homebrew/bin/fish -c "fisher install $plugin"
 done
