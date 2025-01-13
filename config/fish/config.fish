@@ -68,6 +68,8 @@ unset FDIR
 if type -q brew
   if type -q mise
     mise activate | source
+    # Sometimes I forget the name of mise
+    alias asdf "mise"
   end
 end
 
