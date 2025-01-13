@@ -24,11 +24,50 @@ $ git clone https://github.com/onnimonni/dotfiles ~/.dotfiles
 $ ~/.dotfiles/.install.sh
 ```
 
+## Initial installation
+You need to uncomment `{ nix.linux-builder.enable = true; }` and comment `nix-rosetta-builder.darwinModules.default` and run the:
+```
+$ darwin-rebuild switch --flake .
+```
+
+Then toggle the comments in the code above and build again. This will allow your Apple Silicon laptop to build to linux-x86-64 targets.
+
 ## To update Nix flake
 I followed this tutorial to get started with [Nix on MacOS](https://nixcademy.com/posts/nix-on-macos/).
 ```
-$ darwin-rebuild switch --flake .#simple
+$ darwin-rebuild switch --flake .
 ```
+
+### Setup UTM so that Mac can build x86_64-linux servers
+Download latest NixOS Minimal ISO for 64-bit ARM:
+```
+cd ~/Downloads
+# This version might have changed
+curl -O https://channels.nixos.org/nixos-24.05/latest-nixos-minimal-aarch64-linux.iso
+```
+Then open the UTM and launch the new VM
+Start -> Virtualize -> Linux
+
+Then select:
+[x] Use Apple Virtualization
+[x] Enable Rosetta (x86_64 Emulation)
+
+And select your Boot ISO image which you downloaded earlier and start the VM.
+
+First in the VM run:
+```sh
+$ sudo su
+$ passwd
+# type 'root' as password
+$ ip -4 addr show
+# Copy the ipv4 address so that you can then continue on the host machine terminal
+```
+On host machine
+```sh
+# Install your ssh keys into the VM
+$ ssh-copy-id root@<ipv4-addr-here>
+```
+
 
 # After installation config
 1. Create new ssh key in Secretive

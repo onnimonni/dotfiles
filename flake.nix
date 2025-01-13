@@ -3,20 +3,30 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nix-darwin.url = "github:lnl7/nix-darwin";
-    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    #nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-23.11-darwin";
+    nix-darwin = {
+      url = "github:lnl7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-rosetta-builder = {
+      url = "github:cpick/nix-rosetta-builder";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager }:
+  outputs = inputs@{ self, nixpkgs, nix-darwin, nix-rosetta-builder, home-manager }:
   let
     configuration = { pkgs, ... }: {
       # List packages installed in system profile. To search by name, run:
       # $ nix-env -qaP | grep wget
-      environment.systemPackages =
-        [ pkgs.vim
-        ];
+      environment.systemPackages = [
+        # Run Nixos virtual machines so that we can build x86 servers
+        pkgs.utm
+      ];
 
       # Auto upgrade nix package and the daemon service.
       services.nix-daemon.enable = true;
@@ -24,6 +34,10 @@
 
       # Necessary for using flakes on this system.
       nix.settings.experimental-features = "nix-command flakes";
+      nix.settings.extra-nix-path = "nixpkgs=flake:nixpkgs";
+
+      # This line is a prerequisite for local building
+      nix.settings.trusted-users = [ "@admin" ];
 
       # Create /etc/zshrc that loads the nix-darwin environment.
       programs.zsh.enable = true;
@@ -54,17 +68,35 @@
       # The platform the configuration will be used on.
       nixpkgs.hostPlatform = "aarch64-darwin";
 
+      # nix-darwin provides a neat Linux builder that runs a NixOS VM as a service in the background. 
+      nix.linux-builder.enable = true;
+
+      # Rosetta is installed and we can build x86_64-darwin too
+      nix.extraOptions = ''
+        extra-platforms = x86_64-darwin aarch64-darwin
+      '';
+
       users.users.onnimonni = {
-        name = "onnimonni";
-        home = "/Users/onnimonni";
-    };
+          name = "onnimonni";
+          home = "/Users/onnimonni";
+      };
     };
   in
   {
     # Build darwin flake using:
     # $ darwin-rebuild build --flake .#Onnis-MacBook-Pro
     darwinConfigurations."Onnis-MacBook-Pro" = nix-darwin.lib.darwinSystem {
-      modules = [ configuration ];
+      modules = [ 
+        configuration
+
+        # An existing Linux builder is needed to initially bootstrap `nix-rosetta-builder`.
+        # If one isn't already available: comment out the `nix-rosetta-builder` module below,
+        # uncomment this `linux-builder` module, and run `darwin-rebuild switch`:
+        { nix.linux-builder.enable = true; }
+        # Then: uncomment `nix-rosetta-builder`, remove `linux-builder`, and `darwin-rebuild switch`
+        # a second time. Subsequently, `nix-rosetta-builder` can rebuild itself.
+        #nix-rosetta-builder.darwinModules.default
+      ];
     };
 
     # Expose the package set, including overlays, for convenience.
