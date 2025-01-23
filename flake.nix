@@ -79,6 +79,7 @@
       users.users.onnimonni = {
           name = "onnimonni";
           home = "/Users/onnimonni";
+          shell = pkgs.fish;
       };
     };
   in
