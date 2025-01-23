@@ -56,6 +56,9 @@ source $FDIR/colors.fish
 source $FDIR/yubikey.fish
 source $FDIR/local.fish
 
+# Some extra ENV to skip tracking from CLI tools
+source $FDIR/no-tracking.fish
+
 # Don't store secrets in git use additional file for them
 if test -f ~/.secrets.fish
   source ~/.secrets.fish
