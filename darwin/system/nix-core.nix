@@ -11,6 +11,13 @@
 
   # Try to just append the additional settings normally and trust that nix-darwin will handle it.
   nix.settings = {
+    # Not strictly necessary, but this will reduce your disk utilization
+    builders-use-substitutes = true;
+
+    # Determinate nix-installer doesn't include nixpkgs by default
+    # https://discourse.nixos.org/t/getting-nixpkgs-not-found-error-with-nix-shell/42814/3?u=onnimonni
+    extra-nix-path = "nixpkgs=flake:nixpkgs";
+
     trusted-users = [ "onnimonni" ];
     trusted-substituters = [
       "https://cache.nixos.org/"
