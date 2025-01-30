@@ -5,7 +5,8 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     #nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-23.11-darwin";
     
-    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/0.1";
+    # TODO: This doesn't work nicely with nix-darwin so we won't use it
+    #determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/0.1";
 
     nix-darwin = {
       url = "github:lnl7/nix-darwin";
@@ -21,15 +22,13 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, determinate, nix-darwin, nix-rosetta-builder, home-manager }:
+  outputs = inputs@{ self, nixpkgs, nix-darwin, nix-rosetta-builder, home-manager }:
   {
     # Build darwin flake using:
     # $ darwin-rebuild build --flake .#Onnis-MacBook-Pro
     darwinConfigurations."Onnis-MacBook-Pro" = nix-darwin.lib.darwinSystem {
       modules = [
-        ./darwin/system
         home-manager.darwinModules.home-manager
-        determinate.darwinModules.default
 
         # Set Git commit hash for darwin-version.
         { system.configurationRevision = self.rev or self.dirtyRev or null;}
@@ -40,6 +39,8 @@
         # Then: uncomment `nix-rosetta-builder`, remove `linux-builder`, and `darwin-rebuild switch`
         # a second time. Subsequently, `nix-rosetta-builder` can rebuild itself.
         #nix-rosetta-builder.darwinModules.default
+        
+        ./darwin/system
       ];
     };
 

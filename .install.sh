@@ -30,6 +30,10 @@ if ! command_exists nix; then
   curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
 fi
 
+#
+echo "You might need to run this to remove the default nix files before using nix-darwin:" 
+echo "$ sudo mv /etc/nix/nix.custom.conf{,.before-nix-darwin}; sudo mv /etc/bashrc{,.before-nix-darwin}; sudo mv /etc/zshrc{,.before-nix-darwin}"
+
 # Setup MacOS with nix
 nix run nix-darwin -- switch --flake .
 

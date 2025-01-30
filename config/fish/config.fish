@@ -15,11 +15,6 @@ function fish_config_dir
     end
 end
 
-# Add nix toolchain to path
-#fish_add_path /run/current-system/sw/bin
-#source /nix/var/nix/profiles/default/etc/profile.d/*.fish
-#set -gx NIX_PATH ~/.nix-defexpr/channels
-
 # Use files from this folder and from homebrew /usr/local/sbin
 fish_add_path /opt/homebrew/bin
 fish_add_path /opt/homebrew/sbin
@@ -70,7 +65,6 @@ unset FDIR
 # Use mise (asdf clone) installed with homebrew
 if type -q brew
   if type -q mise
-    mise activate | source
     # Sometimes I forget the name of mise
     alias asdf "mise"
   end
@@ -88,8 +82,3 @@ end
 if test -d /opt/homebrew/share/fish/vendor_functions.d
     source /opt/homebrew/share/fish/vendor_functions.d/*.fish
 end
-
-# FIXME: Whaaaaaaaaaaat?????? This file seems to break nixos-anywhere disko by breaking "nix copy" command WTF
-# This seems to be caused because we unsit the $FDIR above already?
-# Needs to happen at last
-#source $FDIR/hacks.fish

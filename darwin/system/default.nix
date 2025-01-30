@@ -17,20 +17,18 @@
     pkgs.devenv
   ];
 
-  # Auto upgrade nix package and the daemon service.
-  services.nix-daemon.enable = true;
-  # nix.package = pkgs.nix;
-
-  # Necessary for using flakes on this system.
-  # nix.settings.experimental-features = "nix-command flakes";
-
   # This line is a prerequisite for local building
   # nix.settings.trusted-users = [ "@admin" ];
 
   # Create /etc/zshrc that loads the nix-darwin environment.
   programs.zsh.enable = true;
   # Also enable fish
-  programs.fish.enable = true;
+  programs.fish = {
+    enable = true;
+    shellAliases = {
+      update-nix = "darwin-rebuild switch --flake ~/.dotfiles/";
+    };
+  };
 
   # Allow sudo to use Touch ID.
   security.pam.enableSudoTouchIdAuth = true;
@@ -52,9 +50,6 @@
 
   # The platform the configuration will be used on.
   nixpkgs.hostPlatform = "aarch64-darwin";
-
-  # nix-darwin provides a neat Linux builder that runs a NixOS VM as a service in the background. 
-  nix.linux-builder.enable = true;
 
   # Rosetta is installed and we can build x86_64-darwin too
   nix.extraOptions = ''
