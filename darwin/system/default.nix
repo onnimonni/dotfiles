@@ -16,6 +16,8 @@
     pkgs.nixos-rebuild
     # For local development
     pkgs.devenv
+    # To interact with Estonian ID card
+    pkgs.opensc
   ];
 
   # This line is a prerequisite for local building
