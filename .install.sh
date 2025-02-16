@@ -21,8 +21,13 @@ softwareupdate --install-rosetta --agree-to-license
 # Install homebrew which also installs macos commandline tools
 if ! command_exists brew; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  (echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> /Users/onnimonni/.zprofile
   eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+# Install x86-64 version of homebrew
+if [ ! -d /usr/local/Homebrew ]; then
+  echo "Installing x86-64 homebrew"
+  arch -x86_64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
 # Install nix
@@ -58,7 +63,7 @@ done
 /opt/homebrew/bin/fish -c "mise use -g usage"
 
 # Activate dotfiles for the first time
-rcup -d ~/.dotfiles -x UNLICENSE -x README.md -x Brewfile
+rcup -d ~/.dotfiles -x UNLICENSE -x README.md -x Brewfile -x flake.lock -x flake.nix
 
 # Symlink whole karabiner folder from config
 ln -sfn ~/.dotfiles/karabiner ~/.config/karabiner
