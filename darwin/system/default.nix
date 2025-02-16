@@ -2,7 +2,6 @@
 {
   imports = [
     ./nix-core.nix
-    ./linux-builder.nix
   ];
 
   # Pretty nice examples for setting up nix-darwin: https://github.com/thurstonsand/nixonomicon
@@ -32,6 +31,11 @@
       update-nix = "darwin-rebuild switch --flake ~/.dotfiles/";
     };
   };
+
+  # The default Nix build user group ID was changed from 30000 to 350.
+  # You are currently managing Nix build users with nix-darwin, but your
+  # nixbld group has GID 350, whereas we expected 30000.
+  ids.gids.nixbld = 350;
 
   # Allow sudo to use Touch ID.
   security.pam.enableSudoTouchIdAuth = true;
