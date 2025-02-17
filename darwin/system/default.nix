@@ -17,6 +17,8 @@
     pkgs.devenv
     # To interact with Estonian ID card
     pkgs.opensc
+    # To format nix files properly
+    pkgs.nixfmt
   ];
 
   # This line is a prerequisite for local building
