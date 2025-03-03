@@ -19,6 +19,8 @@
     pkgs.opensc
     # To format nix files properly
     pkgs.nixfmt
+    # To find nix packages
+    pkgs.nix-search-cli
   ];
 
   # This line is a prerequisite for local building
