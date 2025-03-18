@@ -18,9 +18,13 @@
     # To interact with Estonian ID card
     pkgs.opensc
     # To format nix files properly
-    pkgs.nixfmt
+    pkgs.nixfmt-rfc-style
     # To find nix packages
     pkgs.nix-search-cli
+    # To use cache for Midwork
+    pkgs.cachix
+    # To encrypt/decrypt secrets
+    pkgs.sops
   ];
 
   # This line is a prerequisite for local building
