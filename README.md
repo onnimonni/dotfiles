@@ -68,11 +68,17 @@ On host machine
 $ ssh-copy-id root@<ipv4-addr-here>
 ```
 
-
 # After installation config
 1. Create new ssh key in Secretive
 2. Copy the public key into `~/.ssh/secretive.pub`
 3. Add it [into Github as new SSH key](https://github.com/settings/ssh/new) both as signing key and authentication key
+
+## Add API key for Gemini
+You can create a new API key to use Gemini from command line here: https://aistudio.google.com/app/apikey
+
+```sh
+echo 'export GEMINI_API_KEY="XXXXXX"' >> ~/.secrets.fish
+```
 
 ## Update configs
 ```

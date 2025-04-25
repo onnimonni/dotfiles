@@ -70,6 +70,19 @@ function cdf --description 'Change to directory which is open in Finder'
 end
 
 ##
+# Query Gemini API for cli command help
+##
+function gemini-cli-help --description 'Query Gemini for CLI help'
+  set -l model "gemini-2.0-flash"
+  set -l response (http --json "https://generativelanguage.googleapis.com/v1beta/models/$model:generateContent?key=$GEMINI_API_KEY" \
+    contents[][parts][][text]="Answer shortly without markdown syntax. Give me a command I can run directly in the MacOS terminal to accomplish the following: '$argv'") 
+  set -l command (echo $response | jq -r '.candidates[0].content.parts[0].text')
+  echo "Use this command from your clipboard:"
+  echo "\$ $command"
+  echo $command | tr -d '\n' | pbcopy
+end
+
+##
 # Utility to wait until port is open
 ##
 function wait-port-open --description 'Wait for port to open'
