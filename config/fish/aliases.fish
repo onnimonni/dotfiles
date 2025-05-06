@@ -65,11 +65,14 @@ if command_exists thefuck
 end
 
 # Pretty print json
-alias to_pretty_json "python -m json.tool"
+alias to_pretty_json "jq -r"
 
 # Minify json
-alias to_json "python -c 'import sys, json; print json.dumps(json.load(sys.stdin),sort_keys=True)'"
-alias to_min_json "python -c 'import sys, json; print json.dumps(json.load(sys.stdin),sort_keys=True)'"
+alias to_json "jq -r"
+alias to_min_json "jq -r -c"
+
+# See into zip file
+alias lszip "zipinfo -1"
 
 # Always enable colored `grep` output
 # Note: `GREP_OPTIONS="--color=auto"` is deprecated, hence the alias usage.
