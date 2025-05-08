@@ -7,8 +7,7 @@ set -U VISUAL $EDITOR
 set -U HOMEBREW_EDITOR $EDITOR
 
 # Shortcuts
-alias d "cd ~/Documents/Dropbox"
-alias dl "cd ~/Downloads"
+alias d "cd ~/Downloads"
 alias dt "cd ~/Desktop"
 alias p "cd ~/Projects"
 
