@@ -137,10 +137,10 @@ function investigate-file --description 'Shows human readable contents of many l
           SELECT * EXCLUDE(avg,std,q25,q50,q75) REPLACE(LEFT(min, 60) as min, LEFT(max, 60) as max)
           FROM (
             SUMMARIZE (
-              FROM read_json_auto('$file_path', maximum_object_size=3e8)
+              FROM read_json_auto('$file_path', maximum_object_size=3e8, sample_size=100_000)
             )
           );
-          FROM read_json_auto('$file_path', maximum_object_size=3e8);
+          FROM read_json_auto('$file_path', maximum_object_size=3e8, sample_size=100_000);
         """
       end
     case '*CSV text*' # Matches if "CSV text" is in the file type string
