@@ -74,11 +74,19 @@ end
 function gemini-cli-help --description 'Query Gemini for CLI help'
   set -l model "gemini-2.0-flash"
   set -l response (http --json "https://generativelanguage.googleapis.com/v1beta/models/$model:generateContent?key=$GEMINI_API_KEY" \
-    contents[][parts][][text]="Answer shortly without markdown syntax. Give me a command I can run directly in the MacOS terminal to accomplish the following: '$argv'") 
+    contents[][parts][][text]="Answer shortly without markdown syntax. Give me a command I can run directly in the MacOS fish terminal to accomplish the following: '$argv'")
   set -l command (echo $response | jq -r '.candidates[0].content.parts[0].text')
   echo "Use this command from your clipboard:"
   echo "\$ $command"
   echo $command | tr -d '\n' | pbcopy
+end
+
+function gemini-help --description 'Query Gemini for any help'
+  set -l model "gemini-2.0-flash"
+  set -l response (http --json "https://generativelanguage.googleapis.com/v1beta/models/$model:generateContent?key=$GEMINI_API_KEY" \
+    contents[][parts][][text]="Answer shortly without markdown syntax. $argv") 
+  set -l command (echo $response | jq -r '.candidates[0].content.parts[0].text')
+  echo $command
 end
 
 ##
