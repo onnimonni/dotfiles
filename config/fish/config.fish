@@ -2,6 +2,10 @@
 # onnimonni preferred aliases and functions
 ##
 
+# Don't use Finnish even if my location is in Finland
+set -x LANG "en_US.UTF-8"
+set -x LC_ALL "en_US.UTF-8"
+
 ##
 # Get current conf file directory
 # This needs to resolve symlinks from rcm
@@ -16,6 +20,7 @@ function fish_config_dir
 end
 
 # Use files from this folder and from homebrew /usr/local/sbin
+fish_add_path /opt/homebrew/opt/curl/bin
 fish_add_path /opt/homebrew/bin
 fish_add_path /opt/homebrew/sbin
 fish_add_path ~/.dotfiles/bin
