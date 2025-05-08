@@ -7,9 +7,6 @@ alias cp "cp -iv"
 alias mv "mv -iv"
 alias rm "rm -iv"
 
-# ls aliases
-alias ll "ls -lah"
-
 # Shortcuts
 alias h "history"
 alias j "jobs"
@@ -71,9 +68,20 @@ alias to_pretty_json "jq -r"
 alias to_json "jq -r"
 alias to_min_json "jq -r -c"
 
-# Show 20 newest files in folder
-alias lsnew "eza --sort date -r --long | head -n 20"
-alias llnew "eza --sort date -r | head -n 20"
+# Use eza instead of ls
+if command_exists eza
+  # Use eza instead of ls
+  alias ls "eza"
+  # This allows still overriding --sort since later args take precedence
+  # This is what I use most of the time
+  alias ll "eza --long --all --sort date"
+
+  alias lsd "eza --long --dirs-only"
+else
+  # Use ls instead of eza
+  alias ll "ls -lah"
+  alias lsd "ls -ld */"
+end
 
 # See into zip file
 function lszip
@@ -86,7 +94,91 @@ function lszip
     echo $argv | xargs -n1 atool -l
   end
 end
-alias zipcat "atool -c"
+function zipcat
+  if not isatty stdin
+    # Read the piped data
+    while read -l line
+      echo $line | xargs -n1 atool -c
+    end
+  else
+    echo $argv | xargs -n1 atool -c
+  end
+end
+alias extract "atool -x"
+
+# Help figure out what data looks like
+function investigate-file --description 'Shows human readable contents of many large files'
+  set -l file_path $argv[1]
+  set -l file_type_info (file -b $file_path)
+  # Branch based on the file type information
+  switch (file -b $file_path)
+    case '*Zip archive data*' '*gzip compressed data*'
+      # TODO: There seems to be more recent version of atool: https://github.com/z3ntu/atool
+      # TODO: Check if this atool can be replaced in homebrew
+      # TODO: --quiet option is not working with zip files:
+      # $atool -q -l swagger.zip
+      # Length      Date    Time    Name
+      # ---------  ---------- -----   ----
+      # 261775  03-23-2025 12:21   swagger.json
+      # ---------                     -------
+      # 261775                     1 file
+      atool -l $file_path
+
+      # TODO: if you can easily check that the archive contains just one file
+      # you can use `atool -c` to extract it and do further analysis
+    case '*JSON data*' # Matches if "CSV text" is in the file type string
+      # For small files, use jq to pretty print
+      if test (du -k $file_path | awk '{print $1}') -lt 20
+        echo "$file_path: JSON"
+        jq . $file_path
+      else
+        echo "$file_path: JSON (too large to pretty print)"
+        duckdb -c """
+          SELECT * EXCLUDE(avg,std,q25,q50,q75) REPLACE(LEFT(min, 60) as min, LEFT(max, 60) as max)
+          FROM (
+            SUMMARIZE (
+              FROM read_json_auto('$file_path', maximum_object_size=3e8)
+            )
+          );
+          FROM read_json_auto('$file_path', maximum_object_size=3e8);
+        """
+      end
+    case '*CSV text*' # Matches if "CSV text" is in the file type string
+        echo "$file_path: CSV"
+        duckdb -c """
+          SELECT * EXCLUDE(avg,std,q25,q50,q75) REPLACE(LEFT(min, 65) as min, LEFT(max, 65) as max)
+          FROM (
+            SUMMARIZE (
+              FROM read_csv_auto('$file_path')
+            )
+          );
+          FROM read_csv_auto('$file_path');
+        """
+    case '*SQLite*' # Matches if "SQLite" is in the file type string
+        echo "This is an SQLite file: $file_type_info"
+        duckdb $file_path -c """
+          SELECT * EXCLUDE(database_name, database_oid, schema_name, schema_oid, table_oid, internal, temporary, sql)
+          FROM duckdb_tables()
+          ORDER BY estimated_size DESC;
+        
+          SET VARIABLE tables_sorted_by_size = (
+              SELECT ARRAY_AGG(table_name ORDER BY estimated_size DESC)
+              FROM duckdb_tables()
+          );
+
+          -- FIXME: This might scan the whole table again
+          SELECT getvariable('tables_sorted_by_size')[1] as table_name,* EXCLUDE(q25,q50,q75) REPLACE(LEFT(min, 40) as min, LEFT(max, 40) as max) FROM (
+            SUMMARIZE FROM sqlite_scan('$file_path', getvariable('tables_sorted_by_size')[1])
+          );
+          SELECT getvariable('tables_sorted_by_size')[2] as table_name,* EXCLUDE(q25,q50,q75) REPLACE(LEFT(min, 40) as min, LEFT(max, 40) as max) FROM (
+            SUMMARIZE FROM sqlite_scan('$file_path', getvariable('tables_sorted_by_size')[2])
+          );
+        """
+    case '*' # Default case for any other file type
+        echo "UNKNOWN file: No special handling for this file type."
+        echo $file_type_info
+  end
+end
 
 # Always enable colored `grep` output
 # Note: `GREP_OPTIONS="--color=auto"` is deprecated, hence the alias usage.
