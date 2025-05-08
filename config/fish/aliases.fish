@@ -72,7 +72,19 @@ alias to_json "jq -r"
 alias to_min_json "jq -r -c"
 
 # See into zip file
-alias lszip "zipinfo -1"
+function lszip
+  if not isatty stdin
+    # Read the piped data
+    while read -l line
+      echo $line | xargs -n1 atool -l
+    end
+  else
+    echo $argv | xargs -n1 atool -l
+  end
+end
+function zipcat
+  atool -c $argv
+end
 
 # Always enable colored `grep` output
 # Note: `GREP_OPTIONS="--color=auto"` is deprecated, hence the alias usage.
