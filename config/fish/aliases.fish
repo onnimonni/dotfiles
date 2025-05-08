@@ -71,6 +71,10 @@ alias to_pretty_json "jq -r"
 alias to_json "jq -r"
 alias to_min_json "jq -r -c"
 
+# Show 20 newest files in folder
+alias lsnew "eza --sort date -r --long | head -n 20"
+alias llnew "eza --sort date -r | head -n 20"
+
 # See into zip file
 function lszip
   if not isatty stdin
@@ -82,9 +86,7 @@ function lszip
     echo $argv | xargs -n1 atool -l
   end
 end
-function zipcat
-  atool -c $argv
-end
+alias zipcat "atool -c"
 
 # Always enable colored `grep` output
 # Note: `GREP_OPTIONS="--color=auto"` is deprecated, hence the alias usage.
