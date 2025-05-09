@@ -113,7 +113,7 @@ alias fgrep 'fgrep --color=auto'
 alias egrep 'egrep --color=auto'
 
 # Allow reloading fish config after changes
-alias reload "source ~/.config/fish/config.fish"
+alias reload "source ~/.config/fish/config.fish && source ~/.config/fish/functions/*.fish"
 
 # Get week number
 alias week 'date +%V'
