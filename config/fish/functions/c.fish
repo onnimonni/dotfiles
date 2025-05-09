@@ -2,7 +2,7 @@
 # Otherwise fallbacks to basic cat
 function c --description 'Print file contents with colors'
   if command_exists bat
-    bat $argv
+    bat --pager=never --style=numbers --force-colorization $argv
   else
     cat --color=auto $argv
   end
