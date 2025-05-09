@@ -1,0 +1,25 @@
+# This is the top-most EditorConfig file
+root = true
+
+# General settings for all files
+[*]
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+indent_style = space
+indent_size = 2
+
+# Settings for JavaScript files
+[*.js]
+indent_size = 2
+
+# Settings for Markdown files
+[*.md]
+trim_trailing_whitespace = false
+insert_final_newline = false
+
+# Settings for Makefiles (typically require tabs)
+[Makefile]
+indent_style = tab
+indent_size = 4
