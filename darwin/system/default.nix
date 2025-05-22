@@ -2,29 +2,36 @@
 {
   imports = [
     ./nix-core.nix
+    ./settings.nix
+    ./homebrew.nix
+    ./keyboard.nix
   ];
+
+
 
   # Pretty nice examples for setting up nix-darwin: https://github.com/thurstonsand/nixonomicon
 
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
-  environment.systemPackages = [
+  environment.systemPackages = with pkgs; [
     # Run Nixos virtual machines so that we can build x86 servers
-    pkgs.utm
+    utm
     # For deploying new versions to remote bare metal servers
-    pkgs.nixos-rebuild
+    nixos-rebuild
     # For local development
-    pkgs.devenv
+    devenv
     # To interact with Estonian ID card
-    pkgs.opensc
+    opensc
     # To format nix files properly
-    pkgs.nixfmt-rfc-style
+    nixfmt-rfc-style
     # To find nix packages
-    pkgs.nix-search-cli
+    nix-search-cli
     # To use cache for Midwork
-    pkgs.cachix
+    cachix
     # To encrypt/decrypt secrets
-    pkgs.sops
+    sops
+    # httpie is easier than curl
+    httpie
   ];
 
   # This line is a prerequisite for local building
@@ -46,22 +53,11 @@
   ids.gids.nixbld = 350;
 
   # Allow sudo to use Touch ID.
-  security.pam.enableSudoTouchIdAuth = true;
-
-  # Setup MacOS defaults
-  system.defaults = {
-    dock.autohide = true;
-    dock.mru-spaces = false;
-    finder.AppleShowAllExtensions = true;
-    finder.FXPreferredViewStyle = "clmv";
-    loginwindow.LoginwindowText = "Teretulemast Onnimonni";
-    screencapture.location = "~/Desktop/Screenshots/";
-    screensaver.askForPasswordDelay = 10;
-  };
+  security.pam.services.sudo_local.touchIdAuth = true;
 
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog
-  system.stateVersion = 4;
+  system.stateVersion = 5;
 
   # The platform the configuration will be used on.
   nixpkgs.hostPlatform = "aarch64-darwin";
@@ -71,9 +67,13 @@
     extra-platforms = x86_64-darwin aarch64-darwin
   '';
 
+  # TODO: Move these to a separate file which sets the username
+  system.defaults.loginwindow.LoginwindowText = "Teretulemast Onnimonni";
+  system.primaryUser = "onnimonni";
   users.users.onnimonni = {
-      name = "onnimonni";
-      home = "/Users/onnimonni";
-      shell = pkgs.fish;
+    name = "onnimonni";
+    home = "/Users/onnimonni";
+    shell = pkgs.fish;
   };
+
 }
