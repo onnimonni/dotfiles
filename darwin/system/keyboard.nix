@@ -1,59 +1,47 @@
 { ...}:
 {
-  system.defaults.CustomUserPreferences."com.apple.symbolichotkeys" = {
-    # Well I have absolutely no idea what all of these do
-    # I copied them from:
-    # $ defaults read com.apple.symbolichotkeys
-    # And at least I have changed ⌥ + TAB -> alter windows of same program
-    AppleSymbolicHotKeys = {
-      "164" = {
-        enabled = 0;
-        value = {
-          parameters = [65535 65535 0];
-          type = "standard";
+
+  home-manager.users.onnimonni.home.file = {
+    # Custom dvorak keyboard layout made with Ukelele
+    "Library/Keyboard Layouts/OnniDvorak.keylayout".source = ./config/OnniDvorak.keylayout;
+  };
+
+  system.defaults.CustomUserPreferences = {
+    "com.apple.symbolichotkeys" = {
+      # Keyboard > Keyboard Shortcuts... > Keyboard >
+      # Move focus to next window = ⌥ + tab
+      AppleSymbolicHotKeys = {
+        "27" = {
+          enabled = 1;
+          value = {
+            parameters = [65535 48 524288];
+            type = "standard";
+          };
         };
       };
-      "176" = {
-          enabled = 0;
-          value = {
-            type = "SAE1.0";
-          };
-      };
-      "27" = {
-          enabled = 1;
-          value = {
-              parameters = [65535 48 524288];
-              type = "standard";
-          };
-      };
-      "52" = {
-          enabled = 0;
-          value = {
-            parameters = [100 2 1572864];
-            type = "standard";
-          };
-      };
-      "60" = {
-          enabled = 1;
-          value = {
-            parameters = [32 49 262144];
-            type = "standard";
-          };
-      };
-      "61" = {
-          enabled = 1;
-          value = {
-            parameters = [32 49 786432];
-            type = "standard";
-          };
-      };
-      "65" = {
-          enabled = 0;
-          value = {
-            parameters = [32 49 1572864];
-            type = "standard";
-          };
-      };
+    };
+
+    # Disable automatic period substitution by double-tapping space.
+    NSGlobalDomain.NSAutomaticPeriodSubstitutionEnabled = false;
+
+    "com.apple.HIToolbox" = {
+      # Source: https://macos-defaults.com/keyboard/applefnusagetype.html
+      # Don't do anything when pressing the fn/globe key
+      AppleDictationAutoEnable = false;
+
+      # Add my custom keyboard layout to the system
+      AppleCurrentKeyboardLayoutInputSourceID = "org.unknown.keylayout.ONNIDVORAK-QWERTYCMD";
+      AppleEnabledInputSources = [
+        {
+          InputSourceKind = "AppleKeyboardLayout";
+          "KeyboardLayout ID" = "org.unknown.keylayout.ONNIDVORAK-QWERTYCMD";
+        }
+        {
+          InputSourceKind = "Keyboard Layout";
+          "KeyboardLayout ID" = 17;
+          "KeyboardLayout Name" = "Finnish";
+        }
+      ];
     };
   };
 }
