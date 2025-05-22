@@ -1,2 +1,0 @@
-# Don't intall documentation and install binaries to my home folder
-gem: --no-document
