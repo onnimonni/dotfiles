@@ -20,8 +20,12 @@
       show-process-indicators = true;
       orientation = "bottom";
       mru-spaces = false;
-      # mouse in top right corner will (5) start screensaver
-      wvous-tr-corner = 5;
+
+      # Disable hot corners
+      wvous-bl-corner = 1;
+      wvous-br-corner = 1;
+      wvous-tl-corner = 1;
+      wvous-tr-corner = 1;
     };
     screensaver = {
       # ask for password immediately after screensaver starts

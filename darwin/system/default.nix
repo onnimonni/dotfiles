@@ -3,11 +3,10 @@
   imports = [
     ./nix-core.nix
     ./settings.nix
+    ./user.nix
     ./homebrew.nix
     ./keyboard.nix
   ];
-
-
 
   # Pretty nice examples for setting up nix-darwin: https://github.com/thurstonsand/nixonomicon
 
@@ -38,7 +37,7 @@
   # nix.settings.trusted-users = [ "@admin" ];
 
   # Create /etc/zshrc that loads the nix-darwin environment.
-  programs.zsh.enable = true;
+  #programs.zsh.enable = true;
   # Also enable fish
   programs.fish = {
     enable = true;
@@ -66,14 +65,4 @@
   nix.extraOptions = ''
     extra-platforms = x86_64-darwin aarch64-darwin
   '';
-
-  # TODO: Move these to a separate file which sets the username
-  system.defaults.loginwindow.LoginwindowText = "Teretulemast Onnimonni";
-  system.primaryUser = "onnimonni";
-  users.users.onnimonni = {
-    name = "onnimonni";
-    home = "/Users/onnimonni";
-    shell = pkgs.fish;
-  };
-
 }
