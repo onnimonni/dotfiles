@@ -16,16 +16,16 @@
   };
 
   # FIXME: these don't seem to work for now :(
-  #environment.systemPackages = with pkgs; [
-  #  fishPlugins.z
+  environment.systemPackages = with pkgs; [
+    fishPlugins.z
   #  # bang-bang is missing from nix: https://github.com/NixOS/nixpkgs/issues/409901
   #  # fishPlugins.bang-bang
   #  # FIXME: Failing because of missing fishtape
   #  #fishPlugins.fzf-fish
-  #  fishPlugins.forgit
-  #  fishPlugins.hydro
   #  fzf
-  #  fishPlugins.grc
-  #  grc
-  #];
+    fishPlugins.forgit
+    fishPlugins.hydro
+    fishPlugins.grc
+    grc
+  ];
 }
