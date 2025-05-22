@@ -24,12 +24,11 @@
     taps = [
       "homebrew/bundle"
       "homebrew/services"
-      "onnimonni/tap"
     ];
 
     brews = [
       # TODO: Somehow the nix enabled shell doesn't work?
-      "fish"
+      #"fish"
     ];
 
     casks = [

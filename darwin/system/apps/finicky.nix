@@ -6,6 +6,7 @@ rec {
 
   # TODO: Don't hard code the username here
   home-manager.users.onnimonni.home.file = {
-    ".finicky.js".source = ./config/finicky.js;
+    # Finicky can't use a symlink
+    ".finicky.js".text = builtins.readFile ./config/finicky.js;
   };
 }
