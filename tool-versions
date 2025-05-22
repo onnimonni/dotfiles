@@ -1,4 +1,0 @@
-gcloud 471.0.0 # Sadly I can't have latest here
-python 3.12.2 # This needs to be set in order for gcloud to work
-golang 1.19.5 # Some tools eg poetry pre-commit hooks need golang
-nodejs 21.7.2
