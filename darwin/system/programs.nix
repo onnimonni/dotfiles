@@ -27,6 +27,10 @@
     sops
     # httpie is easier than curl
     httpie
+    # Github cli
+    gh
+    # Listing files
+    tree
   ];
 
   # Also enable fish
