@@ -32,14 +32,41 @@
     ];
 
     casks = [
-      "jetdrive-toolbox"
       "google-chrome"
-      "finicky"
       "spotify"
       "visual-studio-code"
+      # TODO: Figure out how to use settings from karabiner json
       "karabiner-elements"
-      "rectangle"
+      # TODO: Figure out how to map the ⌥ + ⌫ to wipe word and ⌥ + ⇧ + ⌫ to wipe line
       "iterm2"
+      # Social
+      "slack"
+      "whatsapp"
+      "telegram"
+
+      # Estonian identity cards and signing
+      # See also the masApps below
+      "open-eid"
     ];
+
+    masApps = {
+      # Remove stupid cookie banners etc
+      "1Blocker" = 1365531024;
+
+      # To force machine to stay alive
+      "amphetamine" = 937984704;
+
+      # MacOS office suite
+      "keynote" = 409183694;
+      "numbers" = 409203825;
+      "pages" = 409201541;
+
+      # To use iOS simulator
+      "xcode" = 497799835;
+
+      # Estonian identity cards and signing
+      "DigiDoc4" = 1370791134;
+      "Web eID"  = 1576665083;
+    };
   };
 }
