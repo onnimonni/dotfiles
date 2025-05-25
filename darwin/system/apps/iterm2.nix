@@ -21,6 +21,16 @@ rec {
 
     # Custom key bindings
     GlobalKeyMap = {
+      # Because I'm using custom Dvorak there's 'j' character in place of 'c'
+      # Sometimes my qwerty muscle memory still kicks in so when pressing physical c button
+      # ^ + j to terminate the process
+      "0x6a-0x40000-0x8" = {
+          Action = 11;
+          "Apply Mode" = 0;
+          Escaping = 2;
+          Text = "0x03";
+          Version = 2;
+      };
       # ⌥ + ⌫ to wipe a word
       "0x7f-0x80000-0x33" = {
           Action = 11;
