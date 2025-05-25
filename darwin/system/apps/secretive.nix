@@ -13,4 +13,10 @@ in {
   };
 
   home-manager.users.onnimonni.programs.ssh.matchBlocks."*".extraOptions."IdentityAgent" = SSH_AUTH_SOCK;
+
+  home-manager.users.onnimonni.home.file = {
+    ".ssh/google_compute_engine".text = ''
+      # Fake file to allow gcloud to work with secretive
+    '';
+  };
 }

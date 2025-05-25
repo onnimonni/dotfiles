@@ -1,7 +1,6 @@
 { pkgs, ... }:
 {
   users.users.onnimonni.shell = pkgs.fish;
-  programs.fish.enable = true;
   home-manager.users.onnimonni.programs.fish.enable = true;
 
   # Force fish for interactive sessions
@@ -13,6 +12,31 @@
         exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
       fi
     '';
+  };
+
+  # This disables annoying message when opening a new terminal:
+  # Last login: Sun May 25 21:52:09 on ttys009
+  home-manager.users.onnimonni.home.file = {
+    ".hushlogin".text = ''
+      # Disables last login from appearing in Terminal
+    '';
+  };
+
+  # Also enable fish
+  programs.fish = {
+    enable = true;
+    shellAliases = {
+      # Update this config
+      update-nix = "sudo darwin-rebuild switch --flake ~/.dotfiles/";
+
+      # Reload fish config
+      reload-fish = "source ~/.config/fish/config.fish";
+
+      # Prevent overwriting or deleting by accident
+      cp = "cp -iv";
+      mv = "mv -iv";
+      rm = "rm -iv";
+    };
   };
 
   # FIXME: these don't seem to work for now :(

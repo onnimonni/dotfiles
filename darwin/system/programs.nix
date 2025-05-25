@@ -34,12 +34,4 @@
     # To test connection speed
     speedtest-go
   ];
-
-  # Also enable fish
-  programs.fish = {
-    enable = true;
-    shellAliases = {
-      update-nix = "sudo darwin-rebuild switch --flake ~/.dotfiles/";
-    };
-  };
 }

@@ -20,6 +20,8 @@ rec {
     ClickToSelectCommand = false;
 
     # Custom key bindings
+    # To update these you need to first create them in iTerm2 UI and then read them with:
+    # $ defaults read com.googlecode.iterm2 GlobalKeyMap
     GlobalKeyMap = {
       # Because I'm using custom Dvorak there's 'j' character in place of 'c'
       # Sometimes my qwerty muscle memory still kicks in so when pressing physical c button
