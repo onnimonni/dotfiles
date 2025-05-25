@@ -31,13 +31,15 @@
     gh
     # Listing files
     tree
+    # To test connection speed
+    speedtest-go
   ];
 
   # Also enable fish
   programs.fish = {
     enable = true;
     shellAliases = {
-      update-nix = "darwin-rebuild switch --flake ~/.dotfiles/";
+      update-nix = "sudo darwin-rebuild switch --flake ~/.dotfiles/";
     };
   };
 }

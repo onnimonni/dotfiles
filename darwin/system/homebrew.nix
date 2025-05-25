@@ -27,8 +27,8 @@
     ];
 
     brews = [
-      # TODO: Somehow the nix enabled shell doesn't work?
-      #"fish"
+      # To be able to install apps from the app store
+      "mas"
     ];
 
     casks = [
@@ -37,8 +37,6 @@
       "visual-studio-code"
       # TODO: Figure out how to use settings from karabiner json
       "karabiner-elements"
-      # TODO: Figure out how to map the ⌥ + ⌫ to wipe word and ⌥ + ⇧ + ⌫ to wipe line
-      "iterm2"
       # Social
       "slack"
       "whatsapp"
@@ -54,19 +52,28 @@
       "1Blocker" = 1365531024;
 
       # To force machine to stay alive
-      "amphetamine" = 937984704;
+      "Amphetamine" = 937984704;
 
       # MacOS office suite
-      "keynote" = 409183694;
-      "numbers" = 409203825;
-      "pages" = 409201541;
+      "Keynote" = 409183694;
+      "Numbers" = 409203825;
+      "Pages" = 409201541;
 
       # To use iOS simulator
-      "xcode" = 497799835;
+      "Xcode" = 497799835;
 
       # Estonian identity cards and signing
       "DigiDoc4" = 1370791134;
       "Web eID"  = 1576665083;
+
+      # To be able to interact with Victron Power devices
+      "VictronConnect" = 1084677271;
+
+      # To fix openstreetmaps issues on macOS
+      "Go Map!!" = 592990211;
+
+      # Great topo maps viewer from https://github.com/PasiSalenius
+      "Maptrails" = 1524211335;
     };
   };
 }
