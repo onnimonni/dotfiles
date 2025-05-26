@@ -1,12 +1,12 @@
-{ ...}:
+{pkgs, lib, osConfig, ...}:
 {
 
-  home-manager.users.onnimonni.home.file = {
+  home.file = {
     # Custom dvorak keyboard layout made with Ukelele
     "Library/Keyboard Layouts/OnniDvorak.keylayout".source = ./config/OnniDvorak.keylayout;
   };
 
-  system.defaults.CustomUserPreferences = {
+  targets.darwin.defaults.CustomUserPreferences = {
     "com.apple.symbolichotkeys" = {
       # Keyboard > Keyboard Shortcuts... > Keyboard >
       # Move focus to next window = ⌥ + tab

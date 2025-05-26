@@ -16,8 +16,7 @@
     ".duti.conf".text = ''
       # Open links in Finicky
       net.kassett.finicky http
-      net.kassett.finicky https
-      net.kassett.finicky com.apple.default-app.web-browser all
+      net.kassett.finicky com.apple.default-app.web-browser
 
       # VLC
       org.videolan.vlc mkv all

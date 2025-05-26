@@ -6,7 +6,6 @@
     ./user.nix
     ./homebrew.nix
     ./programs.nix
-    ./keyboard.nix
   ];
 
   # Pretty nice examples for setting up nix-darwin: https://github.com/thurstonsand/nixonomicon
