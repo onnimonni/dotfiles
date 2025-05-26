@@ -1,2 +1,0 @@
-# Don't trust file extensions. Use outputs of $ file always
-use_file_always 1

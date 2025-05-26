@@ -1,3 +1,0 @@
-[whitelist]
-# Allow automatically loading .envrc in Midwork projects
-prefix = [ "~/Projects/Midwork/infra"]

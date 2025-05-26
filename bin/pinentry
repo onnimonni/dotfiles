@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-MACOS_PINENTRY=/usr/local/MacGPG2/libexec/pinentry-mac.app/Contents/MacOS/pinentry-mac
-POPOS_PINENTRY=/usr/bin/pinentry-gnome3
-if test -f "$MACOS_PINENTRY"; then
-    exec $MACOS_PINENTRY $@
-elif test -f "$POPOS_PINENTRY"; then
-    exec $POPOS_PINENTRY $@
-fi

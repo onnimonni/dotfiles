@@ -1,8 +1,0 @@
-[tools]
-usage = "latest"
-bun = "latest"
-erlang = "27"
-elixir = "1.18.1-otp-27"
-
-[settings]
-experimental = true
