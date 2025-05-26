@@ -9,9 +9,13 @@ rec {
   };
 
   home-manager.useGlobalPkgs = true;
-  home-manager.users."${system.primaryUser}" = { pkgs, ... }: {
+  home-manager.users."${system.primaryUser}" = { pkgs, lib, ... }: {
     # The state version is required and should stay at the version you
     # originally installed.
     home.stateVersion = "25.05";
+    imports = [
+      # Import the home-manager modules
+      ./file-associations.nix
+    ];
   };
 }
