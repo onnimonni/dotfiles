@@ -1,22 +1,29 @@
-module.exports = {
+export default {
   defaultBrowser: "Safari",
   rewrite: [
     {
-      // Redirect all urls to use https except localhost
-      match: ({ url }) => url.protocol === "http" && !finicky.matchHostnames(['localhost']),
-      url: { protocol: "https" }
+      // Redirect Tiktok video links to use offtiktok.com
+      match: "tiktok.com/*",
+      url: (url) => {
+        url.host = "vm.offtiktok.com";
+        return url;
+      },
     },
     {
-      // TODO: This gets links like: https://vm.tiktok.com/ZNeKFD54M
-      // Redirect them to: https://vm.offtiktok.com/ZNeKFD54M instead
-      // Redirect Tiktok video links to use offtiktok.com
-      match: ({ url }) => url.host.endsWith("tiktok.com"),
+      // Redirect all x.com urls to use xcancel.com
+      match: "x.com/*",
+      url: (url) => {
+        url.host = "xcancel.com";
+        return url;
+      },
+    },
+    {
+      // Redirect links like this: https://c212.net/c/link/?t=0&l=en&o=4218234-1&h=2715864414&u=https%3A%2F%2Foverturemaps.org%2Fbecome-a-member%2F&a=https%3A%2F%2Foverturemaps.org%2Fbecome-a-member%2F
+      // to: https://overturemaps.org/become-a-member/
+      // This is needed when using pihole which anyway blocks c212.net
+      match: "c212.net/*u=*",
       url: ({ url }) => {
-        return {
-          protocol: "https",
-          host: "vm.offtiktok.com",
-          pathname: url.pathname
-        }
+        return new URLSearchParams(url.search).get("u");
       }
     }
   ],

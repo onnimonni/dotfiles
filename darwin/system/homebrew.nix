@@ -34,17 +34,37 @@
     casks = [
       "google-chrome"
       "spotify"
+
+      # Editors
       "visual-studio-code"
+      "cursor"
+
       # TODO: Figure out how to use settings from karabiner json
       "karabiner-elements"
+
       # Social
       "slack"
       "whatsapp"
       "telegram"
 
+      # Notes and releasing blogs to https://flaky.build
+      "notion"
+
+      # Easier markdown editing with nice copy paste
+      "typora"
+
+      # For video playback
+      "vlc"
+
+      # Forcing newer MacOS on old Macbooks
+      "opencore-patcher"
+
       # Estonian identity cards and signing
       # See also the masApps below
       "open-eid"
+
+      # To combine different internet connections
+      "speedify"
     ];
 
     masApps = {

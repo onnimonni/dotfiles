@@ -18,6 +18,14 @@
             type = "standard";
           };
         };
+        # Disable opening Finder with ⌥ + ⌘ + space
+        "65" = {
+          enabled = 0;
+          value = {
+            parameters = [32 49 1572864];
+            type = "standard";
+          };
+        };
       };
     };
 

@@ -33,5 +33,29 @@
     tree
     # To test connection speed
     speedtest-go
+    # Download youtube videos offline
+    yt-dlp
+
+    # Video conversions and what not
+    ffmpeg
+
+    # Activate devenv and other environment variables automatically
+    direnv
+
+    # Image conversions
+    imagemagick
+
+    # Better than ssh for shitty connections
+    mosh
+
+    # For generating passwords
+    pwgen
+
+    # Node
+    nodejs
+    pnpm
+
+    # Read geolocation files like gpx
+    gdal
   ];
 }

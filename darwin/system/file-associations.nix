@@ -11,12 +11,11 @@
       ${pkgs.duti}/bin/duti ~/.duti.conf
     '';
   };
-
   home.file = {
     ".duti.conf".text = ''
       # Open links in Finicky
-      net.kassett.finicky http
-      net.kassett.finicky com.apple.default-app.web-browser
+      se.johnste.finicky http
+      se.johnste.finicky com.apple.default-app.web-browser
 
       # VLC
       org.videolan.vlc mkv all

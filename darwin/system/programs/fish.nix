@@ -43,11 +43,10 @@
   environment.systemPackages = with pkgs; [
     fishPlugins.z
     fishPlugins.bang-bang
-    # Add this manually before building fzf-fish if needed
+    # TODO fishPlugins.fzf-fish is not building because of weird issues
     # See more: https://github.com/NixOS/nixpkgs/issues/410069
-    #fishPlugins.fishtape
-    fishPlugins.fzf-fish
-    fzf
+    #fishPlugins.fzf-fish
+    #fzf
     fishPlugins.forgit
     fishPlugins.hydro
     fishPlugins.grc
