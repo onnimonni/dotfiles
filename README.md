@@ -92,5 +92,19 @@ $ cd ~/.dotfiles
 $ brew bundle dump --force
 ```
 
+## Common fixes
+### warning: Nix search path entry
+If you get following messages:
+```
+warning: Nix search path entry '/nix/var/nix/profiles/per-user/root/channels' does not exist, ignoring
+```
+
+You can fix them by running:
+```sh
+sudo nix-channel --update nixos
+```
+
+[Source](https://github.com/NixOS/nix/issues/2982#issuecomment-997983067)
+
 ## UNLICENSE
 Use these dotfiles as you want to. Sharing is caring!
