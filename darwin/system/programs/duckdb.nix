@@ -11,6 +11,7 @@
       LOAD spatial;
       LOAD cache_httpfs;
       LOAD zipfs;
+      LOAD ui;
     '';
   };
 }

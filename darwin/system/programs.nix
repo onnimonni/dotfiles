@@ -57,5 +57,11 @@
 
     # Read geolocation files like gpx
     gdal
+
+    # Read overturemaps data from azure blob storage with 'azcopy'
+    azure-storage-azcopy
+
+    # Let Google wreck havoc both on my privacy and my machine
+    gemini-cli
   ];
 }
