@@ -55,6 +55,9 @@
     nodejs
     pnpm
 
+    # Python
+    uv
+
     # Read geolocation files like gpx
     gdal
 

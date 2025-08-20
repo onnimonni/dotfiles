@@ -29,6 +29,10 @@
     brews = [
       # To be able to install apps from the app store
       "mas"
+
+      # FIXME: Version from nixpkgs does not build
+      # Download files areena.yle.fi for personal archiving
+      "yle-dl"
     ];
 
     casks = [
@@ -62,9 +66,6 @@
       # Estonian identity cards and signing
       # See also the masApps below
       "open-eid"
-
-      # To combine different internet connections
-      "speedify"
     ];
 
     masApps = {
