@@ -106,5 +106,8 @@ sudo nix-channel --update nixos
 
 [Source](https://github.com/NixOS/nix/issues/2982#issuecomment-997983067)
 
+## Docs for common procedures
+* [Using Estonian ID-card as ssh public key](docs/estonian-id-card.md)
+
 ## UNLICENSE
 Use these dotfiles as you want to. Sharing is caring!
