@@ -9,8 +9,6 @@
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
-    # Run Nixos virtual machines so that we can build x86 servers
-    utm
     # For deploying new versions to remote bare metal servers
     nixos-rebuild
     # For local development
@@ -58,13 +56,25 @@
     # Python
     uv
 
-    # Read geolocation files like gpx
-    gdal
-
     # Read overturemaps data from azure blob storage with 'azcopy'
     azure-storage-azcopy
 
     # Let Google wreck havoc both on my privacy and my machine
     gemini-cli
+
+    # Run docker on MacOS
+    colima
+    docker-client
+
+    # Secret management
+    sops
+    age-plugin-se
+
+    # For converting AI generated png images to svg
+    potrace
+    vtracer
+
+    # To remember how command line works
+    tldr
   ];
 }

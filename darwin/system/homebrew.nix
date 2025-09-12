@@ -66,6 +66,12 @@
       # Estonian identity cards and signing
       # See also the masApps below
       "open-eid"
+
+      # To edit SVG files
+      "inkscape"
+
+      # RSS reader
+      "netnewswire"
     ];
 
     masApps = {

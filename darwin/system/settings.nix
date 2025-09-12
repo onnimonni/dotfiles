@@ -89,5 +89,8 @@
 
     # Prevent Photos from opening automatically when devices are plugged in
     "com.apple.ImageCapture".disableHotPlug = true;
+
+    # Show week numbers in calendar app
+    "com.apple.iCal"."Show Week Numbers" = true;
   };
 }
