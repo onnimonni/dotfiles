@@ -12,17 +12,13 @@
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-rosetta-builder = {
-      url = "github:cpick/nix-rosetta-builder";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, nix-darwin, nix-rosetta-builder, home-manager, ... }:
+  outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager, ... }:
   {
     # Build darwin flake using:
     # $ darwin-rebuild build --flake .#Onnis-MacBook-Pro
@@ -33,13 +29,18 @@
         # Set Git commit hash for darwin-version.
         { system.configurationRevision = self.rev or self.dirtyRev or null;}
 
-        # An existing Linux builder is needed to initially bootstrap `nix-rosetta-builder`.
-        # If one isn't already available: comment out the `nix-rosetta-builder` module below,
-        # uncomment this `linux-builder` module, and run `darwin-rebuild switch`:
-        #{ nix.linux-builder.enable = true; }
-        # Then: uncomment `nix-rosetta-builder`, remove `linux-builder`, and `darwin-rebuild switch`
-        # a second time. Subsequently, `nix-rosetta-builder` can rebuild itself.
-        #nix-rosetta-builder.darwinModules.default
+        # Allow unfree software like Claude Code
+        { nixpkgs.config.allowUnfree = true;}
+
+        # Allows building aarch64-linux binaries on macOS hosts
+        {
+          nix = {
+            linux-builder.enable = true;
+
+            # This line is a prerequisite
+            settings.trusted-users = [ "@admin" ];
+          };
+        }
 
         ./darwin/system
       ];
