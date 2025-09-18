@@ -80,6 +80,9 @@ in
     # Let Google wreck havoc both on my privacy and my machine
     gemini-cli
 
+    # Same for claude
+    claude-code
+
     # Run docker on MacOS
     colima
     docker-client
