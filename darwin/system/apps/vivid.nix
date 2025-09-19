@@ -1,6 +1,6 @@
 {...}:
 rec {
-  homebrew.casks = [ "vivid" ];
+  homebrew.casks = [ "vivid-app" ];
 
   system.defaults.CustomUserPreferences."com.goodsnooze.vivid" = {
     SUAutomaticallyUpdate = false;
