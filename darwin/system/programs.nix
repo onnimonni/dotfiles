@@ -97,5 +97,8 @@ in
 
     # To remember how command line works
     tldr
+
+    # To build C stuff like duckdb
+    cmake
   ];
 }
