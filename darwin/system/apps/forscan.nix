@@ -11,4 +11,7 @@
     "ftdi-vcp-driver"
     "forscan"
   ];
+
+  # Forscan can't be installed if "wine-stable" is quarantined
+  homebrew.caskArgs.no_quarantine = true;
 }
