@@ -10,8 +10,8 @@
     ".duckdbrc".text = ''
       INSTALL spatial;
       LOAD spatial;
-      INSTALL cache_httpfs FROM community;
-      LOAD cache_httpfs;
+      INSTALL httpfs;
+      LOAD httpfs;
       INSTALL zipfs FROM community;
       LOAD zipfs;
       INSTALL ui;
