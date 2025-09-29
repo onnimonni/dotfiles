@@ -18,10 +18,10 @@ in
 {
   environment.systemPackages = [
     # DuckDB for data mangling
-    # pkgs.duckdb
-    (if (latestDuckDB > expectedVersion)
-      then (throw "DuckDB ${latestDuckDB} is newer than ${expectedVersion}. Custom override can be removed.")
-      else customDuckDB)
+    pkgs.duckdb
+    #(if (latestDuckDB > expectedVersion)
+    #  then (throw "DuckDB ${latestDuckDB} is newer than ${expectedVersion}. Custom override can be removed.")
+    #  else customDuckDB)
   ];
 
   home-manager.users.onnimonni.home.file = {
