@@ -32,15 +32,8 @@
         # Allow unfree software like Claude Code
         { nixpkgs.config.allowUnfree = true;}
 
-        # Allows building aarch64-linux binaries on macOS hosts
-        {
-          nix = {
-            linux-builder.enable = true;
-
-            # This line is a prerequisite
-            settings.trusted-users = [ "@admin" ];
-          };
-        }
+        # Disable nix settings because I use Determinate Nix
+        {  nix.enable = false; }
 
         ./darwin/system
       ];
