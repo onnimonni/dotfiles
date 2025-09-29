@@ -50,6 +50,7 @@
       "slack"
       "whatsapp"
       "telegram"
+      "discord"
 
       # Notes and releasing blogs to https://flaky.build
       "notion"
@@ -72,6 +73,8 @@
 
       # RSS reader
       "netnewswire"
+
+
     ];
 
     masApps = {
