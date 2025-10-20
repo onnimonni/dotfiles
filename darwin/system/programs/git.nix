@@ -1,12 +1,17 @@
 { pkgs, config, ... }:
 {
   home-manager.users.${config.system.primaryUser} = { pkgs, ... }: {
+    programs.delta = {
+      enable = true;
+      enableGitIntegration = true;
+    };
+
     programs.git = {
       enable = true;
 
       attributes = [ "*.lockb binary diff=lockb" ];
 
-      extraConfig = {
+      settings = {
         commit.gpgsign = true;
 
         diff.lockb = {
@@ -46,8 +51,6 @@
           whitespace = "red reverse";
         };
       };
-
-      delta.enable = true;
     };
   };
 }
