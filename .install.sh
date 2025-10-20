@@ -30,6 +30,9 @@ sudo rm /etc/nix/nix.custom.conf
 sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake ~/.dotfiles/
 
 echo "INSTALLATION IS COMPLETE!"
+echo "Visit: https://flakehub.com/token/create?class=user and create new token"
+echo "then run this command and paste your token there:"
+echo "$ determinate-nixd login"
 echo "OPTIONAL FINAL STEPS:"
 echo "Activate onnimonni-Dvorak keyboard layout from"
 echo "GO: System Preferences -> Keyboard \
