@@ -20,11 +20,14 @@ softwareupdate --install-rosetta --agree-to-license
 
 # Install nix
 if ! command_exists nix; then
-  curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+  curl -fsSL https://install.determinate.systems/nix | sh -s -- install --determinate
 fi
 
+# Remove the default file so that nix-core.nix is able to write custom nix config there
+sudo rm /etc/nix/nix.custom.conf
+
 # Setup MacOS with nix
-nix run nix-darwin -- switch --flake .
+sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake ~/.dotfiles/
 
 echo "INSTALLATION IS COMPLETE!"
 echo "OPTIONAL FINAL STEPS:"

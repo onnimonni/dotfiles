@@ -29,12 +29,6 @@
         # Set Git commit hash for darwin-version.
         { system.configurationRevision = self.rev or self.dirtyRev or null;}
 
-        # Allow unfree software like Claude Code
-        { nixpkgs.config.allowUnfree = true;}
-
-        # Disable nix settings because I use Determinate Nix
-        {  nix.enable = false; }
-
         ./darwin/system
       ];
     };
