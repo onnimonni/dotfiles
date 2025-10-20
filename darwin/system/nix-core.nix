@@ -9,14 +9,15 @@
 
   #nix.extraOptions = "experimental-features = nix-command flakes";
 
-  environment.etc."nix/nix.custom.conf".text = ''
-    # Determinate nixd handles the /etc/nix/nix.conf
-    # Custom changes need to go here instead
-
-    # Allow using cachix for devenv
-    extra-substituters = https://devenv.cachix.org
-    extra-trusted-public-keys = devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=
-  '';
+  #environment.etc."nix/nix.custom.conf" = {
+  #  text = ''
+  #    # Determinate nixd handles the /etc/nix/nix.conf
+  #    # Custom changes need to go here instead
+  #    # Allow using cachix for devenv
+  #    extra-substituters = https://devenv.cachix.org
+  #    extra-trusted-public-keys = devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=
+  #  '';
+  #};
 
   # Try to just append the additional settings normally and trust that nix-darwin will handle it.
   #nix.settings = {
