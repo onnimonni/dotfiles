@@ -18,6 +18,9 @@ end
 # Install rosetta to be able to use and build intel binaries
 softwareupdate --install-rosetta --agree-to-license
 
+# Disable diagnostic reporting, i.e. telemetry
+export NIX_INSTALLER_DIAGNOSTIC_ENDPOINT=""
+
 # Install nix
 if ! command_exists nix; then
   curl -fsSL https://install.determinate.systems/nix | sh -s -- install --determinate
