@@ -49,6 +49,22 @@ rec {
           Text = "0x15";
           Version = 2;
       };
+      # ⌘ + ← to jump to start of the line
+      "0xf702-0x300000-0x7b" =     {
+        Action = 11;
+        "Apply Mode" = 0;
+        Escaping = 2;
+        Text = 0x01;
+        Version = 2;
+      };
+      # ⌘ + → to jump to end of the line
+      "0xf703-0x300000-0x7c" =     {
+          Action = 11;
+          "Apply Mode" = 0;
+          Escaping = 2;
+          Text = 0x05;
+          Version = 2;
+      };
     };
   };
 }
