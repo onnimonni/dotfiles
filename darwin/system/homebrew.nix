@@ -43,6 +43,9 @@
       "visual-studio-code"
       "cursor"
 
+      # To play with elixir
+      "livebook"
+
       # TODO: Figure out how to use settings from karabiner json
       "karabiner-elements"
 

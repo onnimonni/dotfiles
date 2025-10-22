@@ -3,6 +3,13 @@
 {
   # Setup MacOS defaults
   system.defaults = {
+    # Mouse
+    trackpad = {
+      # tap to click
+      Clicking = true;
+      # two-finger-tap right click
+      TrackpadRightClick = true;
+    };
     # dock settings
     dock = {
       # auto show and hide dock
