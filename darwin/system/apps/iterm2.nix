@@ -54,7 +54,7 @@ rec {
         Action = 11;
         "Apply Mode" = 0;
         Escaping = 2;
-        Text = 0x01;
+        Text = "0x01";
         Version = 2;
       };
       # ⌘ + → to jump to end of the line
@@ -62,7 +62,7 @@ rec {
           Action = 11;
           "Apply Mode" = 0;
           Escaping = 2;
-          Text = 0x05;
+          Text = "0x05";
           Version = 2;
       };
     };
