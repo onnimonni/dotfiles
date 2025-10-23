@@ -25,8 +25,6 @@ in
   environment.systemPackages = with pkgs; [
     # For deploying new versions to remote bare metal servers
     nixos-rebuild
-    # For local development
-    devenv
     # To interact with Estonian ID card
     # As of 2025-09: Support for new Estonian ID cards of 2025 were not yet released
     # FIXME: replace with 'opensc' when the assert below fails
