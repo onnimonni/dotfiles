@@ -6,3 +6,6 @@ ssh/google_compute_engine.pub
 
 # Add IP-addresses which you don't want reveal publicly here
 ssh/secret_config
+
+# Cached version of https://github.com/elixir-lang/expert/releases
+.bin/expert
