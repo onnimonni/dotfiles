@@ -34,6 +34,8 @@
       com.microsoft.VSCode public.plain-text all
       com.microsoft.VSCode .xml all
       com.microsoft.VSCode .md all
+      com.microsoft.VSCode .ex all
+      com.microsoft.VSCode .exs all
     '';
   };
 }
