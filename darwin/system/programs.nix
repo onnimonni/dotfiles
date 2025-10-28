@@ -75,9 +75,6 @@ in
     # Read overturemaps data from azure blob storage with 'azcopy'
     azure-storage-azcopy
 
-    # Let Google wreck havoc both on my privacy and my machine
-    gemini-cli
-
     # Run docker on MacOS
     colima
     docker-client

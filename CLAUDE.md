@@ -12,7 +12,7 @@ I use fish shell so aliases and environment variables should always exist at lea
 ## How to test if the configuration is working properly
 
 ```sh
-nix flake check --flake ~/.dotfiles
+nix flake check ~/.dotfiles
 ```
 
 ## How to enable new configuration
