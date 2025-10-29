@@ -36,6 +36,7 @@
       com.microsoft.VSCode .md all
       com.microsoft.VSCode .ex all
       com.microsoft.VSCode .exs all
+      com.microsoft.VSCode .tf all
     '';
   };
 }
