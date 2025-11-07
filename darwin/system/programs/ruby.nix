@@ -7,7 +7,7 @@
 
   home-manager.users.onnimonni.home.file = {
     ".gemrc".text = ''
-      # Don't intall documentation and install binaries to my home folder
+      # Don't intall documentation for gems
       gem: --no-document
     '';
   };

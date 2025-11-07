@@ -11,6 +11,7 @@ rec {
     launchType = "Launch and Enable";
     newInstallSent = true;
     seenOnboarding = true;
+    syncBrightness = true;
     seenV2Onboarding = true;
     showDockIcon = false;
     userHasValidLicense = true;
