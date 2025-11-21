@@ -99,5 +99,8 @@
 
     # Show week numbers in calendar app
     "com.apple.iCal"."Show Week Numbers" = true;
+
+    # Do not automatically convert links to rich previews in Mail.app
+    "com.apple.mail"."AddLinkPreviews" = false;
   };
 }
