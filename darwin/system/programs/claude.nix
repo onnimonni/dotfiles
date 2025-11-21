@@ -18,20 +18,31 @@
 
     # Global instructions for Claude Code
     ".claude/CLAUDE.md".text = ''
-      # Important reminders for LLMs
+      IMPORTANT: In all interactions and commit messages, be extremely concise and sacrifice grammar for the sake of concision.
+
+      ## GitHub
+
+      - Your primary method for interacting with GitHub should be the GitHub CLI (gh).
+
+      ## Plans
+
+      - At the end of each plan, give me a list of unresolved questions to answer, if any. Make the questions extremely concise. Sacrifice grammar for the sake of concision.
 
       ## Avoid calling system shells from the code
+
       NEVER EVER use `popen` or `system()` or `shell()` or similiar methods for running commands from other coding language.
       If problem can't be solved in other ways you need to inform the user about it.
       Using binaries in $PATH is only allowed in bash scripts but not in other programming languages.
 
       ## Use env in shell scripts
+
       Shell scripts should start like this:
       ```
       #!/usr/bin/env bash
       ```
 
       ## Using environmental variables with make
+
       env like `GEN=ninja` need to be used after the make command, not before it:
 
       ```sh
@@ -39,6 +50,7 @@
       ```
 
       ## DuckDB
+
       You can enable timer by running `.timer on` command in duckdb sql script.
 
       You can't echo in duckdb scripts. This doesn't work:
@@ -54,6 +66,7 @@
       ```
 
       ## Failing git commit
+
       **IMPORTANT: You are never allowed to use: `--no-verify` or `--no-gpg-sign` in git commits**
 
       Git commit hooks verify that code is linted and tested and that they don't contain secrets.
@@ -68,6 +81,7 @@
       ```
 
       ## Pushing git
+
       Do not push git commits unless when user allowed it.
 
       ## Failing github actions
@@ -79,6 +93,7 @@
       ```
 
       ## Adding custom tools, dependencies or git hooks
+
       If project needs tools which are not yet installed ensure that `devenv.nix` exists in the project.
 
       If it doesn't exist you need to run: `devenv init` first.
@@ -86,6 +101,7 @@
       Then add the required tools or git hooks to `devenv.nix`.
 
       ## Installing git hooks
+
       Always install git hooks into the devenv.nix
     '';
   };
