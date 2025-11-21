@@ -9,3 +9,14 @@ ssh/secret_config
 
 # Cached version of https://github.com/elixir-lang/expert/releases
 .bin/expert
+
+# Devenv
+.devenv*
+devenv.local.nix
+devenv.local.yaml
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml
