@@ -1,10 +1,40 @@
-{ pkgs, ... }:
 {
-  environment.systemPackages = [
+  pkgs,
+  lib,
+  osConfig,
+  ...
+}:
+{
+  home.packages = [
     pkgs.claude-code
   ];
 
-  home-manager.users.onnimonni.home.file = {
+  # Create a home activation script to apply duti settings
+  home.activation = {
+    configureClaudeMCP = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      echo "Configuring Claude MCP servers..."
+
+      echo "Configuring Githits..."
+      ${pkgs.claude-code}/bin/claude mcp get GitHits > /dev/null 2>&1 || \
+        ${pkgs.claude-code}/bin/claude mcp add \
+          --transport http \
+          GitHits \
+          --scope user \
+          https://mcp.githits.com/ \
+          --header "Authorization: Bearer $(cat ${osConfig.sops.secrets.githits_api_key.path})"
+
+      echo "Configuring Context7..."
+      ${pkgs.claude-code}/bin/claude mcp get context7 > /dev/null 2>&1 || \
+        ${pkgs.claude-code}/bin/claude mcp add \
+          --transport http \
+          context7 \
+          --scope user \
+          https://mcp.context7.com/mcp \
+          --header "CONTEXT7_API_KEY: $(cat ${osConfig.sops.secrets.context7_api_key.path})"
+    '';
+  };
+
+  home.file = {
     # See more in https://docs.claude.com/en/docs/claude-code/settings
     # These were needed to compile large C-programs like duckdb
     ".claude/settings.json".text = ''
@@ -86,7 +116,8 @@
 
       ## Failing github actions
 
-      If github actions fail for a temporary issues don't create custom overlays. Instead rerun them first to see if it would fix them:
+      If github actions fail for a temporary issues don't create custom overlays.
+      Instead rerun them first to see if it would fix them:
 
       ```sh
       gh run rerun <id>

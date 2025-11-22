@@ -16,24 +16,37 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-  };
-
-  outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager, ... }:
-  {
-    # Build darwin flake using:
-    # $ darwin-rebuild build --flake .#Onnis-MacBook-Pro
-    darwinConfigurations."Onnis-MacBook-Pro" = nix-darwin.lib.darwinSystem {
-      modules = [
-        home-manager.darwinModules.home-manager
-
-        # Set Git commit hash for darwin-version.
-        { system.configurationRevision = self.rev or self.dirtyRev or null;}
-
-        ./darwin/system
-      ];
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    # Expose the package set, including overlays, for convenience.
-    darwinPackages = self.darwinConfigurations."Onnis-MacBook-Pro".pkgs;
   };
+
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      nix-darwin,
+      home-manager,
+      sops-nix,
+      ...
+    }:
+    {
+      # Build darwin flake using:
+      # $ darwin-rebuild build --flake .#Onnis-MacBook-Pro
+      darwinConfigurations."Onnis-MacBook-Pro" = nix-darwin.lib.darwinSystem {
+        modules = [
+          home-manager.darwinModules.home-manager
+          sops-nix.darwinModules.sops
+
+          # Set Git commit hash for darwin-version.
+          { system.configurationRevision = self.rev or self.dirtyRev or null; }
+
+          ./darwin/system
+        ];
+      };
+
+      # Expose the package set, including overlays, for convenience.
+      darwinPackages = self.darwinConfigurations."Onnis-MacBook-Pro".pkgs;
+    };
 }

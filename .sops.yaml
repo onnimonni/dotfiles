@@ -1,0 +1,12 @@
+keys:
+  # Main age key for this macbook
+  - &user_onnimonni age1se1q2r6sc647nl3zp5cenuqclgj0e9czw43hq2y3amfyhv5yrnc326fusl30yv
+  - &host_macbook_pro age1mv0fkqmh7tju54cgv05wvzn28p8zp4nfcx9yamu37w8hqcmqs3rs3l7mrv
+
+creation_rules:
+  # All secrets in the secrets directory can be decrypted with the user key
+  - path_regex: secrets/[^/]+\.(yaml|yml|json|env|ini)$
+    key_groups:
+    - age:
+      - *user_onnimonni
+      - *host_macbook_pro
