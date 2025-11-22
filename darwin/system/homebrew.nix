@@ -3,9 +3,7 @@
 {
   # Import all nix files from the 'apps' directory
   # Source: https://www.reddit.com/r/NixOS/comments/1gcmce1/recursively_import_nix_files_from_a_directory/
-  imports = lib.filter
-              (n: lib.strings.hasSuffix ".nix" n)
-              (lib.filesystem.listFilesRecursive ./apps);
+  imports = lib.filter (n: lib.strings.hasSuffix ".nix" n) (lib.filesystem.listFilesRecursive ./apps);
 
   homebrew = {
     enable = true;
@@ -55,6 +53,9 @@
       "telegram"
       "discord"
 
+      # Hetzner cloud management
+      "hcloud"
+
       # Notes and releasing blogs to https://flaky.build
       "notion"
 
@@ -77,7 +78,6 @@
       # RSS reader
       "netnewswire"
 
-
     ];
 
     masApps = {
@@ -97,7 +97,7 @@
 
       # Estonian identity cards and signing
       "DigiDoc4" = 1370791134;
-      "Web eID"  = 1576665083;
+      "Web eID" = 1576665083;
 
       # To be able to interact with Victron Power devices
       "VictronConnect" = 1084677271;
