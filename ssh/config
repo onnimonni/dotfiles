@@ -6,10 +6,3 @@ Include /Users/onnimonni/.ssh/secret_config
 # Use ssh keys through secretive
 Host *
 	IdentityAgent /Users/onnimonni/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
-
-# Ensure UTM is up and running before connecting
-Host nixos-utm-builder
-  # If this IP address has updated you can run:
-  # $ VM_NAME=nixos nix run github:ciderale/nixos-utm#nixosIP
-  Hostname 192.168.64.7
-  User root
