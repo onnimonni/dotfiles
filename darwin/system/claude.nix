@@ -9,7 +9,7 @@
     pkgs.claude-code
   ];
 
-  # Create a home activation script to apply duti settings
+  # Create a home activation script to login enable MCP servers for claude code.
   home.activation = {
     configureClaudeMCP = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       echo "Configuring Claude MCP servers..."
