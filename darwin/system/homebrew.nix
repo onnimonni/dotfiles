@@ -31,6 +31,9 @@
       # FIXME: Version from nixpkgs does not build
       # Download files areena.yle.fi for personal archiving
       "yle-dl"
+
+      # Hetzner cloud management
+      "hcloud"
     ];
 
     casks = [
@@ -52,9 +55,6 @@
       "whatsapp"
       "telegram"
       "discord"
-
-      # Hetzner cloud management
-      "hcloud"
 
       # Notes and releasing blogs to https://flaky.build
       "notion"

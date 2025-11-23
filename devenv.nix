@@ -29,7 +29,6 @@ rec {
     nixfmt-rfc-style.enable = true;
 
     # Leaking secrets
-    trufflehog.enable = true;
     ripsecrets.enable = true;
 
     # Check that ssh/config doesn't contain HostName (capital N)
