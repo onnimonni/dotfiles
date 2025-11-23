@@ -5,6 +5,7 @@
   ];
 
   environment.variables = {
-    DEVENV_CORES = "$(sysctl -n hw.ncpu)";
+    # getconf works also in linux so it's more portable than $(sysctl -n hw.ncpu)
+    DEVENV_CORES = "$(getconf _NPROCESSORS_ONLN)";
   };
 }
