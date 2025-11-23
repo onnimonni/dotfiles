@@ -79,6 +79,15 @@
       make release GEN=ninja VCPKG_TOOLCHAIN_PATH=$(pwd)/vcpkg/scripts/buildsystems/vcpkg.cmake
       ```
 
+      ## System clock
+
+      Don't trust your memory; you cannot remember time accurately.
+      If you need to get the current time use:
+
+      ```sh
+      date
+      ```
+
       ## DuckDB
 
       You can enable timer by running `.timer on` command in duckdb sql script.
