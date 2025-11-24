@@ -54,6 +54,11 @@
 
       - Your primary method for interacting with GitHub should be the GitHub CLI (gh).
 
+      ## Use Githits and context7 MCP servers
+      Instead of using 'Web Search' skill, prefer using the Githits and context7 MCP servers for fetching up-to-date information.
+
+      These can provide help when you want to find code examples and libraries and function documentation.
+
       ## Plans
 
       - At the end of each plan, give me a list of unresolved questions to answer, if any. Make the questions extremely concise. Sacrifice grammar for the sake of concision.
