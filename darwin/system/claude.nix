@@ -127,9 +127,9 @@
 
       Ask input from user if you get blocked and never use these flags unless when explicitly allowed by the user!
 
-      Also don't try to skip hooks with certain env like:
+      You are not allowed to use SKIP variable before git commit to skip hooks:
       ```
-      SKIP=mix-test
+      SKIP=... git commit -m "..."
       ```
 
       ## Pushing git
