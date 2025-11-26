@@ -97,7 +97,8 @@
 
       You can enable timer by running `.timer on` command in duckdb sql script.
 
-      You can't echo in duckdb scripts. This doesn't work:
+      ### Printing messages
+      You can't print in duckdb scripts. This doesn't work:
 
       ```sql
       .echo Done!
@@ -107,6 +108,13 @@
 
       ```sql
       SELECT "Done!" as status
+      ```
+
+      ## Duckdb CLI file flag
+      If you want to run SQL files with duckdb CLI use:
+
+      ```sh
+      duckdb -f myscript.sql
       ```
 
       ## Failing git commit

@@ -1,4 +1,4 @@
-{pkgs, lib, ...}:
+{ pkgs, lib, ... }:
 let
   latestOpensc = pkgs.opensc.version;
   # As of 2024-09, latest version is 0.26.1
@@ -16,9 +16,9 @@ in
 {
   # Import all nix files from the 'apps' directory
   # Source: https://www.reddit.com/r/NixOS/comments/1gcmce1/recursively_import_nix_files_from_a_directory/
-  imports = lib.filter
-              (n: lib.strings.hasSuffix ".nix" n)
-              (lib.filesystem.listFilesRecursive ./programs);
+  imports = lib.filter (n: lib.strings.hasSuffix ".nix" n) (
+    lib.filesystem.listFilesRecursive ./programs
+  );
 
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
@@ -28,9 +28,12 @@ in
     # To interact with Estonian ID card
     # As of 2025-09: Support for new Estonian ID cards of 2025 were not yet released
     # FIXME: replace with 'opensc' when the assert below fails
-    (if (latestOpensc > expectedVersion)
-      then (throw "OpenSC ${latestOpensc} is newer than ${expectedVersion}. Custom override can be removed.")
-      else customOpensc)
+    (
+      if (latestOpensc > expectedVersion) then
+        (throw "OpenSC ${latestOpensc} is newer than ${expectedVersion}. Custom override can be removed.")
+      else
+        customOpensc
+    )
     # To format nix files properly
     nixfmt-rfc-style
     # To find nix packages
@@ -71,6 +74,9 @@ in
 
     # Python
     uv
+
+    # To access AWS services, especially SES and public data in S3
+    awscli2
 
     # Read overturemaps data from azure blob storage with 'azcopy'
     azure-storage-azcopy
