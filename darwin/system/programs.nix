@@ -75,9 +75,6 @@ in
     # Python
     uv
 
-    # To access AWS services, especially SES and public data in S3
-    awscli2
-
     # Read overturemaps data from azure blob storage with 'azcopy'
     azure-storage-azcopy
 
