@@ -24,7 +24,6 @@ rec {
       imports = [
         # Import the home-manager modules
         ./file-associations.nix
-        ./claude.nix
         ./keyboard.nix
       ];
     };

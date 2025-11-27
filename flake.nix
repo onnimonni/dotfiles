@@ -35,6 +35,7 @@
       # Build darwin flake using:
       # $ darwin-rebuild build --flake .#Onnis-MacBook-Pro
       darwinConfigurations."Onnis-MacBook-Pro" = nix-darwin.lib.darwinSystem {
+        specialArgs = { inherit inputs; };
         modules = [
           home-manager.darwinModules.home-manager
           sops-nix.darwinModules.sops

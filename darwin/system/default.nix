@@ -7,6 +7,7 @@
     ./homebrew.nix
     ./programs.nix
     ./sops.nix
+    ./claude.nix
   ];
 
   # Pretty nice examples for setting up nix-darwin: https://github.com/thurstonsand/nixonomicon
