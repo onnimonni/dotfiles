@@ -184,6 +184,36 @@
             end
           '';
         };
+
+        aws-exec = {
+          description = "Run command with AWS credentials from SSO/login";
+          body = ''
+            # Check if -- separator and command provided
+            set -l cmd_start 0
+            for i in (seq (count $argv))
+                if test "$argv[$i]" = "--"
+                    set cmd_start (math $i + 1)
+                    break
+                end
+            end
+
+            if test $cmd_start -eq 0 -o $cmd_start -gt (count $argv)
+                echo "Usage: aws-exec -- command [args...]" >&2
+                return 1
+            end
+
+            # Check if logged in to AWS
+            if not aws sts get-caller-identity > /dev/null 2>&1
+                echo "Error: AWS not logged in or credentials expired" >&2
+                echo "Run 'aws login' to authenticate" >&2
+                return 1
+            end
+
+            # Get credentials with proper quoting and run command
+            set -l env_vars (aws configure export-credentials --format env-no-export | sed 's/=\(.*\)/="\1"/')
+            eval $env_vars $argv[$cmd_start..-1]
+          '';
+        };
       };
     };
   };

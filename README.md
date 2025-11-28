@@ -59,6 +59,14 @@ sudo nix-channel --update nixos
 
 [Source](https://github.com/NixOS/nix/issues/2982#issuecomment-997983067)
 
+### Karabiner is not working
+
+Restart it by running ([source](https://karabiner-elements.pqrs.org/docs/manual/misc/configuration-file-path/)):
+
+```sh
+launchctl kickstart -k gui/$(id -u)/org.pqrs.service.agent.karabiner_console_user_server
+```
+
 ## Docs for common procedures
 * [Using Estonian ID-card as ssh public key](docs/estonian-id-card.md)
 
