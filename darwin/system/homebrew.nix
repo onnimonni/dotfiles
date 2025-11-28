@@ -44,7 +44,7 @@
       "spotify"
 
       # Editors
-      "visual-studio-code"
+      # VS Code is installed via home-manager in programs/vscode.nix
       "cursor"
 
       # To play with elixir
