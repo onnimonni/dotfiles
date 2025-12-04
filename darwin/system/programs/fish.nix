@@ -83,6 +83,9 @@
             set -x DOCKER_HOST unix://$HOME/.colima/default/docker.sock
         end
 
+        # Opt out of query.farm telemetry (DuckDB extension)
+        set -gx QUERY_FARM_TELEMETRY_OPT_OUT true
+
         # Load secrets file if it exists
         if test -f ~/.secrets.fish
           source ~/.secrets.fish

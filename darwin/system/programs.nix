@@ -68,10 +68,6 @@ in
     # For generating passwords
     pwgen
 
-    # Node
-    nodejs
-    pnpm
-
     # Python
     uv
 
