@@ -159,6 +159,8 @@ in
 
           Do not push git commits unless when user allowed it.
 
+          Use `git push origin HEAD` instead of just `git push` to avoid pushing all local branches.
+
           ## Failing github actions
 
           If github actions fail for a temporary issues don't create custom overlays.
