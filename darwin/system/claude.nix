@@ -47,12 +47,24 @@ in
 
       home.file = {
         # See more in https://docs.claude.com/en/docs/claude-code/settings
-        # These were needed to compile large C-programs like duckdb
+        # Longer timeouts were needed to compile large programs like duckdb
+        # Disable telemetry and error reporting and feedback surveys
+        # Source: https://www.vincentschmalbach.com/configuring-claude-code-for-privacy-and-noise-control/
         ".claude/settings.json".text = ''
           {
+            "$schema": "https://json.schemastore.org/claude-code-settings.json",
+            "alwaysThinkingEnabled": true,
+            "feedbackSurveyState": {
+              "lastShownTime": 1754109357477
+            },
+            "includeCoAuthoredBy": false,
             "env": {
               "BASH_DEFAULT_TIMEOUT_MS": "1800000",
-              "BASH_MAX_TIMEOUT_MS": "3600000"
+              "BASH_MAX_TIMEOUT_MS": "3600000",
+              "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
+              "DISABLE_TELEMETRY": "1",
+              "DISABLE_ERROR_REPORTING": "1",
+              "DISABLE_NON_ESSENTIAL_MODEL_CALLS": "1"
             }
           }
         '';
