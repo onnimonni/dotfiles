@@ -91,5 +91,8 @@ in
 
     # To build C stuff like duckdb
     cmake
+
+    # Cloudflare Workers CLI
+    wrangler
   ];
 }

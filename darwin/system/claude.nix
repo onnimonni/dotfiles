@@ -140,6 +140,19 @@ in
           duckdb -f myscript.sql
           ```
 
+          ### Querying JSON/structured data in varchar columns
+          NEVER use LIKE to query varchar columns containing JSON or structured data. Parse it properly:
+
+          ```sql
+          -- BAD: Using LIKE to find JSON values
+          SELECT * FROM table WHERE data LIKE '%"key": "value"%';
+
+          -- GOOD: Parse JSON and query properly
+          SELECT * FROM table WHERE json_extract_string(data, '$.key') = 'value';
+          ```
+
+          If proper parsing tools/extensions aren't available, tell user to build/find them rather than using LIKE.
+
           ## Failing git commit
 
           **IMPORTANT: You are never allowed to use: `--no-verify` or `--no-gpg-sign` in git commits**

@@ -8,7 +8,7 @@
 
   # Set XDG_CONFIG_HOME for pnpm and other tools
   # Without this the config files are in ~/Library/Preferences/pnpm/rc
-  environment.variables.XDG_CONFIG_HOME = "~/.config/";
+  environment.variables.XDG_CONFIG_HOME = "$HOME/.config";
 
   # Prevent Shai Hulud kind of worms
   # https://news.ycombinator.com/item?id=46035533

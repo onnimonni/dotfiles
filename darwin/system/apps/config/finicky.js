@@ -18,6 +18,14 @@ export default {
       },
     },
     {
+      // Redirect Instagram reel links to vxinstagram.com
+      match: "instagram.com/reel/*",
+      url: (url) => {
+        url.host = "vxinstagram.com";
+        return url;
+      },
+    },
+    {
       // Redirect links like this: https://c212.net/c/link/?t=0&l=en&o=4218234-1&h=2715864414&u=https%3A%2F%2Foverturemaps.org%2Fbecome-a-member%2F&a=https%3A%2F%2Foverturemaps.org%2Fbecome-a-member%2F
       // to: https://overturemaps.org/become-a-member/
       // This is needed when using pihole which anyway blocks c212.net

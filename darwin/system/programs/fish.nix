@@ -63,6 +63,11 @@
 
         # Trim new lines and copy to clipboard
         cb = "tr -d '\\n' | pbcopy";
+
+        # Open files with specific apps
+        antigravity = "open -a /Applications/Antigravity.app";
+        vlc = "open -a /Applications/VLC.app";
+        typora = "open -a /Applications/Typora.app";
       };
 
       shellInit = ''

@@ -81,6 +81,8 @@
       # RSS reader
       "netnewswire"
 
+      # Running local LLM
+      "lm-studio"
     ];
 
     masApps = {
