@@ -91,6 +91,9 @@
         # Opt out of query.farm telemetry (DuckDB extension)
         set -gx QUERY_FARM_TELEMETRY_OPT_OUT true
 
+        # Number of CPU cores for devenv/build tools
+        set -gx DEVENV_CORES (sysctl -n hw.ncpu)
+
         # Load secrets file if it exists
         if test -f ~/.secrets.fish
           source ~/.secrets.fish

@@ -65,7 +65,17 @@ in
               "DISABLE_TELEMETRY": "1",
               "DISABLE_ERROR_REPORTING": "1",
               "DISABLE_NON_ESSENTIAL_MODEL_CALLS": "1"
-            }
+            },
+            "UserPromptSubmit": [
+              {
+                "hooks": [
+                  {
+                    "type": "command",
+                    "command": "~/.claude/hooks/claudeception-activator.sh"
+                  }
+                ]
+              }
+            ]
           }
         '';
 

@@ -1,15 +1,7 @@
 { pkgs, ... }:
 {
-  homebrew.brews = [
-    # Homebrew has currently newer duckdb than nix
-    # See more in: https://github.com/NixOS/nixpkgs/pull/444225
-    (
-      if (pkgs.duckdb.version > "1.4.1") then
-        (throw "DuckDB ${pkgs.duckdb.version} is newer than 1.4.1. You can install duckdb again from nixpkgs.")
-      else
-        "duckdb"
-    )
-  ];
+  # Always use homebrew duckdb - nixpkgs is too slow to update
+  homebrew.brews = [ "duckdb" ];
 
   environment.variables = {
     # Blocks evil stuff like: https://github.com/Query-farm/jsonata/blob/ae4d2ba664309eb25ceb25f867b5dcf27121dfc3/src/query_farm_telemetry.cpp

@@ -3,6 +3,7 @@
   # Configure SSH to include secret_config
   home-manager.users.onnimonni.programs.ssh = {
     enable = true;
+    enableDefaultConfig = false;
     includes = [
       "~/.colima/ssh_config"
       "~/.ssh/secret_config"

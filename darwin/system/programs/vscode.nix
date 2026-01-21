@@ -7,7 +7,7 @@
       # Use the darwin package for proper macOS integration
       package = pkgs.vscode;
 
-      userSettings = {
+      profiles.default.userSettings = {
         "editor.accessibilitySupport" = "off";
         "window.zoomLevel" = 2;
         "keyboard.dispatch" = "keyCode";
