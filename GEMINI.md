@@ -1,0 +1,1 @@
+Read and follow @CLAUDE.md
