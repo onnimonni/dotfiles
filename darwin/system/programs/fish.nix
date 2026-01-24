@@ -67,7 +67,6 @@
         # Open files with specific apps
         antigravity = "open -a /Applications/Antigravity.app";
         vlc = "open -a /Applications/VLC.app";
-        typora = "open -a /Applications/Typora.app";
       };
 
       shellInit = ''
@@ -193,6 +192,18 @@
               end try
               tell application "Finder" to activate'
             end
+          '';
+        };
+
+        typora = {
+          description = "Create/open file in Typora";
+          body = ''
+            if test (count $argv) -eq 0
+              echo "Usage: typora <filename>" >&2
+              return 1
+            end
+            touch $argv[1]
+            open -a "Typora.app" $argv[1]
           '';
         };
 
