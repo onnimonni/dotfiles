@@ -1,4 +1,8 @@
 { pkgs, ... }:
+let
+  # Public key for GitHub (no biometric auth required in Secretive)
+  githubPubKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAu0qCU51pzJP6GaHRDT5pqGsfMw9qlTTMTnxFo3ppoQekYWwB+9Liyrm0giBR2LxQu1x5G3S7h8xw3sjxHQq4w= github-key";
+in
 {
   # Configure SSH to include secret_config
   home-manager.users.onnimonni.programs.ssh = {
@@ -13,5 +17,15 @@
     matchBlocks."*" = {
       identityAgent = "/Users/onnimonni/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh";
     };
+
+    # Use specific key for GitHub (no biometric prompts)
+    matchBlocks."github.com" = {
+      hostname = "github.com";
+      identityFile = "~/.ssh/github_secretive.pub";
+      identitiesOnly = true;
+    };
   };
+
+  # Store public key so SSH can match it to Secretive agent
+  home-manager.users.onnimonni.home.file.".ssh/github_secretive.pub".text = githubPubKey;
 }

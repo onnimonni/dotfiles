@@ -18,7 +18,7 @@
       ignore-scripts true
     '';
     ".npmrc".text = ''
-      ignore-scripts true
+      ignore-scripts=true
     '';
     ".config/pnpm/rc".text = ''
       ignore-scripts=true

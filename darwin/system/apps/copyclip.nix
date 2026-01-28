@@ -1,11 +1,19 @@
-{...}:
+{ ... }:
 {
   homebrew.casks = [
     "copyclip"
   ];
 
+  # Launch CopyClip2 at login via launchd
+  launchd.user.agents.copyclip2 = {
+    command = "/Applications/CopyClip 2.app/Contents/MacOS/CopyClip 2";
+    serviceConfig = {
+      RunAtLoad = true;
+      KeepAlive = false;
+    };
+  };
+
   system.defaults.CustomUserPreferences."com.fiplab.copyclip2" = {
-    startAtLogin = true;
     saveClippingsCount = 1000;
 
     # Disable auto update: use brew instead

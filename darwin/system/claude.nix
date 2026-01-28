@@ -83,6 +83,17 @@ in
         ".claude/CLAUDE.md".text = ''
           # More instructions in
           @~/.agents/AGENTS.md
+
+          ## Creating PRs for 3rd party repos
+
+          When user says "Create a PR for 3rd party repo" or similar:
+
+          1. Check repo size with `gh api repos/{owner}/{repo} --jq .size` — if over 5000000 KB (≈5GB), use GitHub API/fetch instead or ask user to confirm before cloning
+          2. Clone the repo locally to /tmp/ using `git clone --depth 1` (NOT gh api calls)
+          3. Explore the code locally using filesystem tools (Read, Grep, Glob) instead of GitHub API
+          4. Create a branch, make changes, commit, push, then create PR with `gh pr create`
+
+          Prefer local exploration over API-based file fetching for understanding the codebase.
         '';
       };
     };
