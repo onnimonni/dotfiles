@@ -17,6 +17,14 @@
 
         - Your primary method for interacting with GitHub should be the GitHub CLI (gh).
 
+        ### Viewing private issue attachments
+        To view attachments from private repository issues:
+
+        ```sh
+        gh api -H "Accept: application/octet-stream" \
+          "https://github.com/user-attachments/assets/32c11c1a-3afb-48ec-8fb6-9d95ed8d4d96" > /tmp/issue-53.png 2>&1
+        ```
+
         ## Use Githits and context7 MCP servers
         Instead of using 'Web Search' skill, prefer using the Githits and context7 MCP servers for fetching up-to-date information.
 
@@ -134,6 +142,22 @@
         ## Installing git hooks
 
         Always install git hooks into the devenv.nix
+
+        ## Use sd instead of sed
+        Use `sd` for find & replace instead of `sed`. It's simpler and more intuitive:
+
+        ```sh
+        # sed: confusing syntax with -i, escaping, delimiters
+        sed -i 's/before/after/g' file.txt
+
+        # sd: simple and intuitive
+        sd 'before' 'after' file.txt
+        ```
+
+        sd uses regex by default. For literal strings use `-F`:
+        ```sh
+        sd -F 'literal.string' 'replacement' file.txt
+        ```
 
         ## Cargo documents
         Do not use `--open` flag with `cargo doc`
