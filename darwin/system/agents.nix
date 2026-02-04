@@ -103,13 +103,15 @@
 
         ## Failing git commit
 
-        **IMPORTANT: You are never allowed to use: `--no-verify` or `--no-gpg-sign` in git commits**
+        **IMPORTANT: You are never allowed to use `--no-verify` in git commits**
 
         Git commit hooks verify that code is linted and tested and that they don't contain secrets.
 
-        Fix the pre-commit hook issues instead of bypassing them.GPG signing needs user to approve an interactive popup. If it fails you need to try again.
+        Fix the pre-commit hook issues instead of bypassing them.
 
-        Ask input from user if you get blocked and never use these flags unless when explicitly allowed by the user!
+        **Always use `--no-gpg-sign` flag in git commits** to skip GPG signing.
+
+        Ask input from user if you get blocked and never use `--no-verify` unless when explicitly allowed by the user!
 
         You are not allowed to use SKIP variable before git commit to skip hooks:
         ```
@@ -161,6 +163,20 @@
 
         ## Cargo documents
         Do not use `--open` flag with `cargo doc`
+
+        ## Rust Build Performance
+
+        - **Use `cargo check`** for 90% of dev work (skips codegen/linking, 10x faster)
+        - **Never use full `lto = true`** in release - use `lto = "thin"` instead (20-30% faster builds)
+        - **Strip debug from deps** in `.cargo/config.toml`:
+          ```toml
+          [profile.dev.package."*"]
+          debug = false
+          strip = true
+          ```
+        - Monitor target/ size - if >5GB, run cargo clean (stale artifacts accumulate)
+        - Use lld linker on Linux for 2-5x faster linking (add to devenv.nix)
+        - macOS: ld64 is already fast, don't configure custom linker
 
         ## Prefer libraries to fix html entities and encoding issues
         This is terrible (manual replacements):
