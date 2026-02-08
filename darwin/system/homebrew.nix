@@ -37,6 +37,9 @@
 
       # AWS cli for terraform, public s3 buckets, SES, etc
       "awscli"
+
+      # Docker/container management
+      "container"
     ];
 
     casks = [

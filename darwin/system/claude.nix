@@ -6,8 +6,13 @@
   ...
 }:
 let
-  # claude binary path from homebrew
-  claudeBin = "/opt/homebrew/bin/claude";
+  # Real claude binary from homebrew
+  realClaudeBin = "/opt/homebrew/bin/claude";
+
+  # Wrapper that runs claude under zsh (fish has compatibility issues)
+  claudeWrapper = pkgs.writeShellScriptBin "claude" ''
+    exec /bin/zsh -l -c 'exec ${realClaudeBin} "$@"' -- "$@"
+  '';
 
   # home-manager lib for dag functions
   hm = inputs.home-manager.lib.hm;
@@ -15,6 +20,9 @@ in
 {
   # Install claude-code via homebrew cask (newer than nixpkgs)
   homebrew.casks = [ "claude-code" ];
+
+  # Add wrapper to system PATH (before homebrew)
+  environment.systemPackages = [ claudeWrapper ];
 
   # Home-manager configuration for claude
   home-manager.users.onnimonni =
@@ -26,8 +34,8 @@ in
           echo "Configuring Claude MCP servers..."
 
           echo "Configuring Githits..."
-          ${claudeBin} mcp get GitHits > /dev/null 2>&1 || \
-            ${claudeBin} mcp add \
+          ${realClaudeBin} mcp get GitHits > /dev/null 2>&1 || \
+            ${realClaudeBin} mcp add \
               --transport http \
               GitHits \
               --scope user \
@@ -35,8 +43,8 @@ in
               --header "Authorization: Bearer $(cat ${osConfig.sops.secrets.githits_api_key.path})"
 
           echo "Configuring Context7..."
-          ${claudeBin} mcp get context7 > /dev/null 2>&1 || \
-            ${claudeBin} mcp add \
+          ${realClaudeBin} mcp get context7 > /dev/null 2>&1 || \
+            ${realClaudeBin} mcp add \
               --transport http \
               context7 \
               --scope user \
