@@ -23,13 +23,17 @@ git clone https://github.com/onnimonni/dotfiles ~/.dotfiles
 
 ## Using this config with your own user
 
-Create `~/.dotfiles/local-user.nix` with your details:
+Run the generator script:
+```sh
+~/.dotfiles/scripts/generate-local-user.sh
+```
 
+Or create `~/.dotfiles/local-user.nix` manually:
 ```nix
 {
   hostname = "Your-Mac-Hostname";  # from: scutil --get LocalHostName
   username = "yourusername";       # from: whoami
-  fullName = "Your Name";
+  fullName = "Your Name";          # from: id -F
   email = "you@example.com";
 }
 ```
