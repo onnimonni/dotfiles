@@ -1,6 +1,6 @@
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 rec {
-  system.primaryUser = "onnimonni";
+  system.primaryUser = username;
 
   system.defaults.loginwindow.LoginwindowText = "Teretulemast ${system.primaryUser} 👋!";
   users.users."${system.primaryUser}" = {

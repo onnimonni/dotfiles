@@ -1,6 +1,6 @@
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 {
-  users.users.onnimonni.shell = pkgs.fish;
+  users.users.${username}.shell = pkgs.fish;
 
   # FIXME: Fails often like this:
   # /nix/store/5kyj36g08zq4xi5311fww00b39jcb0bg-procps-1003.1-2008/bin/ps: illegal option -- -
@@ -17,7 +17,7 @@
 
   # This disables annoying message when opening a new terminal:
   # Last login: Sun May 25 21:52:09 on ttys009
-  home-manager.users.onnimonni = {
+  home-manager.users.${username} = {
     home.file = {
       ".hushlogin".text = ''
         # Disables last login from appearing in Terminal

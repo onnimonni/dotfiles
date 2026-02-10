@@ -1,10 +1,10 @@
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 {
   environment.systemPackages = [
     pkgs.curl
   ];
 
-  home-manager.users.onnimonni.home.file = {
+  home-manager.users.${username}.home.file = {
     ".curlrc".text = ''
       # Enable redirect
       -L

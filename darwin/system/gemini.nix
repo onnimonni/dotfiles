@@ -2,6 +2,7 @@
   pkgs,
   lib,
   inputs,
+  username,
   ...
 }:
 {
@@ -12,7 +13,7 @@
   ];
 
   # Home-manager configuration for gemini
-  home-manager.users.onnimonni = {
+  home-manager.users.${username} = {
     home.file = {
       ".gemini/GEMINI.md".text = ''
         # More instructions in

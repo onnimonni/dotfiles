@@ -1,7 +1,12 @@
-{ pkgs, lib, ... }:
+{
+  pkgs,
+  lib,
+  username,
+  ...
+}:
 {
   # VS Code installed and configured via home-manager
-  home-manager.users.onnimonni = {
+  home-manager.users.${username} = {
     programs.vscode = {
       enable = true;
       # Use the darwin package for proper macOS integration

@@ -11,14 +11,32 @@ I hope someday I will learn to play [vimgolf](http://www.vimgolf.com/) but until
 - This includes my own keyboard layout based on Dvorak ( I implemented small tweaks for finnish language ).
 
 ## Installation on fresh MacOS
-```
+```sh
 # Install Xcode Command line tools to get git
-$ xcode-select --install
+xcode-select --install
 
 # Clone the dotfiles and run the installation script
-$ git clone https://github.com/onnimonni/dotfiles ~/.dotfiles
+git clone https://github.com/onnimonni/dotfiles ~/.dotfiles
 
-$ ~/.dotfiles/.install.sh
+~/.dotfiles/.install.sh
+```
+
+## Using this config with your own user
+
+Create `~/.dotfiles/local-user.nix` with your details:
+
+```nix
+{
+  hostname = "Your-Mac-Hostname";  # from: scutil --get LocalHostName
+  username = "yourusername";       # from: whoami
+  fullName = "Your Name";
+  email = "you@example.com";
+}
+```
+
+Then rebuild:
+```sh
+sudo darwin-rebuild switch --flake ~/.dotfiles
 ```
 
 ## To update everything

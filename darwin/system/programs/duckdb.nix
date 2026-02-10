@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 {
   # Always use homebrew duckdb - nixpkgs is too slow to update
   homebrew.brews = [ "duckdb" ];
@@ -8,7 +8,7 @@
     QUERY_FARM_TELEMETRY_OPT_OUT = "1";
   };
 
-  home-manager.users.onnimonni.home.file = {
+  home-manager.users.${username}.home.file = {
     # Automatically load few duckdb extensions
     ".duckdbrc".text = ''
       INSTALL netquack FROM community;

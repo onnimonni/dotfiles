@@ -10,6 +10,9 @@ ssh/secret_config
 # Cached version of https://github.com/elixir-lang/expert/releases
 .bin/expert
 
+# Local user override for nix-darwin
+local-user.nix
+
 # Devenv
 .devenv*
 devenv.local.nix

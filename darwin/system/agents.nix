@@ -2,16 +2,19 @@
   pkgs,
   lib,
   inputs,
+  username,
+  fullName,
+  email,
   ...
 }:
 {
-  # Home-manager configuration for gemini
-  home-manager.users.onnimonni = {
+  # Home-manager configuration for agents
+  home-manager.users.${username} = {
     home.file = {
       ".agents/AGENTS.md".text = ''
         IMPORTANT: In all interactions and commit messages, be extremely concise and sacrifice grammar for the sake of concision.
 
-        My name is Onni Hakala and my nickname is onnimonni. Use onni@flaky.build in emails.
+        My name is ${fullName} and my nickname is ${username}. Use ${email} in emails.
 
         ## GitHub
 

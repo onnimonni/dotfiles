@@ -1,5 +1,5 @@
 # Custom nix rules to use determinate nix installer with nix-darwin
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 {
   # Allow unfree software like Claude Code
   nixpkgs.config.allowUnfree = true;
@@ -7,7 +7,7 @@
   # Required for use with Determinate Nix
   nix.enable = false;
   environment.etc."nix/nix.custom.conf".text = ''
-    trusted-users = root onnimonni
+    trusted-users = root ${username}
     warn-dirty = false
 
     extra-substituters = https://devenv.cachix.org
