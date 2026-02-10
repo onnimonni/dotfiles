@@ -43,6 +43,9 @@
     ];
 
     casks = [
+      # Terminal emulator
+      "ghostty"
+
       "google-chrome"
       "spotify"
 

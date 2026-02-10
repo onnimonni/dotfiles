@@ -74,10 +74,6 @@ in
     # Read overturemaps data from azure blob storage with 'azcopy'
     azure-storage-azcopy
 
-    # Run docker on MacOS
-    colima
-    docker-client
-
     # Secret management
     sops
     age-plugin-se
@@ -88,6 +84,9 @@ in
 
     # To remember how command line works
     tldr
+
+    # Better sed replacement (intuitive find & replace)
+    sd
 
     # To build C stuff like duckdb
     cmake

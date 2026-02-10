@@ -22,6 +22,21 @@
       ".hushlogin".text = ''
         # Disables last login from appearing in Terminal
       '';
+
+      # Ghostty terminal config
+      ".config/ghostty/config".text = ''
+        # Use fish shell
+        command = ${pkgs.fish}/bin/fish
+
+        # Font settings
+        font-family = JetBrains Mono
+        font-size = 14
+
+        # Window settings
+        window-padding-x = 8
+        window-padding-y = 8
+        macos-titlebar-style = hidden
+      '';
     };
 
     programs.fish = {
@@ -39,6 +54,9 @@
         # Reload fish config
         reload-fish = "source ~/.config/fish/config.fish";
 
+        # Free up disk space
+        free-up-disk = "brew cleanup --prune=all && container prune && sudo rm -rf ~/.Trash/*";
+
         # Prevent overwriting or deleting by accident
         cp = "cp -iv";
         mv = "mv -iv";
@@ -49,8 +67,10 @@
         dt = "cd ~/Desktop";
         p = "cd ~/Projects";
 
-        # Docker wpscan
-        wpscan = "docker run --rm wpscanteam/wpscan";
+        # Use container instead of docker
+        docker = "container";
+        docker-compose = "container compose";
+        wpscan = "container run --rm wpscanteam/wpscan";
 
         # Empty the Trash on all mounted volumes and the main HDD.
         # Also, clear Apple's System Logs to improve shell startup speed.
@@ -80,12 +100,6 @@
         # Source: https://github.com/smashedtoatoms/asdf-postgres
         set -Ux HOMEBREW_PREFIX (brew --prefix)
         set -Ux HOMEBREW_CASK_OPTS "--no-quarantine" # Don't quarantine casks by default
-
-        # Use Colima to run docker on Darwin
-        switch (uname)
-          case Darwin
-            set -x DOCKER_HOST unix://$HOME/.colima/default/docker.sock
-        end
 
         # Opt out of query.farm telemetry (DuckDB extension)
         set -gx QUERY_FARM_TELEMETRY_OPT_OUT true

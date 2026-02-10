@@ -11,6 +11,7 @@ let
 
   # Wrapper that runs claude under zsh (fish has compatibility issues)
   claudeWrapper = pkgs.writeShellScriptBin "claude" ''
+    export SHELL=/bin/zsh
     exec /bin/zsh -l -c 'exec ${realClaudeBin} "$@"' -- "$@"
   '';
 
