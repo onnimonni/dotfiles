@@ -37,7 +37,6 @@ if [ ! -f ~/.dotfiles/local-user.nix ]; then
   ~/.dotfiles/scripts/generate-local-user.sh
   # Add to git so nix flake can see it
   git -C ~/.dotfiles add local-user.nix
-  git -C ~/.dotfiles commit -m "Add local-user.nix for $(scutil --get LocalHostName)"
 fi
 
 # Setup MacOS with nix
