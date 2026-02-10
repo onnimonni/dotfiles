@@ -29,7 +29,7 @@ if ! command_exists nix; then
 fi
 
 # Remove the default file so that nix-core.nix is able to write custom nix config there
-sudo rm /etc/nix/nix.custom.conf
+sudo rm -f /etc/nix/nix.custom.conf
 
 # Setup MacOS with nix
 sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake ~/.dotfiles/
