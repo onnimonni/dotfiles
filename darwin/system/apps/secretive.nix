@@ -9,15 +9,14 @@ in
     defaultsHasRunSetup = true;
   };
 
-  home-manager.users.${username}.home.sessionVariables = {
-    inherit SSH_AUTH_SOCK;
-  };
+  home-manager.users.${username} = {
+    home.sessionVariables = {
+      inherit SSH_AUTH_SOCK;
+    };
 
-  home-manager.users.${username}.programs.ssh.matchBlocks."*".extraOptions."IdentityAgent" =
-    SSH_AUTH_SOCK;
+    programs.ssh.matchBlocks."*".extraOptions."IdentityAgent" = SSH_AUTH_SOCK;
 
-  home-manager.users.${username}.home.file = {
-    ".ssh/google_compute_engine".text = ''
+    home.file.".ssh/google_compute_engine".text = ''
       # Fake file to allow gcloud to work with secretive
     '';
   };
