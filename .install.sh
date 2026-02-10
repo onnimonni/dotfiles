@@ -8,12 +8,12 @@ function command_exists () {
   command -v "$1" >/dev/null 2>&1
 }
 
-if softwareupdate -l 2>&1 | grep 'No new software available.'
+if softwareupdate -l 2>&1 | grep 'No new software available.' >/dev/null 2>&1; then
   echo "Skipping MacOS updates"
 else
   echo "Installing MacOS updates requires sudo and restart"
   sudo softwareupdate --install --all --restart --verbose
-end
+fi
 
 # Install rosetta to be able to use and build intel binaries
 softwareupdate --install-rosetta --agree-to-license
