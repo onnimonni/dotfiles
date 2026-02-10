@@ -35,6 +35,9 @@ sudo rm -f /etc/nix/nix.custom.conf
 if [ ! -f ~/.dotfiles/local-user.nix ]; then
   echo "Generating local-user.nix for this machine..."
   ~/.dotfiles/scripts/generate-local-user.sh
+  # Add to git so nix flake can see it
+  git -C ~/.dotfiles add local-user.nix
+  git -C ~/.dotfiles commit -m "Add local-user.nix for $(scutil --get LocalHostName)"
 fi
 
 # Setup MacOS with nix
