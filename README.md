@@ -40,7 +40,7 @@ Or create `~/.dotfiles/local-user.nix` manually:
 
 Then rebuild:
 ```sh
-sudo darwin-rebuild switch --flake ~/.dotfiles
+sudo darwin-rebuild switch --impure --flake ~/.dotfiles
 ```
 
 ## To update everything

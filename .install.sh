@@ -37,8 +37,8 @@ if [ ! -f ~/.dotfiles/local-user.nix ]; then
   ~/.dotfiles/scripts/generate-local-user.sh
 fi
 
-# Setup MacOS with nix
-sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake ~/.dotfiles/
+# Setup MacOS with nix (--impure needed to read gitignored local-user.nix)
+sudo nix run --impure nix-darwin/master#darwin-rebuild -- switch --impure --flake ~/.dotfiles/
 
 echo "INSTALLATION IS COMPLETE!"
 echo "Visit: https://flakehub.com/token/create?class=user and create new token"

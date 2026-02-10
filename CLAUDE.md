@@ -19,5 +19,5 @@ nix flake check ~/.dotfiles
 ## How to enable new configuration
 
 ```sh
-sudo darwin-rebuild switch --flake ~/.dotfiles/
+sudo darwin-rebuild switch --impure --flake ~/.dotfiles/
 ```
