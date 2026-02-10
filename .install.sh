@@ -31,6 +31,12 @@ fi
 # Remove the default file so that nix-core.nix is able to write custom nix config there
 sudo rm -f /etc/nix/nix.custom.conf
 
+# Generate local-user.nix if it doesn't exist
+if [ ! -f ~/.dotfiles/local-user.nix ]; then
+  echo "Generating local-user.nix for this machine..."
+  ~/.dotfiles/scripts/generate-local-user.sh
+fi
+
 # Setup MacOS with nix
 sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake ~/.dotfiles/
 
