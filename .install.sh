@@ -23,7 +23,9 @@ export NIX_INSTALLER_DIAGNOSTIC_ENDPOINT=""
 
 # Install nix
 if ! command_exists nix; then
-  curl -fsSL https://install.determinate.systems/nix | sh -s -- install --determinate
+  # Disable the determinate nix because the linux builder was not that useful in the end
+  #curl -fsSL https://install.determinate.systems/nix | sh -s -- install --determinate
+  curl -sSfL https://artifacts.nixos.org/nix-installer | sh -s -- install
 fi
 
 # Remove the default file so that nix-core.nix is able to write custom nix config there
