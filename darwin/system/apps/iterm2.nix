@@ -1,4 +1,4 @@
-{...}:
+{ ... }:
 rec {
   # Allows looking into zip file with MacOS QuickLook
   homebrew.casks = [
@@ -16,6 +16,9 @@ rec {
     SUHasLaunchedBefore = true;
     SUEnableAutomaticUpdates = false;
 
+    # Allow clicking multiline URLs from terminal
+    IgnoreHardNewlinesInURLs = true;
+
     # Annoying new feature to select the area for search
     ClickToSelectCommand = false;
 
@@ -27,30 +30,30 @@ rec {
       # Sometimes my qwerty muscle memory still kicks in so when pressing physical c button
       # ^ + j to terminate the process
       "0x6a-0x40000-0x8" = {
-          Action = 11;
-          "Apply Mode" = 0;
-          Escaping = 2;
-          Text = "0x03";
-          Version = 2;
+        Action = 11;
+        "Apply Mode" = 0;
+        Escaping = 2;
+        Text = "0x03";
+        Version = 2;
       };
       # ⌥ + ⌫ to wipe a word
       "0x7f-0x80000-0x33" = {
-          Action = 11;
-          "Apply Mode" = 0;
-          Escaping = 2;
-          Text = "0x17";
-          Version = 2;
+        Action = 11;
+        "Apply Mode" = 0;
+        Escaping = 2;
+        Text = "0x17";
+        Version = 2;
       };
       # ⌥ + ⇧ + ⌫ to wipe a line
       "0x7f-0xa0000-0x33" = {
-          Action = 11;
-          "Apply Mode" = 0;
-          Escaping = 2;
-          Text = "0x15";
-          Version = 2;
+        Action = 11;
+        "Apply Mode" = 0;
+        Escaping = 2;
+        Text = "0x15";
+        Version = 2;
       };
       # ⌘ + ← to jump to start of the line
-      "0xf702-0x300000-0x7b" =     {
+      "0xf702-0x300000-0x7b" = {
         Action = 11;
         "Apply Mode" = 0;
         Escaping = 2;
@@ -58,12 +61,12 @@ rec {
         Version = 2;
       };
       # ⌘ + → to jump to end of the line
-      "0xf703-0x300000-0x7c" =     {
-          Action = 11;
-          "Apply Mode" = 0;
-          Escaping = 2;
-          Text = "0x05";
-          Version = 2;
+      "0xf703-0x300000-0x7c" = {
+        Action = 11;
+        "Apply Mode" = 0;
+        Escaping = 2;
+        Text = "0x05";
+        Version = 2;
       };
     };
   };
