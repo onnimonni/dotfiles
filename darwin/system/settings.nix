@@ -100,7 +100,8 @@
     # Show week numbers in calendar app
     "com.apple.iCal"."Show Week Numbers" = true;
 
-    # Do not automatically convert links to rich previews in Mail.app
-    "com.apple.mail"."AddLinkPreviews" = false;
+    # NOTE: com.apple.mail settings removed — sandboxed app container doesn't
+    # exist until Mail.app is opened, causing "Could not write domain" on fresh installs.
+    # Set manually: defaults write com.apple.mail AddLinkPreviews -bool false
   };
 }
