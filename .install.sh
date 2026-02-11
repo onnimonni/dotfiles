@@ -39,6 +39,16 @@ if [ ! -f ~/.dotfiles/local-user.nix ]; then
   git -C ~/.dotfiles add local-user.nix
 fi
 
+# Bootstrap homebrew (nix-darwin takes over management after first switch)
+if [ ! -x /opt/homebrew/bin/brew ]; then
+  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+
+# Install mas to manage App Store apps
+if [ ! -x /opt/homebrew/bin/mas ]; then
+  /opt/homebrew/bin/brew install mas
+fi
+
 # Sign into App Store before nix-darwin (needed for mas app installs)
 echo ""
 echo "=== App Store Setup ==="
@@ -50,7 +60,7 @@ read -r
 
 # Install a small free app to trigger the approval dialog
 echo "Installing Amphetamine to verify App Store access..."
-mas get 937984704 || true
+/opt/homebrew/bin/mas get 937984704 || true
 
 # Wait for the app to appear in /Applications
 echo "Waiting for Amphetamine to install..."
