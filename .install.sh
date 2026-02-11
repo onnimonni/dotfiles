@@ -51,8 +51,8 @@ echo "Activate onnimonni-Dvorak keyboard layout from"
 echo "GO: System Preferences -> Keyboard \
 -> Input Sources -> search 'onni' -> activate onnimonni-Dvorak"
 
-echo "Then create a new ssh key in Secretive and add it to Github"
-echo "To enable login with gcloud you need to add the public files here:"
+echo "Then create a new ssh key named 'github-key' in Secretive and run:"
+echo "$ ssh-add -L | grep github-key > ~/.ssh/github_secretive.pub"
 echo "$ ssh-add -L > ~/.ssh/google_compute_engine.pub"
 echo "$ ssh-add -L > ~/.ssh/secretive.pub"
 echo "$ gh auth refresh -h github.com -s admin:public_key"
