@@ -68,7 +68,7 @@ else
 
   # Install a small free app to trigger the approval dialog
   echo "Installing Amphetamine to verify App Store access..."
-  /opt/homebrew/bin/mas get 937984704 || true
+  MAS_NO_AUTO_INDEX=1 /opt/homebrew/bin/mas get 937984704 || true
 
   # Wait for the app to appear in /Applications
   echo "Waiting for Amphetamine to install..."

@@ -9,6 +9,7 @@ rec {
   };
 
   home-manager.useGlobalPkgs = true;
+  home-manager.backupFileExtension = "backup";
 
   home-manager.users."${system.primaryUser}" =
     {
