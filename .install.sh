@@ -1,7 +1,8 @@
 #!/bin/zsh
 
-# Stop on first error
+# Stop on first error or ctrl+c
 set -e
+trap 'echo "\nCancelled."; exit 130' INT
 
 # Helper function
 function command_exists () {
