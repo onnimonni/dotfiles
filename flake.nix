@@ -31,23 +31,49 @@
       sops-nix,
       ...
     }:
-    {
-      # Build darwin flake using:
-      # $ darwin-rebuild build --flake .#Onnis-MacBook-Pro
-      darwinConfigurations."Onnis-MacBook-Pro" = nix-darwin.lib.darwinSystem {
-        specialArgs = { inherit inputs; };
-        modules = [
-          home-manager.darwinModules.home-manager
-          sops-nix.darwinModules.sops
-
-          # Set Git commit hash for darwin-version.
-          { system.configurationRevision = self.rev or self.dirtyRev or null; }
-
-          ./darwin/system
-        ];
+    let
+      # Default user config (can be overridden via local-user.nix)
+      defaultUser = {
+        hostname = "Onnis-MacBook-Pro";
+        username = "onnimonni";
+        fullName = "Onni Hakala";
+        email = "onni@flaky.build";
       };
 
+      # Load local override if exists (gitignored)
+      localUserPath = ./local-user.nix;
+      userConfig = if builtins.pathExists localUserPath then import localUserPath else defaultUser;
+
+      mkDarwinConfig =
+        {
+          hostname,
+          username,
+          fullName,
+          email,
+        }:
+        nix-darwin.lib.darwinSystem {
+          specialArgs = {
+            inherit
+              inputs
+              username
+              fullName
+              email
+              ;
+          };
+          modules = [
+            home-manager.darwinModules.home-manager
+            sops-nix.darwinModules.sops
+            { system.configurationRevision = self.rev or self.dirtyRev or null; }
+            ./darwin/system
+          ];
+        };
+    in
+    {
+      # Build darwin flake using:
+      # $ darwin-rebuild build --flake .#<hostname>
+      darwinConfigurations.${userConfig.hostname} = mkDarwinConfig userConfig;
+
       # Expose the package set, including overlays, for convenience.
-      darwinPackages = self.darwinConfigurations."Onnis-MacBook-Pro".pkgs;
+      darwinPackages = self.darwinConfigurations.${userConfig.hostname}.pkgs;
     };
 }

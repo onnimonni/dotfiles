@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 {
   environment.systemPackages = with pkgs; [
     # Node
@@ -12,7 +12,7 @@
 
   # Prevent Shai Hulud kind of worms
   # https://news.ycombinator.com/item?id=46035533
-  home-manager.users.onnimonni.home.file = {
+  home-manager.users.${username}.home.file = {
     # Even if files have .zip extension they are sometimes gunzipped
     ".yarnrc".text = ''
       ignore-scripts true

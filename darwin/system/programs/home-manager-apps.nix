@@ -2,6 +2,7 @@
   pkgs,
   lib,
   inputs,
+  username,
   ...
 }:
 let
@@ -10,7 +11,7 @@ in
 {
   # Create macOS aliases in /Applications for home-manager apps
   # This allows Spotlight and Finder to find nix-installed GUI apps
-  home-manager.users.onnimonni = {
+  home-manager.users.${username} = {
     home.activation.aliasHomeManagerApps = hm.dag.entryAfter [ "writeBoundary" ] ''
       app_folder="$HOME/Applications/Home Manager Apps"
       if [ -d "$app_folder" ]; then

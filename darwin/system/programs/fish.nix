@@ -1,6 +1,6 @@
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 {
-  users.users.onnimonni.shell = pkgs.fish;
+  users.users.${username}.shell = pkgs.fish;
 
   # FIXME: Fails often like this:
   # /nix/store/5kyj36g08zq4xi5311fww00b39jcb0bg-procps-1003.1-2008/bin/ps: illegal option -- -
@@ -17,7 +17,7 @@
 
   # This disables annoying message when opening a new terminal:
   # Last login: Sun May 25 21:52:09 on ttys009
-  home-manager.users.onnimonni = {
+  home-manager.users.${username} = {
     home.file = {
       ".hushlogin".text = ''
         # Disables last login from appearing in Terminal
@@ -55,7 +55,7 @@
         reload-fish = "source ~/.config/fish/config.fish";
 
         # Free up disk space
-        free-up-disk = "brew cleanup --prune=all && container prune && sudo rm -rf ~/.Trash/*";
+        free-up-disk = "brew cleanup --prune=all && container prune && nix-collect-garbage -d && xcrun simctl delete unavailable && sudo rm -rf ~/.Trash/*";
 
         # Prevent overwriting or deleting by accident
         cp = "cp -iv";
@@ -114,6 +114,17 @@
       '';
 
       functions = {
+        cpg = {
+          description = "Copy directory excluding .gitignore'd files";
+          body = ''
+            if test (count $argv) -ne 2
+              echo "Usage: cpg <src> <dest>" >&2
+              return 1
+            end
+            rsync -a --filter=':- .gitignore' --exclude='.git' $argv[1]/ $argv[2]/
+          '';
+        };
+
         update-to-latest = {
           description = "Updates MacOS, Homebrew & asdf";
           body = ''

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 {
   homebrew.casks = [
     # MITMProxy for debugging HTTP traffic
@@ -7,7 +7,7 @@
     "mitmproxy"
   ];
 
-  home-manager.users.onnimonni.home.file = {
+  home-manager.users.${username}.home.file = {
     ".mitmproxy/keys.yaml".text = ''
       # See more: https://github.com/mitmproxy/mitmproxy/issues/2649#issuecomment-392342343
       # Copy request to clipboard as curl.

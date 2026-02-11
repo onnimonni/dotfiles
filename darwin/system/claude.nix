@@ -3,6 +3,7 @@
   pkgs,
   lib,
   inputs,
+  username,
   ...
 }:
 let
@@ -26,7 +27,7 @@ in
   environment.systemPackages = [ claudeWrapper ];
 
   # Home-manager configuration for claude
-  home-manager.users.onnimonni =
+  home-manager.users.${username} =
     { osConfig, ... }:
     {
       # Create a home activation script to enable MCP servers for claude code.

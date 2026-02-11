@@ -1,7 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 {
   # Migrated my very old nanorc here which makes it a bit more easier to use I guess?
-  home-manager.users.onnimonni.home.file.".nanorc".text = ''
+  home-manager.users.${username}.home.file.".nanorc".text = ''
     ## Use auto-indentation
     #set autoindent
     # It makes pasting to nano extremely unuseful

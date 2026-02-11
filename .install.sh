@@ -29,7 +29,15 @@ if ! command_exists nix; then
 fi
 
 # Remove the default file so that nix-core.nix is able to write custom nix config there
-sudo rm /etc/nix/nix.custom.conf
+sudo rm -f /etc/nix/nix.custom.conf
+
+# Generate local-user.nix if it doesn't exist
+if [ ! -f ~/.dotfiles/local-user.nix ]; then
+  echo "Generating local-user.nix for this machine..."
+  ~/.dotfiles/scripts/generate-local-user.sh
+  # Add to git so nix flake can see it
+  git -C ~/.dotfiles add local-user.nix
+fi
 
 # Setup MacOS with nix
 sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake ~/.dotfiles/
@@ -43,8 +51,8 @@ echo "Activate onnimonni-Dvorak keyboard layout from"
 echo "GO: System Preferences -> Keyboard \
 -> Input Sources -> search 'onni' -> activate onnimonni-Dvorak"
 
-echo "Then create a new ssh key in Secretive and add it to Github"
-echo "To enable login with gcloud you need to add the public files here:"
+echo "Then create a new ssh key named 'github-key' in Secretive and run:"
+echo "$ ssh-add -L | grep github-key > ~/.ssh/github_secretive.pub"
 echo "$ ssh-add -L > ~/.ssh/google_compute_engine.pub"
 echo "$ ssh-add -L > ~/.ssh/secretive.pub"
 echo "$ gh auth refresh -h github.com -s admin:public_key"

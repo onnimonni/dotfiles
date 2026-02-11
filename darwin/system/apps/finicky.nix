@@ -1,11 +1,10 @@
-{...}:
+{ username, ... }:
 rec {
   homebrew.casks = [
     "finicky"
   ];
 
-  # TODO: Don't hard code the username here
-  home-manager.users.onnimonni.xdg.configFile = {
+  home-manager.users.${username}.xdg.configFile = {
     # Force copy the file instead of symlinking
     "finicky.js" = {
       source = ./config/finicky.js;

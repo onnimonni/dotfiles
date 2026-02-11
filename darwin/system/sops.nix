@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, username, ... }:
 {
   # Import sops secrets configuration
   sops = {
@@ -12,18 +12,18 @@
 
     # Use age for encryption instead of GPG
     age = {
-      keyFile = "/Users/onnimonni/.config/sops/age/keys.txt";
+      keyFile = "/Users/${username}/.config/sops/age/keys.txt";
       # Don't try to convert SSH keys to age keys
       sshKeyPaths = [ ];
     };
 
     secrets = {
       githits_api_key = {
-        # This secret will be available at /run/secrets-for-users/onnimonni/githits_api_key
+        # This secret will be available at /run/secrets-for-users/${username}/githits_api_key
         # The MCP configuration is done in darwin/system/programs/claude.nix
       };
       context7_api_key = {
-        # This secret will be available at /run/secrets-for-users/onnimonni/context7_api_key
+        # This secret will be available at /run/secrets-for-users/${username}/context7_api_key
         # The MCP configuration is done in darwin/system/programs/claude.nix
       };
     };
