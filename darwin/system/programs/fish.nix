@@ -25,17 +25,72 @@
 
       # Ghostty terminal config
       ".config/ghostty/config".text = ''
-        # Use fish shell
         command = ${pkgs.fish}/bin/fish
 
-        # Font settings
         font-family = JetBrains Mono
         font-size = 14
 
-        # Window settings
         window-padding-x = 8
         window-padding-y = 8
         macos-titlebar-style = hidden
+
+        theme = light:dotfiles-light,dark:dotfiles-dark
+        cursor-style-blink = false
+        confirm-close-surface = false
+        scrollback-limit = 1000
+        mouse-hide-while-typing = true
+      '';
+
+      # Ghostty light theme (extracted from iTerm2 profile)
+      ".config/ghostty/themes/dotfiles-light".text = ''
+        palette = 0=#14191e
+        palette = 1=#b43c2a
+        palette = 2=#00c200
+        palette = 3=#c7c400
+        palette = 4=#2744c8
+        palette = 5=#c040be
+        palette = 6=#00c5c7
+        palette = 7=#c7c7c7
+        palette = 8=#686868
+        palette = 9=#dd7975
+        palette = 10=#58e790
+        palette = 11=#ece100
+        palette = 12=#a7abf2
+        palette = 13=#e17ee1
+        palette = 14=#60fdff
+        palette = 15=#ffffff
+        background = #fafafa
+        foreground = #101010
+        cursor-color = #000000
+        cursor-text = #ffffff
+        selection-background = #b3d7ff
+        selection-foreground = #000000
+      '';
+
+      # Ghostty dark theme (extracted from iTerm2 profile)
+      ".config/ghostty/themes/dotfiles-dark".text = ''
+        palette = 0=#14191e
+        palette = 1=#b43c2a
+        palette = 2=#00c200
+        palette = 3=#c7c400
+        palette = 4=#2744c8
+        palette = 5=#c040be
+        palette = 6=#00c5c7
+        palette = 7=#c7c7c7
+        palette = 8=#686868
+        palette = 9=#dd7975
+        palette = 10=#58e790
+        palette = 11=#ece100
+        palette = 12=#a7abf2
+        palette = 13=#e17ee1
+        palette = 14=#60fdff
+        palette = 15=#ffffff
+        background = #15191f
+        foreground = #dcdcdc
+        cursor-color = #ffffff
+        cursor-text = #000000
+        selection-background = #b3d7ff
+        selection-foreground = #000000
       '';
     };
 

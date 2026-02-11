@@ -1,9 +1,13 @@
-{ ... }:
+{ username, ... }:
 rec {
   # Allows looking into zip file with MacOS QuickLook
   homebrew.casks = [
     "iterm2"
   ];
+
+  # Deploy iTerm2 dynamic profile with fish shell and color theme
+  home-manager.users.${username}.home.file."Library/Application Support/iTerm2/DynamicProfiles/dotfiles-profile.json".source =
+    ./config/iterm2-profile.json;
 
   system.defaults.CustomUserPreferences."com.googlecode.iterm2" = {
     QuitWhenAllWindowsClosed = true;
