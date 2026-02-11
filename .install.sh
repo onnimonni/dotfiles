@@ -39,6 +39,11 @@ if [ ! -f ~/.dotfiles/local-user.nix ]; then
   git -C ~/.dotfiles add local-user.nix
 fi
 
+# Sign into App Store before nix-darwin (needed for mas app installs)
+echo "Please sign into the App Store before continuing."
+echo "Press Enter when done (or skip with Ctrl+C and re-run later)..."
+read -r
+
 # Setup MacOS with nix
 sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake ~/.dotfiles/
 

@@ -1,10 +1,13 @@
-{...}:
-rec {
-  homebrew.casks = [
+{ lib, hostname, ... }:
+let
+  isMacBook = lib.hasInfix "MacBook" hostname;
+in
+{
+  homebrew.casks = lib.optionals isMacBook [
     "jetdrive-toolbox"
   ];
 
-  system.defaults.CustomUserPreferences."com.transcend.JetDriveToolbox-v2" = {
+  system.defaults.CustomUserPreferences."com.transcend.JetDriveToolbox-v2" = lib.mkIf isMacBook {
     # Disable auto update: use brew instead
     SUAutomaticallyUpdate = false;
     SUEnableAutomaticChecks = false;

@@ -14,15 +14,16 @@
       cleanup = "uninstall";
       autoUpdate = true;
       upgrade = true;
+      extraFlags = [
+        "--verbose"
+        "--no-lock" # Don't fail build if mas apps fail (requires App Store sign-in)
+      ];
     };
 
     # Stop being annoyed by Apple "protecting" me
     caskArgs.no_quarantine = true;
 
-    taps = [
-      "homebrew/bundle"
-      "homebrew/services"
-    ];
+    taps = [ ];
 
     brews = [
       # To be able to install apps from the app store

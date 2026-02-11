@@ -55,6 +55,7 @@
           specialArgs = {
             inherit
               inputs
+              hostname
               username
               fullName
               email
