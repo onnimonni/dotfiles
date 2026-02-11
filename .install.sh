@@ -16,7 +16,11 @@ else
 fi
 
 # Install rosetta to be able to use and build intel binaries
-softwareupdate --install-rosetta --agree-to-license
+if [ -f "/Library/Apple/usr/share/rosetta/rosetta" ]; then
+  echo "Rosetta 2 already installed. Skipping..."
+else
+  softwareupdate --install-rosetta --agree-to-license
+fi
 
 # Disable diagnostic reporting, i.e. telemetry
 export NIX_INSTALLER_DIAGNOSTIC_ENDPOINT=""
