@@ -50,7 +50,7 @@ read -r
 
 # Install a small free app to trigger the approval dialog
 echo "Installing Amphetamine to verify App Store access..."
-sudo mas get 937984704 || true
+mas get 937984704 || true
 
 # Wait for the app to appear in /Applications
 echo "Waiting for Amphetamine to install..."
