@@ -16,7 +16,6 @@
       upgrade = true;
       extraFlags = [
         "--verbose"
-        "--no-lock" # Don't fail build if mas apps fail (requires App Store sign-in)
       ];
     };
 
