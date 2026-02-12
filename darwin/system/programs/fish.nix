@@ -316,6 +316,34 @@
           '';
         };
 
+        fish_command_not_found = {
+          description = "Autocorrect mistyped commands like code. → code .";
+          body = ''
+            set -l cmd $argv[1]
+            set -l rest $argv[2..-1]
+
+            # Detect trailing dots: e.g. code. → code .  or  cd.. → cd ..
+            if string match -qr '.+(\.+)$' -- $cmd
+              set -l dots (string match -r '(\.+)$' -- $cmd)[2]
+              set -l base (string replace -r '\.+$' "" -- $cmd)
+              if type -q $base
+                set_color yellow
+                echo "I guess you typoed '\$ $base $dots'? You have 1s to cancel by pressing any key"
+                set_color normal
+                if not read -n 1 -t 1 -l _discard 2>/dev/null
+                  $base $dots $rest
+                  return $status
+                end
+                echo "Cancelled."
+                return 127
+              end
+            end
+
+            echo "fish: Unknown command: $cmd" >&2
+            return 127
+          '';
+        };
+
         aws-exec = {
           description = "Run command with AWS credentials from SSO/login";
           body = ''
