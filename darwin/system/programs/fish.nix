@@ -113,7 +113,6 @@
         free-up-disk = "brew cleanup --prune=all && container prune && nix-collect-garbage -d && xcrun simctl delete unavailable && sudo rm -rf ~/.Trash/*";
 
         # Prevent overwriting or deleting by accident
-        cp = "cp -iv";
         mv = "mv -iv";
         rm = "rm -iv";
 
@@ -287,6 +286,27 @@
           '';
         };
 
+        cp = {
+          description = "Copy file to clipboard (1 arg) or cp -iv (2+ args)";
+          wraps = "cp";
+          body = ''
+            if test (count $argv) -eq 1 && not string match -q -- '-*' $argv[1]
+              set -l abs_path (realpath $argv[1])
+              osascript -l JavaScript -e '
+              function run(argv) {
+                ObjC.import("AppKit");
+                var path = argv[0];
+                var pb = $.NSPasteboard.generalPasteboard;
+                pb.clearContents;
+                pb.setPropertyListForType([path], "NSFilenamesPboardType");
+                pb.setStringForType(path, "public.utf8-plain-text");
+              }' "$abs_path"
+            else
+              command cp -iv $argv
+            end
+          '';
+        };
+
         aws-exec = {
           description = "Run command with AWS credentials from SSO/login";
           body = ''
@@ -337,7 +357,6 @@
       reload-fish = "source ~/.config/fish/config.fish";
 
       # Prevent overwriting or deleting by accident
-      cp = "cp -iv";
       mv = "mv -iv";
       rm = "rm -iv";
     };

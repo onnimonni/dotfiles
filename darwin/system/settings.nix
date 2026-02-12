@@ -1,6 +1,14 @@
 # Custom nix rules to use determinate nix installer with nix-darwin
 { pkgs, ... }:
 {
+  # Firewall with stealth mode
+  networking.applicationFirewall = {
+    enable = true;
+    enableStealthMode = true;
+    allowSigned = true;
+    allowSignedApp = true;
+  };
+
   # Setup MacOS defaults
   system.defaults = {
     # Mouse
@@ -27,6 +35,7 @@
       show-process-indicators = true;
       orientation = "bottom";
       mru-spaces = false;
+      minimize-to-application = true;
 
       # Disable hot corners
       wvous-bl-corner = 1;
@@ -51,6 +60,9 @@
       _FXSortFoldersFirst = true; # keep folders on top when sorting by name
       AppleShowAllExtensions = true; # show all file extensions
       FXPreferredViewStyle = "clmv"; # list view
+      ShowStatusBar = true;
+      FXRemoveOldTrashItems = true; # auto-delete trash after 30 days
+      FXEnableExtensionChangeWarning = false;
     };
 
     # Store screenshots in separate folder
@@ -59,6 +71,11 @@
     NSGlobalDomain = {
       # Allows accented characters to be typed by holding the key down
       ApplePressAndHoldEnabled = true;
+      NSDocumentSaveNewDocumentsToCloud = false;
+      NSNavPanelExpandedStateForSaveMode = true;
+      NSNavPanelExpandedStateForSaveMode2 = true;
+      PMPrintingExpandedStateForPrint = true;
+      PMPrintingExpandedStateForPrint2 = true;
     };
   };
 
