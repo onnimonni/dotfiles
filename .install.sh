@@ -1,7 +1,8 @@
 #!/bin/zsh
 
-# Stop on first error
+# Stop on first error or ctrl+c
 set -e
+trap 'echo "\nCancelled."; exit 130' INT
 
 # Helper function
 function command_exists () {
@@ -16,7 +17,11 @@ else
 fi
 
 # Install rosetta to be able to use and build intel binaries
-softwareupdate --install-rosetta --agree-to-license
+if [ -f "/Library/Apple/usr/share/rosetta/rosetta" ]; then
+  echo "Rosetta 2 already installed. Skipping..."
+else
+  softwareupdate --install-rosetta --agree-to-license
+fi
 
 # Disable diagnostic reporting, i.e. telemetry
 export NIX_INSTALLER_DIAGNOSTIC_ENDPOINT=""
@@ -50,34 +55,38 @@ if [ ! -x /opt/homebrew/bin/mas ]; then
 fi
 
 # Sign into App Store before nix-darwin (needed for mas app installs)
-echo ""
-echo "=== App Store Setup ==="
-echo "1. Open App Store and sign in with your Apple ID"
-echo "2. When prompted, click 'Always Allow' to approve installs"
-echo ""
-echo "Press Enter when you have signed in..."
-read -r
-
-# Install a small free app to trigger the approval dialog
-echo "Installing Amphetamine to verify App Store access..."
-/opt/homebrew/bin/mas get 937984704 || true
-
-# Wait for the app to appear in /Applications
-echo "Waiting for Amphetamine to install..."
-timeout=120
-elapsed=0
-while [ ! -d "/Applications/Amphetamine.app" ] && [ $elapsed -lt $timeout ]; do
-  sleep 2
-  elapsed=$((elapsed + 2))
-done
-
 if [ -d "/Applications/Amphetamine.app" ]; then
-  echo "App Store working! Continuing..."
+  echo "App Store already verified (Amphetamine installed). Skipping..."
 else
-  echo "WARNING: Amphetamine did not appear in /Applications after ${timeout}s"
-  echo "App Store installs may fail. You can re-run this script later."
-  echo "Press Enter to continue anyway or Ctrl+C to abort..."
+  echo ""
+  echo "=== App Store Setup ==="
+  echo "1. Open App Store and sign in with your Apple ID"
+  echo "2. When prompted, click 'Always Allow' to approve installs"
+  echo ""
+  echo "Press Enter when you have signed in..."
   read -r
+
+  # Install a small free app to trigger the approval dialog
+  echo "Installing Amphetamine to verify App Store access..."
+  MAS_NO_AUTO_INDEX=1 /opt/homebrew/bin/mas get 937984704 || true
+
+  # Wait for the app to appear in /Applications
+  echo "Waiting for Amphetamine to install..."
+  timeout=120
+  elapsed=0
+  while [ ! -d "/Applications/Amphetamine.app" ] && [ $elapsed -lt $timeout ]; do
+    sleep 2
+    elapsed=$((elapsed + 2))
+  done
+
+  if [ -d "/Applications/Amphetamine.app" ]; then
+    echo "App Store working! Continuing..."
+  else
+    echo "WARNING: Amphetamine did not appear in /Applications after ${timeout}s"
+    echo "App Store installs may fail. You can re-run this script later."
+    echo "Press Enter to continue anyway or Ctrl+C to abort..."
+    read -r
+  fi
 fi
 
 # Setup MacOS with nix

@@ -54,4 +54,35 @@
   #    "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
   #  ];
   #};
+
+  # Automatic nix garbage collection and store optimization via launchd
+  # Can't use nix.gc.automatic / nix.optimise.automatic because they assert nix.enable = true,
+  # which conflicts with Determinate Nix
+  launchd.daemons.nix-gc = {
+    command = "/nix/var/nix/profiles/default/bin/nix-collect-garbage --delete-older-than 14d";
+    serviceConfig = {
+      RunAtLoad = false;
+      StartCalendarInterval = [
+        {
+          Weekday = 7;
+          Hour = 3;
+          Minute = 0;
+        }
+      ];
+    };
+  };
+
+  launchd.daemons.nix-optimise = {
+    command = "/nix/var/nix/profiles/default/bin/nix-store --optimise";
+    serviceConfig = {
+      RunAtLoad = false;
+      StartCalendarInterval = [
+        {
+          Weekday = 7;
+          Hour = 4;
+          Minute = 0;
+        }
+      ];
+    };
+  };
 }

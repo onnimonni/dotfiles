@@ -113,7 +113,6 @@
         free-up-disk = "brew cleanup --prune=all && container prune && nix-collect-garbage -d && xcrun simctl delete unavailable && sudo rm -rf ~/.Trash/*";
 
         # Prevent overwriting or deleting by accident
-        cp = "cp -iv";
         mv = "mv -iv";
         rm = "rm -iv";
 
@@ -287,6 +286,64 @@
           '';
         };
 
+        cp = {
+          description = "Copy file to clipboard (1 arg) or cp -iv (2+ args)";
+          wraps = "cp";
+          body = ''
+            if contains -- --help $argv; or contains -- -h $argv
+              echo "Usage: cp <file>          - copy file to macOS clipboard"
+              echo "       cp <src> <dest>    - cp -iv (safe copy)"
+              echo ""
+              echo "With one argument: copies the file to the clipboard so you"
+              echo "can paste it in Finder (Cmd+V) or terminal (Cmd+V as path)."
+              echo "With two or more arguments: runs 'cp -iv'."
+              return 0
+            end
+            if test (count $argv) -eq 1 && not string match -q -- '-*' $argv[1]
+              set -l abs_path (realpath $argv[1])
+              osascript -l JavaScript -e '
+              function run(argv) {
+                ObjC.import("AppKit");
+                var path = argv[0];
+                var pb = $.NSPasteboard.generalPasteboard;
+                pb.clearContents;
+                pb.setPropertyListForType([path], "NSFilenamesPboardType");
+                pb.setStringForType(path, "public.utf8-plain-text");
+              }' "$abs_path"
+            else
+              command cp -iv $argv
+            end
+          '';
+        };
+
+        fish_command_not_found = {
+          description = "Autocorrect mistyped commands like code. → code .";
+          body = ''
+            set -l cmd $argv[1]
+            set -l rest $argv[2..-1]
+
+            # Detect trailing dots: e.g. code. → code .  or  cd.. → cd ..
+            if string match -qr '.+(\.+)$' -- $cmd
+              set -l dots (string match -r '(\.+)$' -- $cmd)[2]
+              set -l base (string replace -r '\.+$' "" -- $cmd)
+              if type -q $base
+                set_color yellow
+                echo "I guess you typoed '\$ $base $dots'? You have 1s to cancel by pressing any key"
+                set_color normal
+                if not read -n 1 -t 1 -l _discard 2>/dev/null
+                  $base $dots $rest
+                  return $status
+                end
+                echo "Cancelled."
+                return 127
+              end
+            end
+
+            echo "fish: Unknown command: $cmd" >&2
+            return 127
+          '';
+        };
+
         aws-exec = {
           description = "Run command with AWS credentials from SSO/login";
           body = ''
@@ -337,7 +394,6 @@
       reload-fish = "source ~/.config/fish/config.fish";
 
       # Prevent overwriting or deleting by accident
-      cp = "cp -iv";
       mv = "mv -iv";
       rm = "rm -iv";
     };
