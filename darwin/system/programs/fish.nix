@@ -290,6 +290,15 @@
           description = "Copy file to clipboard (1 arg) or cp -iv (2+ args)";
           wraps = "cp";
           body = ''
+            if contains -- --help $argv; or contains -- -h $argv
+              echo "Usage: cp <file>          - copy file to macOS clipboard"
+              echo "       cp <src> <dest>    - cp -iv (safe copy)"
+              echo ""
+              echo "With one argument: copies the file to the clipboard so you"
+              echo "can paste it in Finder (Cmd+V) or terminal (Cmd+V as path)."
+              echo "With two or more arguments: runs 'cp -iv'."
+              return 0
+            end
             if test (count $argv) -eq 1 && not string match -q -- '-*' $argv[1]
               set -l abs_path (realpath $argv[1])
               osascript -l JavaScript -e '
