@@ -9,9 +9,7 @@
     #determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/0.1";
 
     nix-darwin = {
-      # Use fork with fix for mas App Store auth in user's GUI session
-      # PR: https://github.com/nix-darwin/nix-darwin/issues/1694
-      url = "github:onnimonni/nix-darwin/fix/mas-user-session";
+      url = "github:nix-darwin/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {

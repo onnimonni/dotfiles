@@ -33,6 +33,10 @@
 
         These can provide help when you want to find code examples and libraries and function documentation.
 
+        ## Documentation files
+
+        Keep existing README.md updated when making relevant changes. Never create new markdown/doc files unless user explicitly asks.
+
         ## Plans
 
         - At the end of each plan, give me a list of unresolved questions to answer, if any. Make the questions extremely concise. Sacrifice grammar for the sake of concision.

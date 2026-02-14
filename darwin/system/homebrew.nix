@@ -1,9 +1,24 @@
 # Custom nix rules to use determinate nix installer with nix-darwin
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
   # Import all nix files from the 'apps' directory
   # Source: https://www.reddit.com/r/NixOS/comments/1gcmce1/recursively_import_nix_files_from_a_directory/
   imports = lib.filter (n: lib.strings.hasSuffix ".nix" n) (lib.filesystem.listFilesRecursive ./apps);
+
+  # Patch brew bundle to use `mas get` instead of `mas install` for App Store apps
+  # `mas install` fails on fresh Apple Accounts with "Redownload Unavailable"
+  # `mas get` handles both fresh installs and re-downloads
+  # Upstream issue: https://github.com/Homebrew/brew/issues/21559
+  # PR: https://github.com/onnimonni/brew/pull/1
+  system.activationScripts.preActivation.text = ''
+    MAS_INSTALLER="/opt/homebrew/Library/Homebrew/bundle/mac_app_store_installer.rb"
+    if [ -f "$MAS_INSTALLER" ]; then
+      if ${lib.getExe pkgs.gnugrep} -q '"mas", "install"' "$MAS_INSTALLER"; then
+        echo "Patching brew bundle: mas install -> mas get (Homebrew/brew#21559)..."
+        ${lib.getExe pkgs.sd} '"mas", "install"' '"mas", "get"' "$MAS_INSTALLER"
+      fi
+    fi
+  '';
 
   homebrew = {
     enable = true;
