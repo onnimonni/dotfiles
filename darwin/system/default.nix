@@ -10,6 +10,7 @@
     ./claude.nix
     ./gemini.nix
     ./agents.nix
+    ./mcp.nix
   ];
 
   # Pretty nice examples for setting up nix-darwin: https://github.com/thurstonsand/nixonomicon
