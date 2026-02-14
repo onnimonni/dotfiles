@@ -19,6 +19,10 @@ xcode-select --install
 git clone https://github.com/onnimonni/dotfiles ~/.dotfiles
 
 ~/.dotfiles/.install.sh
+
+# Then create age key with secure enclave
+mkdir -p ~/.config/sops/age/
+age-plugin-se keygen --access-control none -o ~/.config/sops/age/secure-enclave-key.txt
 ```
 
 ## Using this config with your own user
@@ -91,6 +95,9 @@ launchctl kickstart -k gui/$(id -u)/org.pqrs.service.agent.karabiner_console_use
 
 ## Docs for common procedures
 * [Using Estonian ID-card as ssh public key](docs/estonian-id-card.md)
+
+## MCP
+Githits and context7 MCP are configured for Claude and Codex via nix-darwin modules.
 
 ## UNLICENSE
 Use these dotfiles as you want to. Sharing is caring!

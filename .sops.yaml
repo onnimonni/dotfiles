@@ -2,7 +2,7 @@ keys:
   # Main age key for this macbook
   - &user_onnimonni age1se1q2r6sc647nl3zp5cenuqclgj0e9czw43hq2y3amfyhv5yrnc326fusl30yv
   - &host_macbook_pro age1mv0fkqmh7tju54cgv05wvzn28p8zp4nfcx9yamu37w8hqcmqs3rs3l7mrv
-  - &server age1se1q27dr0un75pcgxkjdcgzv0nyx9z7cwc860hjxs4eum5fv7zvxkz36a6wwh0
+  - &server age1se1qfptarnwfn4adk9n565afaejj8ghm2u7wyhzxe7dj7w8spu28wnuytaruzg
 
 creation_rules:
   # All secrets in the secrets directory can be decrypted with the user key
