@@ -115,6 +115,12 @@
 
       # Docker/container process viewer
       "container-ps"
+
+      # Run multiple Claude Code instances parallel
+      "conductor"
+
+      # Speak to create text into any field
+      "handy"
     ];
 
     masApps = {
