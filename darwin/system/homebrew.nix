@@ -2,15 +2,20 @@
 { lib, pkgs, ... }:
 {
   # Import all nix files from the 'apps' directory
-  # Source: https://www.reddit.com/r/NixOS/comments/1gcmce1/recursively_import_nix_files_from_a_directory/
+  # Source: https://www.reddit.com/r/NixOS/comments/1gcmce1/recursively_import_nix_files_from_a_directory/
   imports = lib.filter (n: lib.strings.hasSuffix ".nix" n) (lib.filesystem.listFilesRecursive ./apps);
 
-  # Patch brew bundle to use `mas get` instead of `mas install` for App Store apps
+  # Fix mas detecting installed apps (requires Spotlight index to be current)
+  # and patch brew bundle to use `mas get` instead of `mas install`
   # `mas install` fails on fresh Apple Accounts with "Redownload Unavailable"
-  # `mas get` handles both fresh installs and re-downloads
   # Upstream issue: https://github.com/Homebrew/brew/issues/21559
-  # PR: https://github.com/onnimonni/brew/pull/1
   system.activationScripts.preActivation.text = ''
+    # Ensure Spotlight indexing is enabled for /Applications so mas can detect installed apps
+    if mdutil -s /Applications 2>&1 | ${lib.getExe pkgs.gnugrep} -q "Indexing disabled"; then
+      echo "Enabling Spotlight indexing for /Applications (required by mas)..."
+      mdutil -i on /Applications
+    fi
+
     MAS_INSTALLER="/opt/homebrew/Library/Homebrew/bundle/mac_app_store_installer.rb"
     if [ -f "$MAS_INSTALLER" ]; then
       if ${lib.getExe pkgs.gnugrep} -q '"mas", "install"' "$MAS_INSTALLER"; then
@@ -104,6 +109,12 @@
 
       # Running local LLM
       "lm-studio"
+
+      # OpenAI Codex CLI
+      "codex"
+
+      # Docker/container process viewer
+      "container-ps"
     ];
 
     masApps = {
