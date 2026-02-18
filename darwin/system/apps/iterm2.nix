@@ -13,6 +13,9 @@ rec {
     QuitWhenAllWindowsClosed = true;
     PromptOnQuit = false;
 
+    # Allow iTerm2 to be controlled from scripts with `it2`
+    EnableAPIServer = true;
+
     # Allow system to restart/shutdown without prompting iterm
     NeverBlockSystemShutdown = true;
 
