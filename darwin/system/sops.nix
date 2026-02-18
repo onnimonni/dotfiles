@@ -1,7 +1,16 @@
-{ config, username, ... }:
 {
-  # Import sops secrets configuration
-  sops = {
+  config,
+  lib,
+  username,
+  ...
+}:
+let
+  keyFile = "/Users/${username}/.config/sops/age/keys.txt";
+  hasKeyFile = builtins.pathExists keyFile;
+in
+{
+  # Only enable sops when age key file exists on this machine
+  sops = lib.mkIf hasKeyFile {
     defaultSopsFile = ../../secrets/secrets.yaml;
 
     # Prevents storing the sops files to the nix store
@@ -12,7 +21,7 @@
 
     # Use age for encryption instead of GPG
     age = {
-      keyFile = "/Users/${username}/.config/sops/age/keys.txt";
+      inherit keyFile;
       # Don't try to convert SSH keys to age keys
       sshKeyPaths = [ ];
     };

@@ -77,6 +77,7 @@ in
     # Secret management
     sops
     age-plugin-se
+    age
 
     # For converting AI generated png images to svg
     potrace
@@ -90,8 +91,5 @@ in
 
     # To build C stuff like duckdb
     cmake
-
-    # Cloudflare Workers CLI
-    wrangler
   ];
 }

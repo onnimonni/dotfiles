@@ -18,6 +18,9 @@ let
 
   # home-manager lib for dag functions
   hm = inputs.home-manager.lib.hm;
+
+  # Only configure MCP secrets when sops age key exists
+  hasSopsKey = builtins.pathExists "/Users/${username}/.config/sops/age/keys.txt";
 in
 {
   # Install claude-code via homebrew cask (newer than nixpkgs)
@@ -31,7 +34,8 @@ in
     { osConfig, ... }:
     {
       # Create a home activation script to enable MCP servers for claude code.
-      home.activation = {
+      # Only configure secrets when sops age key exists on this machine.
+      home.activation = lib.mkIf hasSopsKey {
         configureClaudeMCP = hm.dag.entryAfter [ "writeBoundary" ] ''
           echo "Configuring Claude MCP servers..."
 

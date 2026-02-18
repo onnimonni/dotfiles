@@ -1,23 +1,4 @@
 #!/usr/bin/env bash
-
-
-##
-# This script can be called from anywhere so it's good to be in the correct location
-# This can also be called in .git/hooks dir and we need to get into project root
-##
-cd "$( dirname "${BASH_SOURCE[0]}" )"/../..
-
-# No spell checking for merging or squashing
-if [ -f .git/MERGE_MSG ]; then
-   exit 0
-elif [ -f .git/SQUASH_MSG ]; then
-   exit 0
-fi
-
-# Get commit message
-commit_msg=$(cat "$1")
-
-# I'm lazy. Please capitalize first letter if I forgot to
-commit_msg_capitalize="$(tr '[:lower:]' '[:upper:]' <<< ${commit_msg:0:1})${commit_msg:1}"
-
-echo "$commit_msg_capitalize" > "$1"
+# DecisionGraph commit message helper
+# Auto-suggests document IDs from staged files
+exec dg hooks prepare-commit-msg "$@"

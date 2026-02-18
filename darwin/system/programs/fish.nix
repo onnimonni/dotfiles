@@ -158,6 +158,9 @@
         # Opt out of query.farm telemetry (DuckDB extension)
         set -gx QUERY_FARM_TELEMETRY_OPT_OUT true
 
+        # Avoid repeated Spotlight auto-indexing during `mas` installs
+        set -gx MAS_NO_AUTO_INDEX 1
+
         # Number of CPU cores for devenv/build tools
         set -gx DEVENV_CORES (sysctl -n hw.ncpu)
 
