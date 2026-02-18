@@ -35,7 +35,7 @@ in
         customOpensc
     )
     # To format nix files properly
-    nixfmt-rfc-style
+    nixfmt
     # To find nix packages
     nix-search-cli
     # To use cache for Midwork
