@@ -5,17 +5,17 @@ import Foundation
 // MARK: - Config
 
 struct AppConfig: Codable {
-    var scrollAmount: Int?
-    var continuousSpeed: Int?
+    var initialSpeed: Double?
+    var maxSpeed: Double?
 }
 
 struct ScrollDefaults: Codable {
-    var scrollAmount: Int
-    var continuousSpeed: Int
+    var initialSpeed: Double  // px per 8ms tick. 0 = auto from windowHeight/4 over 250ms
+    var maxSpeed: Double      // px per 8ms tick cap
+    var acceleration: Double  // multiplier per tick (e.g. 0.002 = 0.2% speed increase per 8ms)
+    var coastMs: Double       // ms to scroll at initial speed before acceleration begins
     var mouseXRatio: Double
     var mouseYRatio: Double
-    var continuousIntervalMs: Int
-    var holdThresholdMs: Int
 }
 
 struct Config: Codable {
@@ -27,12 +27,12 @@ let pidPath = "/tmp/smooth-scroller.pid"
 
 let defaultConfig = Config(
     defaults: ScrollDefaults(
-        scrollAmount: 400,
-        continuousSpeed: 5,
+        initialSpeed: 0,
+        maxSpeed: 48.0,
+        acceleration: 0.002,
+        coastMs: 800,
         mouseXRatio: 0.75,
-        mouseYRatio: 0.5,
-        continuousIntervalMs: 16,
-        holdThresholdMs: 500
+        mouseYRatio: 0.5
     ),
     apps: [:]
 )
@@ -42,6 +42,10 @@ func loadConfig() -> Config {
     guard let data = FileManager.default.contents(atPath: path) else { return defaultConfig }
     return (try? JSONDecoder().decode(Config.self, from: data)) ?? defaultConfig
 }
+
+// MARK: - Global state
+
+var terminated: sig_atomic_t = 0
 
 // MARK: - Window & Mouse
 
@@ -80,21 +84,34 @@ func sendScroll(delta: Int32) {
         scrollWheelEvent2Source: nil, units: .pixel,
         wheelCount: 1, wheel1: delta, wheel2: 0, wheel3: 0
     ) else { return }
+    event.setIntegerValueField(.scrollWheelEventIsContinuous, value: 1)
     event.post(tap: .cghidEventTap)
 }
 
-func resolveScrollAmount(bundleId: String?, config: Config) -> Int {
-    if let bid = bundleId, let app = config.apps[bid], let amt = app.scrollAmount {
-        return amt
-    }
-    return config.defaults.scrollAmount
+/// Calculate initial speed: cover 1/4 window height in ~250ms at 8ms ticks.
+/// Returns px/tick. Falls back to 8.0 if window bounds unavailable.
+func calcAutoSpeed(windowBounds: CGRect?) -> Double {
+    let height = windowBounds?.height ?? 900
+    let quarterPage = height / 4
+    let ticksPer250ms = 250.0 / 8.0  // ~31 ticks
+    return Double(quarterPage) / ticksPer250ms
 }
 
-func resolveContinuousSpeed(bundleId: String?, config: Config) -> Int {
-    if let bid = bundleId, let app = config.apps[bid], let spd = app.continuousSpeed {
-        return spd
+func resolveInitialSpeed(bundleId: String?, windowBounds: CGRect?, config: Config) -> Double {
+    if let bid = bundleId, let app = config.apps[bid], let v = app.initialSpeed, v > 0 {
+        return v
     }
-    return config.defaults.continuousSpeed
+    if config.defaults.initialSpeed > 0 {
+        return config.defaults.initialSpeed
+    }
+    return calcAutoSpeed(windowBounds: windowBounds)
+}
+
+func resolveMaxSpeed(bundleId: String?, config: Config) -> Double {
+    if let bid = bundleId, let app = config.apps[bid], let v = app.maxSpeed {
+        return v
+    }
+    return config.defaults.maxSpeed
 }
 
 // MARK: - PID
@@ -126,36 +143,39 @@ func startScroll(direction: String) {
     let bundleId = NSWorkspace.shared.frontmostApplication?.bundleIdentifier
     let isUp = direction == "up"
 
-    // Move mouse into window
-    if let bounds = getActiveWindowBounds() {
+    // Move mouse into active window
+    let windowBounds = getActiveWindowBounds()
+    if let bounds = windowBounds {
         moveMouseToWindow(bounds: bounds, config: config)
     }
 
-    // Immediate half-page scroll
-    let amount = resolveScrollAmount(bundleId: bundleId, config: config)
-    sendScroll(delta: isUp ? Int32(amount) : -Int32(amount))
-
-    // Write PID for stop command
     writePid()
+    signal(SIGTERM) { _ in terminated = 1 }
 
-    // SIGTERM handler
-    signal(SIGTERM) { _ in
-        removePid()
-        exit(0)
+    // Scroll immediately — no delay. Speed auto-calculated to cover 1/4 page in ~250ms.
+    let intervalUs: UInt32 = 8000  // 8ms ≈ 120fps
+    let intervalMs = Double(intervalUs) / 1000.0
+    var speed = resolveInitialSpeed(bundleId: bundleId, windowBounds: windowBounds, config: config)
+    let maxSpeed = resolveMaxSpeed(bundleId: bundleId, config: config)
+    let accelFactor = config.defaults.acceleration  // multiplicative: speed *= (1 + factor)
+    let coastTicks = Int(config.defaults.coastMs / intervalMs)  // ticks at constant speed
+
+    // Log effective config to stderr for tuning
+    fputs("smooth-scroller: speed=\(String(format: "%.1f", speed)) max=\(String(format: "%.1f", maxSpeed)) accel=\(String(format: "%.4f", accelFactor)) coast=\(coastTicks) ticks window=\(windowBounds?.height ?? 0)h\n", stderr)
+
+    var tick = 0
+    while terminated == 0 {
+        let d = Int32(round(speed))
+        if d != 0 { sendScroll(delta: isUp ? d : -d) }
+        tick += 1
+        if tick > coastTicks {
+            speed = min(speed * (1.0 + accelFactor), maxSpeed)
+        }
+        usleep(intervalUs)
     }
 
-    // Wait for hold threshold before starting continuous scroll
-    usleep(UInt32(config.defaults.holdThresholdMs) * 1000)
-
-    // Continuous scroll loop
-    let speed = resolveContinuousSpeed(bundleId: bundleId, config: config)
-    let delta = isUp ? Int32(speed) : -Int32(speed)
-    let interval = UInt32(config.defaults.continuousIntervalMs) * 1000
-
-    while true {
-        sendScroll(delta: delta)
-        usleep(interval)
-    }
+    removePid()
+    exit(0)
 }
 
 // MARK: - Main

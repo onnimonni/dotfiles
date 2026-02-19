@@ -61,9 +61,35 @@ let
         }
       ];
 
+  # fn+u/o alone → smooth scroll (no optional modifiers, so fn+ctrl+u etc. won't match)
   smoothScrollRule = [
     {
       description = "fn+{u,o} → smooth scroll up/down";
+      manipulators = map (m: m // { type = "basic"; }) [
+        {
+          from = {
+            key_code = "u";
+            modifiers.mandatory = [ "fn" ];
+          };
+          to = [ { shell_command = "${scrollerBinPath} start up"; } ];
+          to_after_key_up = [ { shell_command = "${scrollerBinPath} stop"; } ];
+        }
+        {
+          from = {
+            key_code = "o";
+            modifiers.mandatory = [ "fn" ];
+          };
+          to = [ { shell_command = "${scrollerBinPath} start down"; } ];
+          to_after_key_up = [ { shell_command = "${scrollerBinPath} stop"; } ];
+        }
+      ];
+    }
+  ];
+
+  # fn+u/o with any extra modifiers → native page up/down (catches fn+ctrl+cmd+u etc.)
+  pageUpDownWithModifiersRule = [
+    {
+      description = "fn+modifier+{u,o} → page up/down";
       manipulators = map (m: m // { type = "basic"; }) [
         {
           from = {
@@ -73,8 +99,7 @@ let
               optional = [ "any" ];
             };
           };
-          to = [ { shell_command = "${scrollerBinPath} start up"; } ];
-          to_after_key_up = [ { shell_command = "${scrollerBinPath} stop"; } ];
+          to = [ { key_code = "page_up"; } ];
         }
         {
           from = {
@@ -84,8 +109,7 @@ let
               optional = [ "any" ];
             };
           };
-          to = [ { shell_command = "${scrollerBinPath} start down"; } ];
-          to_after_key_up = [ { shell_command = "${scrollerBinPath} stop"; } ];
+          to = [ { key_code = "page_down"; } ];
         }
       ];
     }
@@ -196,6 +220,7 @@ let
   ]
   ++ pageUpDownFallbackRule
   ++ smoothScrollRule
+  ++ pageUpDownWithModifiersRule
   ++ [
     {
       description = "Change fn+{m,period} to home/end";
