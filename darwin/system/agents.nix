@@ -33,6 +33,12 @@
 
         These can provide help when you want to find code examples and libraries and function documentation.
 
+        ### MANDATORY: Search before concluding "can't be done"
+        **NEVER** tell user something is impossible, unsupported, or manual-only without
+        FIRST searching GitHits and/or Context7 for workarounds. Undocumented features,
+        reverse-engineered solutions, and community workarounds are common. Search before
+        concluding impossibility. Say "I couldn't find a way" not "it's impossible".
+
         ## Documentation files
 
         Keep existing README.md updated when making relevant changes. Never create new markdown/doc files unless user explicitly asks.

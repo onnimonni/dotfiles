@@ -109,6 +109,10 @@ in
 
           Prefer local exploration over API-based file fetching for understanding the codebase.
         '';
+
+        # Skills
+        ".claude/skills/never-conclude-impossible/SKILL.md".text =
+          builtins.readFile ../../config/claude/skills/never-conclude-impossible/SKILL.md;
       };
     };
 }
