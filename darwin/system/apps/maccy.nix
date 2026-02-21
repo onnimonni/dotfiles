@@ -1,4 +1,4 @@
-{ username, ... }:
+{ ... }:
 {
   homebrew.casks = [
     "maccy"
@@ -22,45 +22,18 @@
     "NSStatusItem VisibleCC Item-1" = false;
   };
 
-  # Disable Maccy notifications & sounds via com.apple.ncprefs flags bitmask
-  # bit 25 = Allow Notifications, bit 2 = Play Sound
-  system.activationScripts.postActivation.text = ''
-        NCPREFS="/Users/${username}/Library/Preferences/com.apple.ncprefs.plist"
-        BUNDLE_ID="org.p0deje.Maccy"
-
-        if [ -f "$NCPREFS" ]; then
-          /usr/bin/python3 -c "
-    import plistlib, sys
-
-    prefs_path = '$NCPREFS'
-    bundle_id = '$BUNDLE_ID'
-    FLAG_ALLOW = 1 << 25
-    FLAG_SOUND = 1 << 2
-
-    with open(prefs_path, 'rb') as f:
-        data = plistlib.load(f)
-
-    modified = False
-    for app in data.get('apps', []):
-        if app.get('bundle-id') == bundle_id:
-            flags = app.get('flags', 0)
-            new_flags = flags & ~FLAG_ALLOW & ~FLAG_SOUND
-            if new_flags != flags:
-                app['flags'] = new_flags
-                modified = True
-                print(f'Maccy notifications disabled (flags {flags} -> {new_flags})')
-            else:
-                print('Maccy notifications already disabled')
-            break
-    else:
-        print('Maccy not yet in ncprefs, skip (will apply on next rebuild after first launch)')
-        sys.exit(0)
-
-    if modified:
-        with open(prefs_path, 'wb') as f:
-            plistlib.dump(data, f)
-    "
-          killall usernoted 2>/dev/null || true
-        fi
-  '';
+  # FIXME: Disable notifications programmatically for Maccy and Tips.app
+  # Manual: System Settings > Notifications > [App] > Allow Notifications = off
+  #
+  # Tried on macOS 26 Tahoe — none of these worked:
+  # 1. Writing flags=0 to com.apple.ncprefs.plist (plist updates but UI ignores it)
+  # 2. Adding auth=7 field (matches Slack/Spotify disabled entries)
+  # 3. Adding src/req code-signing requirement blob via csreq
+  # 4. Killing cfprefsd before write to flush cache, then killing usernoted/NotificationCenter after
+  # 5. Using PlistBuddy to modify entries
+  #
+  # macOS 26 appears to read notification state from an in-memory store that doesn't
+  # sync from the ncprefs plist on disk. Only the System Settings UI toggle works.
+  # Maccy has no built-in preference for this (confirmed in github.com/p0deje/Maccy/issues/692).
+  # Tips.app (com.apple.tips) shows annoying notifications after macOS updates.
 }
