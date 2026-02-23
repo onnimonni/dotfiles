@@ -1,0 +1,17 @@
+.gkn-selected {
+  outline: 2px solid #4285f4 !important;
+  outline-offset: 2px !important;
+  border-radius: 8px !important;
+}
+
+.gkn-kebab-selected {
+  outline: 2px solid #ea4335 !important;
+  outline-offset: 2px !important;
+  border-radius: 4px !important;
+}
+
+.gkn-selected-showmore {
+  outline: 2px solid #4285f4 !important;
+  outline-offset: 2px !important;
+  border-radius: 4px !important;
+}

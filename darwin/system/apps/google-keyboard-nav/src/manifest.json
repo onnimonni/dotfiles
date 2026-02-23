@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Google Keyboard Nav",
+  "version": "0.1.0",
+  "description": "Keyboard-driven navigation for Google search results",
+  "content_scripts": [
+    {
+      "matches": [
+        "*://www.google.*/search*",
+        "*://www.google.co.*/search*",
+        "*://www.google.com.*/search*"
+      ],
+      "js": ["content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_end"
+    }
+  ]
+}

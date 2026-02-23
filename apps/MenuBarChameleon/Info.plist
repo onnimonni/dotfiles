@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleExecutable</key>
+    <string>MenuBarChameleon</string>
+    <key>CFBundleIdentifier</key>
+    <string>build.flaky.MenuBarChameleon</string>
+    <key>CFBundleName</key>
+    <string>MenuBarChameleon</string>
+    <key>CFBundleDisplayName</key>
+    <string>MenuBarChameleon</string>
+    <key>CFBundleVersion</key>
+    <string>1.0</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>14.0</string>
+    <key>LSUIElement</key>
+    <true/>
+    <key>NSScreenCaptureUsageDescription</key>
+    <string>MenuBarChameleon needs screen capture access to sample the colors of windows below the menu bar.</string>
+</dict>
+</plist>
