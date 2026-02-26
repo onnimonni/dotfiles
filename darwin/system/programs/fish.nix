@@ -1,6 +1,18 @@
 { pkgs, username, ... }:
 {
-  users.users.${username}.shell = pkgs.fish;
+  # Register fish as a valid login shell
+  environment.shells = [ pkgs.fish ];
+
+  # Set fish as login shell via dscl directly. Using users.knownUsers +
+  # users.users.shell requires hardcoding uid which varies per machine.
+  system.activationScripts.setFishShell.text = ''
+    current_shell=$(dscl . -read /Users/${username} UserShell 2>/dev/null | awk '{print $2}')
+    fish_path="${pkgs.fish}/bin/fish"
+    if [ "$current_shell" != "$fish_path" ]; then
+      echo "Setting login shell to fish for ${username}..."
+      dscl . -create /Users/${username} UserShell "$fish_path"
+    fi
+  '';
 
   # FIXME: Fails often like this:
   # /nix/store/5kyj36g08zq4xi5311fww00b39jcb0bg-procps-1003.1-2008/bin/ps: illegal option -- -

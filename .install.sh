@@ -64,9 +64,6 @@ echo "Visit: https://flakehub.com/token/create?class=user and create new token"
 echo "then run this command and paste your token there:"
 echo "$ determinate-nixd login"
 echo "OPTIONAL FINAL STEPS:"
-echo "Activate onnimonni-Dvorak keyboard layout from"
-echo "GO: System Preferences -> Keyboard \
--> Input Sources -> search 'onni' -> activate onnimonni-Dvorak"
 
 echo "Then create a new ssh key named 'github-key' in Secretive and run:"
 echo "$ ssh-add -L | grep github-key > ~/.ssh/github_secretive.pub"

@@ -94,24 +94,12 @@ in
       };
     };
 
+    # HIToolbox keyboard layout config moved to activation script +
+    # select-keyboard-layout helper (apps/select-keyboard-layout/).
+    # Using `defaults import` here would REPLACE the entire HIToolbox plist,
+    # fighting with macOS which actively manages input source state.
     "com.apple.HIToolbox" = {
-      # Source: https://macos-defaults.com/keyboard/applefnusagetype.html
-      # Don't do anything when pressing the fn/globe key
       AppleDictationAutoEnable = false;
-
-      # Add my custom keyboard layout to the system
-      AppleCurrentKeyboardLayoutInputSourceID = "org.unknown.keylayout.ONNIDVORAK-QWERTYCMD";
-      AppleEnabledInputSources = [
-        {
-          InputSourceKind = "AppleKeyboardLayout";
-          "KeyboardLayout ID" = "org.unknown.keylayout.ONNIDVORAK-QWERTYCMD";
-        }
-        {
-          InputSourceKind = "Keyboard Layout";
-          "KeyboardLayout ID" = 17;
-          "KeyboardLayout Name" = "Finnish";
-        }
-      ];
     };
   };
 }
