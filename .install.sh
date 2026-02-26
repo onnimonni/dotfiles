@@ -63,6 +63,12 @@ fi
 # Setup MacOS with nix
 sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake ~/.dotfiles/
 
+# Launch Karabiner if not running (needed for keyboard remapping)
+if ! pgrep -q karabiner_grabber; then
+  echo "Starting Karabiner-Elements..."
+  open -a "Karabiner-Elements"
+fi
+
 echo "INSTALLATION IS COMPLETE!"
 echo ""
 echo "OPTIONAL FINAL STEPS:"
