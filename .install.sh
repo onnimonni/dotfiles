@@ -49,12 +49,16 @@ if [ ! -x /opt/homebrew/bin/brew ]; then
   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
-# Sign into App Store before nix-darwin (needed for mas app installs)
-echo ""
-echo "=== App Store Setup ==="
-echo "Open App Store and sign in with your Apple ID before continuing."
-echo "Press Enter when you have signed in..."
-read -r
+# Check App Store sign-in (needed for mas app installs)
+if defaults read MobileMeAccounts Accounts 2>/dev/null | grep -q "AccountID"; then
+  echo "App Store: signed in ✓"
+else
+  echo ""
+  echo "=== App Store Setup ==="
+  echo "Open App Store and sign in with your Apple ID before continuing."
+  echo "Press Enter when you have signed in..."
+  read -r
+fi
 
 # Setup MacOS with nix
 sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake ~/.dotfiles/
