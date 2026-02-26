@@ -71,6 +71,12 @@ in
     # Python
     uv
 
+    # JavaScript/TypeScript runtime
+    bun
+
+    # Google Gemini CLI
+    gemini-cli
+
     # Read overturemaps data from azure blob storage with 'azcopy'
     azure-storage-azcopy
 

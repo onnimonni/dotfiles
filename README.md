@@ -96,6 +96,22 @@ launchctl kickstart -k gui/$(id -u)/org.pqrs.service.agent.karabiner_console_use
 ## Docs for common procedures
 * [Using Estonian ID-card as ssh public key](docs/estonian-id-card.md)
 
+## Custom apps
+
+### MenuBarChameleon
+Swift app that dynamically tints the macOS menu bar based on window content below it.
+Captures a color strip via ScreenCaptureKit, composites it onto the wallpaper top edge, and sets it as desktop image. macOS vibrancy then naturally samples the modified wallpaper.
+
+```sh
+# Build & install
+apps/MenuBarChameleon/build.sh
+
+# Run
+open ~/Applications/MenuBarChameleon.app
+```
+
+Requires Screen Recording permission. Uses Apple Development signing identity for stable TCC.
+
 ## MCP
 Githits and context7 MCP are configured for Claude and Codex via nix-darwin modules.
 

@@ -9,20 +9,35 @@
   # Home-manager configuration for mcp
   home-manager.users.${username} = {
     home.file = {
-      ".mcp.json".text = ''
-        {
-          "servers": {
-            "GitHits": {
-              "url": "https://mcp.githits.com",
-              "type": "http"
-            },
-            "context7": {
-              "url": "https://mcp.context7.com/mcp",
-              "type": "http"
-            }
-          }
-        }
-      '';
+      ".mcp.json".text = builtins.toJSON {
+        mcpServers = {
+          GitHits = {
+            url = "https://mcp.githits.com";
+            type = "http";
+          };
+          context7 = {
+            url = "https://mcp.context7.com/mcp";
+            type = "http";
+          };
+          playwright = {
+            type = "stdio";
+            command = "bunx";
+            args = [ "@playwright/mcp@latest" ];
+          };
+          consult-llm = {
+            type = "stdio";
+            command = "bunx";
+            args = [
+              "-y"
+              "consult-llm-mcp"
+            ];
+            env = {
+              CONSULT_LLM_DEFAULT_MODEL = "gemini-3.1-pro-preview";
+              CONSULT_LLM_ALLOWED_MODELS = "gemini-3.1-pro-preview";
+            };
+          };
+        };
+      };
 
       ".codex/config.toml".text = ''
         model = "gpt-5.3-codex"
