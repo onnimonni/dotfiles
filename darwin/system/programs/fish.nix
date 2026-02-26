@@ -163,6 +163,9 @@
       };
 
       shellInit = ''
+        # Ensure Homebrew is on PATH before anything else references it
+        fish_add_path --path /opt/homebrew/bin /opt/homebrew/sbin
+
         # Set default editor
         set -U EDITOR "code"
         set -U KUBE_EDITOR "$EDITOR --wait"
@@ -171,7 +174,7 @@
 
         # Some builds in MacOs seem to need this
         # Source: https://github.com/smashedtoatoms/asdf-postgres
-        set -Ux HOMEBREW_PREFIX (brew --prefix)
+        set -Ux HOMEBREW_PREFIX /opt/homebrew
         set -Ux HOMEBREW_CASK_OPTS "--no-quarantine" # Don't quarantine casks by default
 
         # Opt out of query.farm telemetry (DuckDB extension)
