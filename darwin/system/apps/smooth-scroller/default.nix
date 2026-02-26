@@ -48,7 +48,9 @@ in
 {
   environment.systemPackages = [ smooth-scroller ];
 
-  system.activationScripts.configureSmoothScroller.text = ''
+  # NOTE: nix-darwin only runs preActivation/extraActivation/postActivation,
+  # custom names are silently ignored.
+  system.activationScripts.postActivation.text = ''
     echo "Deploying smooth-scroller config..."
     mkdir -p /Users/${username}/.config/smooth-scroller
     cp ${configJson} /Users/${username}/.config/smooth-scroller/config.json

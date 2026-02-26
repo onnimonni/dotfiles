@@ -60,9 +60,7 @@ read -r
 sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake ~/.dotfiles/
 
 echo "INSTALLATION IS COMPLETE!"
-echo "Visit: https://flakehub.com/token/create?class=user and create new token"
-echo "then run this command and paste your token there:"
-echo "$ determinate-nixd login"
+echo ""
 echo "OPTIONAL FINAL STEPS:"
 
 echo "Then create a new ssh key named 'github-key' in Secretive and run:"

@@ -5,7 +5,9 @@
 
   # Set fish as login shell via dscl directly. Using users.knownUsers +
   # users.users.shell requires hardcoding uid which varies per machine.
-  system.activationScripts.setFishShell.text = ''
+  # NOTE: nix-darwin only runs preActivation/extraActivation/postActivation,
+  # custom names are silently ignored.
+  system.activationScripts.postActivation.text = ''
     current_shell=$(dscl . -read /Users/${username} UserShell 2>/dev/null | awk '{print $2}')
     fish_path="${pkgs.fish}/bin/fish"
     if [ "$current_shell" != "$fish_path" ]; then

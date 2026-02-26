@@ -33,7 +33,9 @@ in
 
   # Run in user's GUI session context (launchctl asuser) so TISSelectInputSource
   # has WindowServer access. Same pattern nix-darwin uses for home-manager activation.
-  system.activationScripts.selectKeyboardLayout.text = ''
+  # NOTE: nix-darwin only runs preActivation/extraActivation/postActivation,
+  # custom names are silently ignored.
+  system.activationScripts.postActivation.text = ''
     echo "Activating keyboard layout ${layoutID}..."
     launchctl asuser "$(id -u ${username})" \
       sudo -u ${username} --set-home \
