@@ -7,7 +7,9 @@ let
   destDir = "/Users/${username}/.config/google-keyboard-nav";
 in
 {
-  system.activationScripts.deployGoogleKeyboardNav.text = ''
+  # NOTE: nix-darwin only runs preActivation, postActivation, or extraActivation.
+  # Custom activation script names are silently ignored.
+  system.activationScripts.postActivation.text = ''
     echo "Deploying google-keyboard-nav extension..."
     mkdir -p ${destDir}
     cp ${srcDir}/manifest.json ${destDir}/manifest.json

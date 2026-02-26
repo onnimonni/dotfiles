@@ -43,16 +43,29 @@ in
             "DISABLE_ERROR_REPORTING": "1",
             "DISABLE_NON_ESSENTIAL_MODEL_CALLS": "1"
           },
-          "UserPromptSubmit": [
-            {
-              "hooks": [
-                {
-                  "type": "command",
-                  "command": "~/.claude/hooks/claudeception-activator.sh"
-                }
-              ]
-            }
-          ]
+          "hooks": {
+            "UserPromptSubmit": [
+              {
+                "hooks": [
+                  {
+                    "type": "command",
+                    "command": "~/.claude/hooks/claudeception-activator.sh"
+                  }
+                ]
+              }
+            ],
+            "PreToolUse": [
+              {
+                "matcher": "Bash",
+                "hooks": [
+                  {
+                    "type": "command",
+                    "command": "~/.claude/hooks/no-python-direct.sh"
+                  }
+                ]
+              }
+            ]
+          }
         }
       '';
 

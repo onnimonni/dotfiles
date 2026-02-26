@@ -53,6 +53,11 @@
         If problem can't be solved in other ways you need to inform the user about it.
         Using binaries in $PATH is only allowed in bash scripts but not in other programming languages.
 
+        ## Runtime preferences
+        - Prefer Go/Rust/Elixir/Zig over Python/Node when feasible
+        - If Python needed: `uv run` not `python` directly
+        - If Node needed: `bun`/`bunx` not `node`/`npm`/`npx`
+
         ## Use env in shell scripts
 
         Shell scripts should start like this:

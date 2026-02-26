@@ -141,6 +141,11 @@
         # Open files with specific apps
         antigravity = "open -a /Applications/Antigravity.app";
         vlc = "open -a /Applications/VLC.app";
+
+        # Block node/npm — use bun instead
+        node = "echo 'Use bun instead of node' >&2; false";
+        npm = "echo 'Use bun instead of npm' >&2; false";
+        npx = "echo 'Use bunx instead of npx' >&2; false";
       };
 
       shellInit = ''

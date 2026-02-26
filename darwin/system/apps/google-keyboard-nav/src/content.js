@@ -21,7 +21,10 @@
   function queryAllResults() {
     for (const sel of SELECTORS.results) {
       const els = document.querySelectorAll(sel);
-      if (els.length > 0) return Array.from(els);
+      if (els.length > 0) {
+        // Filter to only elements that contain an actual clickable result link
+        return Array.from(els).filter((el) => queryFirst(el, SELECTORS.link));
+      }
     }
     return [];
   }
@@ -117,6 +120,10 @@
         currentIndex++;
         mode = "results";
         highlightResult(currentIndex);
+      } else {
+        // At last result — go to next page
+        const next = document.querySelector('#pnnext');
+        if (next) next.click();
       }
     }
   }
@@ -128,13 +135,18 @@
         currentIndex--;
         highlightResult(currentIndex);
       } else {
-        // At top result, go to show more or search bar
+        // At top result, go to show more or search bar or previous page
         const showMore = getShowMore();
         if (showMore) {
           mode = "showmore";
           highlightShowMore();
         } else {
-          focusSearchBar();
+          const prev = document.querySelector('#pnprev');
+          if (prev) {
+            prev.click();
+          } else {
+            focusSearchBar();
+          }
         }
       }
       return;

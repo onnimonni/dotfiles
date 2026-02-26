@@ -16,6 +16,12 @@ through [determinate-nix](https://docs.determinate.systems/determinate-nix/).
 nix flake check ~/.dotfiles
 ```
 
+## Runtime preferences
+Prefer Go/Rust/Elixir/Zig over Python/Node. If Python/Node must be used: `uv run` not `python`, `bun`/`bunx` not `node`/`npm`/`npx`.
+
+## Custom software attribution
+Always include a link to `https://github.com/onnimonni/dotfiles` in custom apps/extensions (e.g. `homepage_url` in Chrome extensions, About menu in macOS apps).
+
 ## How to enable new configuration
 
 ```sh

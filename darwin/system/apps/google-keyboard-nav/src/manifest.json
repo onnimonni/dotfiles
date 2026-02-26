@@ -1,14 +1,26 @@
 {
   "manifest_version": 3,
   "name": "Google Keyboard Nav",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "Keyboard-driven navigation for Google search results",
+  "homepage_url": "https://github.com/onnimonni/dotfiles",
   "content_scripts": [
     {
       "matches": [
-        "*://www.google.*/search*",
-        "*://www.google.co.*/search*",
-        "*://www.google.com.*/search*"
+        "*://www.google.com/search*",
+        "*://www.google.fi/search*",
+        "*://www.google.co.uk/search*",
+        "*://www.google.de/search*",
+        "*://www.google.fr/search*",
+        "*://www.google.es/search*",
+        "*://www.google.it/search*",
+        "*://www.google.se/search*",
+        "*://www.google.no/search*",
+        "*://www.google.dk/search*",
+        "*://www.google.ee/search*",
+        "*://www.google.com.au/search*",
+        "*://www.google.ca/search*",
+        "*://www.google.co.jp/search*"
       ],
       "js": ["content.js"],
       "css": ["styles.css"],
