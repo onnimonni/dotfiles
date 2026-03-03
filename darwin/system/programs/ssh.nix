@@ -9,6 +9,12 @@
         "~/.ssh/secret_config"
       ];
 
+      # Suppress post-quantum KEX warning for router (doesn't support it)
+      extraConfig = ''
+        Host 192.168.8.1
+          LogLevel ERROR
+      '';
+
       # Use ssh keys through secretive
       matchBlocks."*" = {
         identityAgent = "/Users/${username}/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh";

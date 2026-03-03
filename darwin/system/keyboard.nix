@@ -39,6 +39,66 @@ let
       ''/usr/bin/defaults write -g NSUserKeyEquivalents -dict-add "${name}" "$(printf '${value}')"''
     ) windowShortcuts
   );
+
+  # Symbolic hotkeys: id -> { enabled, parameters }
+  # HACK: Can't use targets.darwin.defaults.CustomUserPreferences for these because
+  # home-manager's `defaults import CustomUserPreferences` writes to a literal
+  # "CustomUserPreferences" domain, not to com.apple.symbolichotkeys.
+  # PlistBuddy writes directly to the correct plist.
+  symbolicHotkeys = {
+    # Keyboard > Keyboard Shortcuts... > Keyboard >
+    # Move focus to next window = ⌥ + Tab
+    "27" = {
+      enabled = 1;
+      parameters = [
+        65535
+        48
+        524288
+      ];
+    };
+    # Keyboard > Keyboard Shortcuts... > Input Sources >
+    # Select previous input source = Ctrl + ⌥ + Space
+    "60" = {
+      enabled = 1;
+      parameters = [
+        32
+        49
+        786432
+      ];
+    };
+    # Disable opening Finder with ⌥ + ⌘ + Space
+    "65" = {
+      enabled = 0;
+      parameters = [
+        32
+        49
+        1572864
+      ];
+    };
+  };
+
+  pb = "/usr/libexec/PlistBuddy";
+  plist = "$HOME/Library/Preferences/com.apple.symbolichotkeys.plist";
+
+  setHotkeyCmds = lib.concatStringsSep "\n" (
+    lib.mapAttrsToList (
+      id:
+      { enabled, parameters }:
+      ''
+        ${pb} -c "Delete :AppleSymbolicHotKeys:${id}" "${plist}" 2>/dev/null || true
+        ${pb} \
+          -c "Add :AppleSymbolicHotKeys:${id} dict" \
+          -c "Add :AppleSymbolicHotKeys:${id}:enabled integer ${toString enabled}" \
+          -c "Add :AppleSymbolicHotKeys:${id}:value dict" \
+          -c "Add :AppleSymbolicHotKeys:${id}:value:type string standard" \
+          -c "Add :AppleSymbolicHotKeys:${id}:value:parameters array" \
+          -c "Add :AppleSymbolicHotKeys:${id}:value:parameters:0 integer ${toString (builtins.elemAt parameters 0)}" \
+          -c "Add :AppleSymbolicHotKeys:${id}:value:parameters:1 integer ${toString (builtins.elemAt parameters 1)}" \
+          -c "Add :AppleSymbolicHotKeys:${id}:value:parameters:2 integer ${toString (builtins.elemAt parameters 2)}" \
+          "${plist}"
+      ''
+    ) symbolicHotkeys
+  );
 in
 {
 
@@ -56,50 +116,17 @@ in
     /usr/bin/defaults write -g NSAutomaticPeriodSubstitutionEnabled -bool false
     /usr/bin/defaults delete -g NSUserKeyEquivalents 2>/dev/null || true
     ${shortcutCmds}
+
+    # Symbolic hotkeys (PlistBuddy for nested dict structure)
+    ${setHotkeyCmds}
+
+    # HIToolbox: fn/🌐 key = Do Nothing (0), not "Change Input Source" (1)
+    /usr/bin/defaults write com.apple.HIToolbox AppleFnUsageType -int 0
+    /usr/bin/defaults write com.apple.HIToolbox AppleDictationAutoEnable -bool false
   '';
 
   home.file = {
     # Custom dvorak keyboard layout made with Ukelele
     "Library/Keyboard Layouts/OnniDvorak.keylayout".source = ./config/OnniDvorak.keylayout;
-  };
-
-  targets.darwin.defaults.CustomUserPreferences = {
-    "com.apple.symbolichotkeys" = {
-      # Keyboard > Keyboard Shortcuts... > Keyboard >
-      # Move focus to next window = ⌥ + tab
-      AppleSymbolicHotKeys = {
-        "27" = {
-          enabled = 1;
-          value = {
-            parameters = [
-              65535
-              48
-              524288
-            ];
-            type = "standard";
-          };
-        };
-        # Disable opening Finder with ⌥ + ⌘ + space
-        "65" = {
-          enabled = 0;
-          value = {
-            parameters = [
-              32
-              49
-              1572864
-            ];
-            type = "standard";
-          };
-        };
-      };
-    };
-
-    # HIToolbox keyboard layout config moved to activation script +
-    # select-keyboard-layout helper (apps/select-keyboard-layout/).
-    # Using `defaults import` here would REPLACE the entire HIToolbox plist,
-    # fighting with macOS which actively manages input source state.
-    "com.apple.HIToolbox" = {
-      AppleDictationAutoEnable = false;
-    };
   };
 }
