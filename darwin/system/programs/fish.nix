@@ -355,7 +355,7 @@
                 set_color yellow
                 echo "I guess you typoed '\$ $base $dots'? You have 1s to cancel by pressing any key"
                 set_color normal
-                if not read -n 1 -t 1 -l _discard 2>/dev/null
+                if not read -n 1 -T 1 -P "" -l _discard 2>/dev/null
                   $base $dots $rest
                   return $status
                 end
