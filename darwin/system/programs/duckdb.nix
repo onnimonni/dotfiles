@@ -15,8 +15,6 @@
       LOAD netquack;
       INSTALL dns FROM community;
       LOAD dns;
-      INSTALL spatial;
-      LOAD spatial;
       INSTALL httpfs;
       LOAD httpfs;
       INSTALL zipfs FROM community;
