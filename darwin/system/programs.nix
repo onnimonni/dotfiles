@@ -100,5 +100,8 @@ in
 
     # Terminal multiplexer
     tmux
+
+    # PDF text extraction (used by Claude Code to read PDFs)
+    poppler-utils
   ];
 }
