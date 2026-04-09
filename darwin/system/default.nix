@@ -1,6 +1,7 @@
 { pkgs, ... }:
 {
   imports = [
+    ./ai-cli-bash.nix
     ./nix-core.nix
     ./settings.nix
     ./user.nix
