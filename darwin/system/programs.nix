@@ -50,8 +50,14 @@ in
     tree
     # To test connection speed
     speedtest-go
+    # Hetzner cloud management
+    hcloud
+    # AWS cli for terraform, public s3 buckets, SES, etc
+    awscli
     # Download youtube videos offline
     yt-dlp
+    # Download files areena.yle.fi for personal archiving
+    yle-dl
 
     # Video conversions and what not
     ffmpeg
@@ -79,6 +85,8 @@ in
 
     # Read overturemaps data from azure blob storage with 'azcopy'
     azure-storage-azcopy
+    # Docker/container management
+    container
 
     # Secret management
     sops

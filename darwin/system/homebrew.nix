@@ -48,18 +48,8 @@
       # To be able to install apps from the app store
       "mas"
 
-      # FIXME: Version from nixpkgs does not build
-      # Download files areena.yle.fi for personal archiving
-      "yle-dl"
-
-      # Hetzner cloud management
-      "hcloud"
-
-      # AWS cli for terraform, public s3 buckets, SES, etc
-      "awscli"
-
-      # Docker/container management
-      "container"
+      # Rust Token Killer
+      "rtk"
     ];
 
     casks = [

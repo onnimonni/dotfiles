@@ -114,6 +114,8 @@ Requires Screen Recording permission. Uses Apple Development signing identity fo
 
 ## MCP
 Githits and context7 MCP are configured for Claude and Codex via nix-darwin modules.
+Codex itself is installed via Homebrew cask.
+`~/.codex/config.toml` is generated as writable file so Codex can persist its own model prefs.
 
 ## UNLICENSE
 Use these dotfiles as you want to. Sharing is caring!
