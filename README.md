@@ -116,7 +116,8 @@ Requires Screen Recording permission. Uses Apple Development signing identity fo
 Githits and context7 MCP are configured for Claude and Codex via nix-darwin modules.
 Codex itself is installed via Homebrew cask.
 `~/.codex/config.toml` is generated as writable file so Codex can persist its own model prefs.
-Interactive `bash` sessions auto-handoff into `fish`.
+Interactive shell sessions auto-handoff into `fish`.
+Non-interactive shell entry via the login shell falls back to `bash`.
 `claude`, `codex`, `gemini`, and `opencode` are wrapped via nix so they launch under bash with `SHELL=/bin/bash` instead of inheriting fish.
 
 ## UNLICENSE

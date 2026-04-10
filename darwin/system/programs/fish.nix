@@ -1,7 +1,31 @@
 { pkgs, username, ... }:
+let
+  fishLoginShell = pkgs.writeShellScriptBin "fish-login-shell" ''
+    real_fish=${pkgs.fish}/bin/fish
+    login_flag=""
+
+    case "$(basename "$0")" in
+      -*)
+        login_flag="--login"
+        ;;
+    esac
+
+    if [ -t 0 ] && [ -t 1 ]; then
+      if [ -n "$login_flag" ] && [ "$#" -eq 0 ]; then
+        exec "$real_fish" "$login_flag"
+      fi
+      exec "$real_fish" "$@"
+    fi
+
+    if [ -n "$login_flag" ] && [ "$#" -eq 0 ]; then
+      exec /bin/bash "$login_flag"
+    fi
+    exec /bin/bash "$@"
+  '';
+in
 {
   # Register fish as a valid login shell
-  environment.shells = [ pkgs.fish ];
+  environment.shells = [ fishLoginShell ];
 
   # Set fish as login shell via dscl directly. Using users.knownUsers +
   # users.users.shell requires hardcoding uid which varies per machine.
@@ -9,7 +33,7 @@
   # custom names are silently ignored.
   system.activationScripts.postActivation.text = ''
     current_shell=$(dscl . -read /Users/${username} UserShell 2>/dev/null | awk '{print $2}')
-    fish_path="${pkgs.fish}/bin/fish"
+    fish_path="${fishLoginShell}/bin/fish-login-shell"
     if [ "$current_shell" != "$fish_path" ]; then
       echo "Setting login shell to fish for ${username}..."
       dscl . -create /Users/${username} UserShell "$fish_path"
@@ -18,14 +42,14 @@
 
   # Recommended shell split:
   # interactive humans -> fish
-  # non-interactive tools/agents -> bash
+  # non-interactive shell entry -> bash
   programs.bash = {
     enable = true;
     interactiveShellInit = ''
       parent_command="$(/bin/ps -o comm= -p "$PPID" 2>/dev/null || true)"
       if [[ "$parent_command" != "fish" && "$parent_command" != */fish && -z ''${BASH_EXECUTION_STRING-} ]]; then
         shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
-        exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
+        exec ${fishLoginShell}/bin/fish-login-shell $LOGIN_OPTION
       fi
     '';
   };
@@ -40,7 +64,7 @@
 
       # Ghostty terminal config
       ".config/ghostty/config".text = ''
-        command = ${pkgs.fish}/bin/fish
+        command = ${fishLoginShell}/bin/fish-login-shell
 
         font-family = JetBrains Mono
         font-size = 14

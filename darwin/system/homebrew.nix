@@ -42,7 +42,9 @@
     # Stop being annoyed by Apple "protecting" me
     caskArgs.no_quarantine = true;
 
-    taps = [ ];
+    taps = [
+      "explicit-sh/tap"
+    ];
 
     brews = [
       # To be able to install apps from the app store
@@ -50,6 +52,8 @@
 
       # Rust Token Killer
       "rtk"
+
+      "explicit"
     ];
 
     casks = [
