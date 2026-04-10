@@ -16,18 +16,19 @@
     fi
   '';
 
-  # FIXME: Fails often like this:
-  # /nix/store/5kyj36g08zq4xi5311fww00b39jcb0bg-procps-1003.1-2008/bin/ps: illegal option -- -
-  # Force fish for interactive sessions
-  #programs.bash = {
-  #  interactiveShellInit = ''
-  #    if [[ $(${pkgs.procps}/bin/ps --no-header --pid=$PPID --format=comm) != "fish" && -z ''${BASH_EXECUTION_STRING} ]]
-  #    then
-  #      shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
-  #      exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
-  #    fi
-  #  '';
-  #};
+  # Recommended shell split:
+  # interactive humans -> fish
+  # non-interactive tools/agents -> bash
+  programs.bash = {
+    enable = true;
+    interactiveShellInit = ''
+      parent_command="$(/bin/ps -o comm= -p "$PPID" 2>/dev/null || true)"
+      if [[ "$parent_command" != "fish" && "$parent_command" != */fish && -z ''${BASH_EXECUTION_STRING-} ]]; then
+        shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
+        exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
+      fi
+    '';
+  };
 
   # This disables annoying message when opening a new terminal:
   # Last login: Sun May 25 21:52:09 on ttys009
