@@ -75,6 +75,17 @@ in
       '';
     };
 
+    # Install caveman plugin if not already present
+    home.activation.caveman = ''
+      if ! [ -d "$HOME/.claude/plugins/marketplaces/caveman" ]; then
+        CLAUDE_BIN="/opt/homebrew/bin/claude"
+        if [ -x "$CLAUDE_BIN" ]; then
+          "$CLAUDE_BIN" plugin marketplace add JuliusBrussee/caveman
+          "$CLAUDE_BIN" plugin install caveman@caveman
+        fi
+      fi
+    '';
+
     # Write settings.json as a regular writable file (not a symlink)
     # so tools like nono can modify it at runtime.
     # Uses jq to deep-merge: nix base settings * existing tool-added keys

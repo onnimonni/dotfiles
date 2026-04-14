@@ -11,6 +11,27 @@
   # Home-manager configuration for agents
   home-manager.users.${username} = {
     home.file = {
+      # Codex personal marketplace — makes caveman visible in /plugins browser
+      # Plugin source lives in Claude's plugin dir (installed via claude plugin marketplace add)
+      # source.path is relative to marketplace root (~/.agents/plugins/)
+      ".agents/plugins/marketplace.json".text = builtins.toJSON {
+        name = "personal";
+        plugins = [
+          {
+            name = "caveman";
+            source = {
+              source = "local";
+              path = "../../.claude/plugins/marketplaces/caveman/plugins/caveman";
+            };
+            policy = {
+              installation = "AVAILABLE";
+              authentication = "ON_INSTALL";
+            };
+            category = "Productivity";
+          }
+        ];
+      };
+
       ".agents/AGENTS.md".text = ''
         IMPORTANT: In all interactions and commit messages, be extremely concise and sacrifice grammar for the sake of concision.
 
