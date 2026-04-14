@@ -10,26 +10,34 @@
 {
   # Home-manager configuration for agents
   home-manager.users.${username} = {
+    home.activation.codexCaveman = ''
+      # Symlink caveman plugin into Codex plugins dir
+      # Source: installed via 'claude plugin marketplace add JuliusBrussee/caveman'
+      PLUGIN_SRC="$HOME/.claude/plugins/marketplaces/caveman/plugins/caveman"
+      PLUGIN_DST="$HOME/.codex/plugins/caveman"
+      if [ -d "$PLUGIN_SRC" ] && [ ! -e "$PLUGIN_DST" ]; then
+        mkdir -p "$HOME/.codex/plugins"
+        ln -sf "$PLUGIN_SRC" "$PLUGIN_DST"
+      fi
+    '';
+
     home.file = {
-      # Codex personal marketplace — makes caveman visible in /plugins browser
-      # Plugin source lives in Claude's plugin dir (installed via claude plugin marketplace add)
-      # source.path is relative to marketplace root (~/.agents/plugins/)
-      ".agents/plugins/marketplace.json".text = builtins.toJSON {
-        name = "personal";
-        plugins = [
-          {
-            name = "caveman";
-            source = {
-              source = "local";
-              path = "../../.claude/plugins/marketplaces/caveman/plugins/caveman";
-            };
-            policy = {
-              installation = "AVAILABLE";
-              authentication = "ON_INSTALL";
-            };
-            category = "Productivity";
-          }
-        ];
+      # Codex: auto-activate caveman every session via hooks
+      ".codex/hooks.json".text = builtins.toJSON {
+        hooks = {
+          SessionStart = [
+            {
+              hooks = [
+                {
+                  type = "command";
+                  command = "echo 'CAVEMAN MODE ACTIVE. Rules: Drop articles/filler/pleasantries/hedging. Fragments OK. Short synonyms. Pattern: [thing] [action] [reason]. [next step]. Not: Sure! I would be happy to help you with that. Yes: Bug in auth middleware. Fix: Code/commits/security: write normal. User says stop caveman or normal mode to deactivate.'";
+                  statusMessage = "Loading caveman mode...";
+                  timeout = 10;
+                }
+              ];
+            }
+          ];
+        };
       };
 
       ".agents/AGENTS.md".text = ''
