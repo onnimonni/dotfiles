@@ -20,7 +20,7 @@ fi
 if [ -f "/Library/Apple/usr/share/rosetta/rosetta" ]; then
   echo "Rosetta 2 already installed. Skipping..."
 else
-  softwareupdate --install-rosetta --agree-to-license
+  sudo softwareupdate --install-rosetta --agree-to-license
 fi
 
 # Disable diagnostic reporting, i.e. telemetry
@@ -61,7 +61,7 @@ else
 fi
 
 # Setup MacOS with nix
-sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake ~/.dotfiles/
+sudo /nix/var/nix/profiles/default/bin/nix run nix-darwin/master#darwin-rebuild -- switch --flake ~/.dotfiles/
 
 # Launch Karabiner if not running (needed for keyboard remapping)
 if ! pgrep -q karabiner_grabber; then
