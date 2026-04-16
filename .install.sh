@@ -16,13 +16,6 @@ else
   sudo softwareupdate --install --all --restart --verbose
 fi
 
-# Install rosetta to be able to use and build intel binaries
-if [ -f "/Library/Apple/usr/share/rosetta/rosetta" ]; then
-  echo "Rosetta 2 already installed. Skipping..."
-else
-  sudo softwareupdate --install-rosetta --agree-to-license
-fi
-
 # Disable diagnostic reporting, i.e. telemetry
 export NIX_INSTALLER_DIAGNOSTIC_ENDPOINT=""
 
