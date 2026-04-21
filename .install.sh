@@ -4,6 +4,9 @@
 set -e
 trap 'echo "\nCancelled."; exit 130' INT
 
+# Accept Xcode license (needed before many dev tools work)
+sudo xcodebuild -license accept
+
 # Helper function
 function command_exists () {
   command -v "$1" >/dev/null 2>&1
@@ -54,7 +57,9 @@ else
 fi
 
 # Setup MacOS with nix
-sudo /nix/var/nix/profiles/default/bin/nix run nix-darwin/master#darwin-rebuild -- switch --flake ~/.dotfiles/
+# --inputs-from reuses the locked nix-darwin rev from flake.lock instead of
+# fetching nix-darwin/master from GitHub (avoids API rate limits)
+sudo /nix/var/nix/profiles/default/bin/nix run --inputs-from ~/.dotfiles nix-darwin#darwin-rebuild -- switch --flake ~/.dotfiles/
 
 # Launch Karabiner if not running (needed for keyboard remapping)
 if ! pgrep -q karabiner_grabber; then

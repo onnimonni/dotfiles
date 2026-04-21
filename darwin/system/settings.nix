@@ -1,6 +1,12 @@
 # Custom nix rules to use determinate nix installer with nix-darwin
 { pkgs, ... }:
 {
+  # Set locale so terminal apps (iTerm2, etc.) don't complain about missing UNIX locale
+  environment.variables = {
+    LANG = "en_US.UTF-8";
+    LC_ALL = "en_US.UTF-8";
+  };
+
   # Firewall with stealth mode
   networking.applicationFirewall = {
     enable = true;

@@ -6,6 +6,7 @@ rec {
   users.users."${system.primaryUser}" = {
     name = system.primaryUser;
     home = "/Users/${system.primaryUser}";
+    shell = pkgs.fish;
   };
 
   home-manager.useGlobalPkgs = true;

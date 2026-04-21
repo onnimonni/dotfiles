@@ -39,9 +39,6 @@
       ];
     };
 
-    # Stop being annoyed by Apple "protecting" me
-    caskArgs.no_quarantine = true;
-
     brews = [
       # To be able to install apps from the app store
       "mas"
@@ -115,10 +112,7 @@
       # To force machine to stay alive
       "Amphetamine" = 937984704;
 
-      # MacOS office suite
-      "Keynote" = 409183694;
-      "Numbers" = 409203825;
-      "Pages" = 409201541;
+      # Keynote, Numbers, Pages are preinstalled on macOS — no need to manage via mas
 
       # To use iOS simulator
       "Xcode" = 497799835;

@@ -200,7 +200,7 @@ in
         # Some builds in MacOs seem to need this
         # Source: https://github.com/smashedtoatoms/asdf-postgres
         set -Ux HOMEBREW_PREFIX /opt/homebrew
-        set -Ux HOMEBREW_CASK_OPTS "--no-quarantine" # Don't quarantine casks by default
+        # Note: --no-quarantine was removed in newer Homebrew versions
 
         # Opt out of query.farm telemetry (DuckDB extension)
         set -gx QUERY_FARM_TELEMETRY_OPT_OUT true
@@ -244,8 +244,8 @@ in
             # Homebrew installed stuff
             echo "brew update"
             brew update
-            echo "brew upgrade --no-quarantine # Heroic needs the no-quarantine"
-            brew upgrade --no-quarantine
+            echo "brew upgrade"
+            brew upgrade
 
             # Mise (asdf clone) plugins
             echo "mise (asdf clone) upgrade"
