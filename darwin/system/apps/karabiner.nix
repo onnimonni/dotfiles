@@ -402,6 +402,349 @@ let
         }
       ];
     }
+  ]
+  ++ dvorakRules;
+
+  # --- Dvorak remapping helpers ---
+  # Simple key-to-key remap; fires with optional shift/caps_lock but NOT cmd/opt/ctrl/fn
+  # This gives "QWERTY CMD" behavior: shortcuts stay in Finnish positions
+  mkDvorakRemap = from: to: {
+    type = "basic";
+    from = {
+      key_code = from;
+      modifiers.optional = [
+        "shift"
+        "caps_lock"
+        "command"
+      ];
+    };
+    to = [ { key_code = to; } ];
+  };
+
+  # For keys where shifted output doesn't match a simple remap.
+  # Returns a list of TWO manipulators (shifted first = higher priority).
+  mkDvorakSplit = from: toUnshifted: toShifted: [
+    {
+      type = "basic";
+      from = {
+        key_code = from;
+        modifiers = {
+          mandatory = [ "shift" ];
+          optional = [ "caps_lock" "command" ];
+        };
+      };
+      to = toShifted;
+    }
+    {
+      type = "basic";
+      from = {
+        key_code = from;
+        modifiers.optional = [ "caps_lock" "command" ];
+      };
+      to = toUnshifted;
+    }
+  ];
+
+  # Option-layer remap: fires when Option is held
+  mkOptRemap = from: toList: {
+    type = "basic";
+    from = {
+      key_code = from;
+      modifiers.mandatory = [ "option" ];
+    };
+    to = toList;
+  };
+
+  # Dvorak rules (appended after all existing rules so fn/spacebar rules take priority)
+  dvorakRules = [
+    {
+      description = "Dvorak: core letter and key remapping";
+      manipulators =
+        # Split-shift keys first (more specific match)
+        builtins.concatLists [
+          # backslash('): unshifted→period(.), shifted→period(. dropping shift)
+          (mkDvorakSplit "backslash" [ { key_code = "period"; } ] [ { key_code = "period"; } ])
+          # q: unshifted→backslash('), shifted→shift+2(")
+          (mkDvorakSplit "q" [ { key_code = "backslash"; } ] [
+            {
+              key_code = "2";
+              modifiers = [ "shift" ];
+            }
+          ])
+          # open_bracket(å): unshifted→shift+7(/), shifted→shift+hyphen(?)
+          (mkDvorakSplit "open_bracket" [
+            {
+              key_code = "7";
+              modifiers = [ "shift" ];
+            }
+          ] [
+            {
+              key_code = "hyphen";
+              modifiers = [ "shift" ];
+            }
+          ])
+          # close_bracket(¨): unshifted→shift+0(=), shifted→hyphen(+ dropping shift)
+          (mkDvorakSplit "close_bracket" [
+            {
+              key_code = "0";
+              modifiers = [ "shift" ];
+            }
+          ] [ { key_code = "hyphen"; } ])
+          # non_us_backslash(<): unshifted→hyphen(+), shifted→option+shift+7(\)
+          (mkDvorakSplit "non_us_backslash" [ { key_code = "hyphen"; } ] [
+            {
+              key_code = "7";
+              modifiers = [
+                "option"
+                "shift"
+              ];
+            }
+          ])
+        ]
+        ++ [
+          # 20 letter-to-letter remaps (Dvorak positions)
+          (mkDvorakRemap "s" "o")
+          (mkDvorakRemap "d" "e")
+          (mkDvorakRemap "f" "i")
+          (mkDvorakRemap "g" "u")
+          (mkDvorakRemap "h" "d")
+          (mkDvorakRemap "x" "q")
+          (mkDvorakRemap "c" "j")
+          (mkDvorakRemap "v" "k")
+          (mkDvorakRemap "b" "x")
+          (mkDvorakRemap "r" "p")
+          (mkDvorakRemap "t" "y")
+          (mkDvorakRemap "y" "f")
+          (mkDvorakRemap "o" "r")
+          (mkDvorakRemap "u" "l")
+          (mkDvorakRemap "i" "c")
+          (mkDvorakRemap "p" "g")
+          (mkDvorakRemap "l" "n")
+          (mkDvorakRemap "j" "h")
+          (mkDvorakRemap "k" "t")
+          (mkDvorakRemap "n" "b")
+          # 8 non-letter remaps where shift behavior matches
+          (mkDvorakRemap "z" "slash") # z→- (Finnish slash=-)
+          (mkDvorakRemap "period" "v") # .→v
+          (mkDvorakRemap "comma" "w") # ,→w
+          (mkDvorakRemap "semicolon" "s") # ö→s
+          (mkDvorakRemap "quote" "comma") # ä→,
+          (mkDvorakRemap "slash" "z") # -→z
+          (mkDvorakRemap "w" "semicolon") # w→ö
+          (mkDvorakRemap "e" "quote") # e→ä
+        ];
+    }
+    {
+      description = "Dvorak: option layer programmer symbols";
+      manipulators = [
+        (mkOptRemap "a" [
+          {
+            key_code = "period";
+            modifiers = [ "shift" ];
+          }
+        ]) # :
+        (mkOptRemap "s" [
+          {
+            key_code = "comma";
+            modifiers = [ "shift" ];
+          }
+        ]) # ;
+        (mkOptRemap "d" [
+          {
+            key_code = "8";
+            modifiers = [ "shift" ];
+          }
+        ]) # (
+        (mkOptRemap "f" [
+          {
+            key_code = "9";
+            modifiers = [ "shift" ];
+          }
+        ]) # )
+        (mkOptRemap "g" [
+          {
+            key_code = "0";
+            modifiers = [ "shift" ];
+          }
+        ]) # =
+        (mkOptRemap "h" [
+          {
+            key_code = "2";
+            modifiers = [ "shift" ];
+          }
+        ]) # "
+        (mkOptRemap "c" [
+          {
+            key_code = "6";
+            modifiers = [ "shift" ];
+          }
+        ]) # &
+        (mkOptRemap "v" [
+          {
+            key_code = "1";
+            modifiers = [ "shift" ];
+          }
+        ]) # !
+        (mkOptRemap "q" [
+          {
+            key_code = "backslash";
+            modifiers = [ "shift" ];
+          }
+        ]) # *
+        (mkOptRemap "w" [
+          {
+            key_code = "7";
+            modifiers = [ "option" ];
+          }
+        ]) # |
+        (mkOptRemap "e" [
+          {
+            key_code = "8";
+            modifiers = [
+              "option"
+              "shift"
+            ];
+          }
+        ]) # {
+        (mkOptRemap "r" [
+          {
+            key_code = "9";
+            modifiers = [
+              "option"
+              "shift"
+            ];
+          }
+        ]) # }
+        (mkOptRemap "y" [
+          {
+            key_code = "3";
+            modifiers = [ "shift" ];
+          }
+        ]) # #
+        (mkOptRemap "t" [
+          {
+            key_code = "4";
+            modifiers = [ "option" ];
+          }
+        ]) # $
+        (mkOptRemap "o" [ { key_code = "hyphen"; } ]) # +
+        (mkOptRemap "u" [ { key_code = "non_us_backslash"; } ]) # <
+        (mkOptRemap "i" [
+          {
+            key_code = "non_us_backslash";
+            modifiers = [ "shift" ];
+          }
+        ]) # >
+        (mkOptRemap "p" [
+          {
+            key_code = "9";
+            modifiers = [
+              "option"
+              "shift"
+            ];
+          }
+        ]) # }
+        (mkOptRemap "l" [ { key_code = "comma"; } ]) # ,
+        (mkOptRemap "j" [
+          {
+            key_code = "8";
+            modifiers = [ "option" ];
+          }
+        ]) # [
+        (mkOptRemap "k" [
+          {
+            key_code = "9";
+            modifiers = [ "option" ];
+          }
+        ]) # ]
+        (mkOptRemap "semicolon" [ { key_code = "period"; } ]) # .
+        (mkOptRemap "quote" [
+          {
+            key_code = "7";
+            modifiers = [ "shift" ];
+          }
+        ]) # /
+        (mkOptRemap "backslash" [
+          {
+            key_code = "7";
+            modifiers = [
+              "option"
+              "shift"
+            ];
+          }
+        ]) # \
+        (mkOptRemap "comma" [
+          {
+            key_code = "2";
+            modifiers = [ "option" ];
+          }
+        ]) # @
+        (mkOptRemap "slash" [
+          {
+            key_code = "slash";
+            modifiers = [ "shift" ];
+          }
+        ]) # _
+        (mkOptRemap "n" [
+          {
+            key_code = "hyphen";
+            modifiers = [ "shift" ];
+          }
+        ]) # ?
+        (mkOptRemap "m" [
+          {
+            key_code = "5";
+            modifiers = [ "shift" ];
+          }
+        ]) # %
+        (mkOptRemap "period" [
+          {
+            key_code = "backslash";
+            modifiers = [ "shift" ];
+          }
+        ]) # *
+        # Multi-character sequences
+        (mkOptRemap "z" [
+          {
+            key_code = "0";
+            modifiers = [ "shift" ];
+          }
+          {
+            key_code = "non_us_backslash";
+            modifiers = [ "shift" ];
+          }
+        ]) # =>
+        (mkOptRemap "non_us_backslash" [
+          { key_code = "non_us_backslash"; }
+          {
+            key_code = "0";
+            modifiers = [ "shift" ];
+          }
+        ]) # <=
+        # Dead key + space sequences (produce literal character)
+        (mkOptRemap "x" [
+          {
+            key_code = "close_bracket";
+            modifiers = [ "shift" ];
+          }
+          { key_code = "spacebar"; }
+        ]) # ^
+        (mkOptRemap "b" [
+          {
+            key_code = "equal_sign";
+            modifiers = [ "shift" ];
+          }
+          { key_code = "spacebar"; }
+        ]) # `
+        (mkOptRemap "open_bracket" [
+          {
+            key_code = "close_bracket";
+            modifiers = [ "option" ];
+          }
+          { key_code = "spacebar"; }
+        ]) # ~
+      ];
+    }
   ];
 
   mkSimpleModification = from: to: {

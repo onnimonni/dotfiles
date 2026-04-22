@@ -126,7 +126,5 @@ in
   '';
 
   home.file = {
-    # Custom dvorak keyboard layout made with Ukelele
-    "Library/Keyboard Layouts/OnniDvorak.keylayout".source = ./config/OnniDvorak.keylayout;
   };
 }
