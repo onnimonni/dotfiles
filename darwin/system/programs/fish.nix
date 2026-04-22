@@ -137,11 +137,11 @@ in
       enable = true;
       shellAliases = {
         # Update this config
-        update-nix = "sudo darwin-rebuild switch --flake ~/.dotfiles/";
+        update-nix = "sudo darwin-rebuild switch --impure --flake ~/.dotfiles/";
 
         update-all = ''
           nix flake update --flake ~/.dotfiles && \
-          sudo darwin-rebuild switch --flake ~/.dotfiles/ && \
+          sudo darwin-rebuild switch --impure --flake ~/.dotfiles/ && \
           duckdb -c "UPDATE EXTENSIONS;"
         '';
 
@@ -432,11 +432,11 @@ in
     enable = true;
     shellAliases = {
       # Update this config
-      update-nix = "sudo darwin-rebuild switch --flake ~/.dotfiles/";
+      update-nix = "sudo darwin-rebuild switch --impure --flake ~/.dotfiles/";
 
       update-all = ''
         nix flake update --flake ~/.dotfiles && \
-        sudo darwin-rebuild switch --flake ~/.dotfiles/ && \
+        sudo darwin-rebuild switch --impure --flake ~/.dotfiles/ && \
         duckdb -c "UPDATE EXTENSIONS;"
       '';
 
