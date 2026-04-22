@@ -416,6 +416,7 @@ let
         "shift"
         "caps_lock"
         "command"
+        "control"
       ];
     };
     to = [ { key_code = to; } ];
@@ -430,7 +431,7 @@ let
         key_code = from;
         modifiers = {
           mandatory = [ "shift" ];
-          optional = [ "caps_lock" "command" ];
+          optional = [ "caps_lock" "command" "control" ];
         };
       };
       to = toShifted;
@@ -439,7 +440,7 @@ let
       type = "basic";
       from = {
         key_code = from;
-        modifiers.optional = [ "caps_lock" "command" ];
+        modifiers.optional = [ "caps_lock" "command" "control" ];
       };
       to = toUnshifted;
     }
@@ -635,15 +636,7 @@ let
             modifiers = [ "shift" ];
           }
         ]) # >
-        (mkOptRemap "p" [
-          {
-            key_code = "9";
-            modifiers = [
-              "option"
-              "shift"
-            ];
-          }
-        ]) # }
+        (mkOptRemap "p" [ { key_code = "slash"; } ]) # - (Finnish slash key = -)
         (mkOptRemap "l" [ { key_code = "comma"; } ]) # ,
         (mkOptRemap "j" [
           {

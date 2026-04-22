@@ -75,6 +75,21 @@ in
       '';
     };
 
+    # Keybindings: § key (next to Tab) for push-to-talk, unbind space
+    home.file.".claude/keybindings.json".text = builtins.toJSON {
+      "$schema" = "https://www.schemastore.org/claude-code-keybindings.json";
+      "$docs" = "https://code.claude.com/docs/en/keybindings";
+      bindings = [
+        {
+          context = "Chat";
+          bindings = {
+            "\`" = "voice:pushToTalk";
+            space = null;
+          };
+        }
+      ];
+    };
+
     # Write settings.json as a regular writable file (not a symlink)
     # so tools like nono can modify it at runtime.
     # Uses jq to deep-merge: nix base settings * existing tool-added keys

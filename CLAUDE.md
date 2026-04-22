@@ -2,8 +2,7 @@
 
 This repository configures my MacBook.
 
-It uses [nix-darwin](https://github.com/nix-darwin/nix-darwin)
-through [determinate-nix](https://docs.determinate.systems/determinate-nix/).
+It uses [nix-darwin](https://github.com/nix-darwin/nix-darwin).
 
 **IMPORTANT: This is a public git repository so never ever add secrets to here**
 
@@ -25,5 +24,8 @@ Always include a link to `https://github.com/onnimonni/dotfiles` in custom apps/
 ## How to enable new configuration
 
 ```sh
-sudo darwin-rebuild switch --flake ~/.dotfiles/
+sudo darwin-rebuild switch --impure --flake ~/.dotfiles/
 ```
+
+The `--impure` flag is required because `linux-builder.nix` uses `builtins.pathExists`
+to auto-enable the linux builder only after it has been successfully bootstrapped.

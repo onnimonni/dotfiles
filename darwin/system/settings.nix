@@ -1,5 +1,5 @@
-# Custom nix rules to use determinate nix installer with nix-darwin
-{ pkgs, ... }:
+# macOS system preferences managed by nix-darwin
+{ pkgs, username, ... }:
 {
   # Set locale so terminal apps (iTerm2, etc.) don't complain about missing UNIX locale
   environment.variables = {
@@ -71,7 +71,7 @@
       FXEnableExtensionChangeWarning = false;
     };
 
-    # Store screenshots in separate folder
+    # Store screenshots in separate folder (created by activation script below)
     screencapture.location = "~/Desktop/Screenshots/";
 
     NSGlobalDomain = {
@@ -130,4 +130,10 @@
     # exist until Mail.app is opened, causing "Could not write domain" on fresh installs.
     # Set manually: defaults write com.apple.mail AddLinkPreviews -bool false
   };
+
+  # Create user directories that don't exist by default
+  system.activationScripts.postActivation.text = ''
+    sudo -u ${username} mkdir -p /Users/${username}/Desktop/Screenshots
+    sudo -u ${username} mkdir -p /Users/${username}/Projects
+  '';
 }

@@ -24,13 +24,8 @@ export NIX_INSTALLER_DIAGNOSTIC_ENDPOINT=""
 
 # Install nix
 if ! command_exists nix; then
-  # Disable the determinate nix because the linux builder was not that useful in the end
-  #curl -fsSL https://install.determinate.systems/nix | sh -s -- install --determinate
   curl -sSfL https://artifacts.nixos.org/nix-installer | sh -s -- install
 fi
-
-# Remove the default file so that nix-core.nix is able to write custom nix config there
-sudo rm -f /etc/nix/nix.custom.conf
 
 # Generate local-user.nix if it doesn't exist
 if [ ! -f ~/.dotfiles/local-user.nix ]; then
@@ -59,7 +54,11 @@ fi
 # Setup MacOS with nix
 # --inputs-from reuses the locked nix-darwin rev from flake.lock instead of
 # fetching nix-darwin/master from GitHub (avoids API rate limits)
-sudo /nix/var/nix/profiles/default/bin/nix run --inputs-from ~/.dotfiles nix-darwin#darwin-rebuild -- switch --flake ~/.dotfiles/
+# --impure allows linux-builder.nix to check if builder was previously bootstrapped
+# First run: linux builder disabled (flag file doesn't exist yet)
+sudo /nix/var/nix/profiles/default/bin/nix run --inputs-from ~/.dotfiles nix-darwin#darwin-rebuild -- switch --impure --flake ~/.dotfiles/
+# Second run: linux builder enabled (flag file created by first activation)
+sudo /nix/var/nix/profiles/default/bin/nix run --inputs-from ~/.dotfiles nix-darwin#darwin-rebuild -- switch --impure --flake ~/.dotfiles/
 
 # Launch Karabiner if not running (needed for keyboard remapping)
 if ! pgrep -q karabiner_grabber; then

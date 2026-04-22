@@ -1,4 +1,4 @@
-# Custom nix rules to use determinate nix installer with nix-darwin
+# Homebrew casks, brews, and Mac App Store apps managed by nix-darwin
 { lib, pkgs, ... }:
 {
   # Import all nix files from the 'apps' directory

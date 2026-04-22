@@ -13,6 +13,7 @@
     ./agents.nix
     ./mcp.nix
     ./githits.nix
+    ./linux-builder.nix
   ];
 
   # Pretty nice examples for setting up nix-darwin: https://github.com/thurstonsand/nixonomicon

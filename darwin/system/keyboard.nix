@@ -56,6 +56,15 @@ let
         524288
       ];
     };
+    # Move focus to previous window = ⌥ + ⇧ + Tab
+    "28" = {
+      enabled = 1;
+      parameters = [
+        65535
+        48
+        655360
+      ];
+    };
     # Keyboard > Keyboard Shortcuts... > Input Sources >
     # Select previous input source = Ctrl + ⌥ + Space
     "60" = {

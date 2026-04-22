@@ -5,9 +5,6 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     #nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-23.11-darwin";
 
-    # TODO: This doesn't work nicely with nix-darwin so we won't use it
-    #determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/0.1";
-
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
