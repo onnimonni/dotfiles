@@ -5,6 +5,7 @@
   ...
 }:
 let
+  codexBin = "/run/current-system/sw/bin/codex";
   hm = inputs.home-manager.lib.hm;
   hasSopsKey = builtins.pathExists "/Users/${username}/.config/sops/age/keys.txt";
 in
@@ -80,6 +81,11 @@ in
       EOF
 
       chmod 600 /Users/${username}/.codex/config.toml
+    '';
+
+    home.activation.configureCodexPlaywright = hm.dag.entryAfter [ "writeCodexConfig" ] ''
+      echo "Configuring Codex Playwright MCP..."
+      ${codexBin} mcp add playwright -- npx @playwright/mcp@latest --headless
     '';
   };
 }
