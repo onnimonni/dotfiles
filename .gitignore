@@ -23,3 +23,6 @@ devenv.local.yaml
 
 # If we try to build this system with nix
 result
+
+# Playwright MCP runtime logs
+.playwright-mcp/

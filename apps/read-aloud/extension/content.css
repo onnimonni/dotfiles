@@ -1,0 +1,39 @@
+#read-aloud-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 2147483647;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: #1a1a2e;
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.15s;
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1;
+}
+
+#read-aloud-btn:hover {
+  background: #16213e;
+  transform: scale(1.08);
+}
+
+#read-aloud-btn.playing {
+  background: #e94560;
+}
+
+#read-aloud-btn.playing:hover {
+  background: #c73e54;
+}
+
+#read-aloud-btn.loading {
+  opacity: 0.7;
+  cursor: wait;
+}

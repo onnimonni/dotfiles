@@ -31,18 +31,6 @@ in
               command = "bunx";
               args = [ "@playwright/mcp@latest" ];
             };
-            consult-llm = {
-              type = "stdio";
-              command = "bunx";
-              args = [
-                "-y"
-                "consult-llm-mcp"
-              ];
-              env = {
-                CONSULT_LLM_DEFAULT_MODEL = "gemini-3.1-pro-preview";
-                CONSULT_LLM_ALLOWED_MODELS = "gemini-3.1-pro-preview";
-              };
-            };
           };
       };
     };

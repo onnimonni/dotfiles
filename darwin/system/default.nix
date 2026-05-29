@@ -10,10 +10,10 @@
     ./sops.nix
     ./claude.nix
     ./gemini.nix
+    ./consult-llm.nix
     ./agents.nix
     ./mcp.nix
     ./githits.nix
-    ./linux-builder.nix
   ];
 
   # Pretty nice examples for setting up nix-darwin: https://github.com/thurstonsand/nixonomicon
@@ -33,8 +33,9 @@
   # The platform the configuration will be used on.
   nixpkgs.hostPlatform = "aarch64-darwin";
 
-  # Rosetta is installed and we can build x86_64-darwin too
-  nix.extraOptions = ''
-    extra-platforms = x86_64-darwin aarch64-darwin
-  '';
+  # Rosetta is installed — we can build x86_64-darwin too.
+  # `nix.extraOptions` is a no-op with `nix.enable = false` (Determinate Nix).
+  # Move into /etc/nix/nix.custom.conf instead:
+  #
+  #   extra-platforms = x86_64-darwin aarch64-darwin
 }

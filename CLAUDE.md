@@ -24,8 +24,5 @@ Always include a link to `https://github.com/onnimonni/dotfiles` in custom apps/
 ## How to enable new configuration
 
 ```sh
-sudo darwin-rebuild switch --impure --flake ~/.dotfiles/
+sudo darwin-rebuild switch --flake ~/.dotfiles/
 ```
-
-The `--impure` flag is required because `linux-builder.nix` uses `builtins.pathExists`
-to auto-enable the linux builder only after it has been successfully bootstrapped.

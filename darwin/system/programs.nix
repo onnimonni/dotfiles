@@ -1,18 +1,4 @@
 { pkgs, lib, ... }:
-let
-  latestOpensc = pkgs.opensc.version;
-  # As of 2024-09, latest version is 0.26.1
-  expectedVersion = "0.26.1";
-  customOpensc = pkgs.opensc.overrideAttrs (oldAttrs: {
-    version = "master";
-    src = pkgs.fetchFromGitHub {
-      owner = "OpenSC";
-      repo = "OpenSC";
-      rev = "79f5059135a5ac7b71258b196986e81d71a4256c";
-      sha256 = "sha256-WWVW7XhUzPH192D1qV4IEmS7ukKgLgj7xDQtKylk6ho=";
-    };
-  });
-in
 {
   # Import all nix files from the 'apps' directory
   # Source: https://www.reddit.com/r/NixOS/comments/1gcmce1/recursively_import_nix_files_from_a_directory/
@@ -26,14 +12,7 @@ in
     # For deploying new versions to remote bare metal servers
     nixos-rebuild
     # To interact with Estonian ID card
-    # As of 2025-09: Support for new Estonian ID cards of 2025 were not yet released
-    # FIXME: replace with 'opensc' when the assert below fails
-    (
-      if (latestOpensc > expectedVersion) then
-        (throw "OpenSC ${latestOpensc} is newer than ${expectedVersion}. Custom override can be removed.")
-      else
-        customOpensc
-    )
+    opensc
     # To format nix files properly
     nixfmt
     # To find nix packages
@@ -80,8 +59,8 @@ in
     # JavaScript/TypeScript runtime
     bun
 
-    # Google Gemini CLI
-    gemini-cli
+    # Google Antigravity CLI
+    antigravity-cli
 
     # Read overturemaps data from azure blob storage with 'azcopy'
     azure-storage-azcopy

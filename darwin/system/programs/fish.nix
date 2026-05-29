@@ -137,19 +137,16 @@ in
       enable = true;
       shellAliases = {
         # Update this config
-        update-nix = "sudo darwin-rebuild switch --impure --flake ~/.dotfiles/";
+        update-nix = "sudo darwin-rebuild switch --flake ~/.dotfiles/";
 
         update-all = ''
           nix flake update --flake ~/.dotfiles && \
-          sudo darwin-rebuild switch --impure --flake ~/.dotfiles/ && \
+          sudo darwin-rebuild switch --flake ~/.dotfiles/ && \
           duckdb -c "UPDATE EXTENSIONS;"
         '';
 
         # Reload fish config
         reload-fish = "source ~/.config/fish/config.fish";
-
-        # Free up disk space
-        free-up-disk = "brew cleanup --prune=all && container prune && nix-collect-garbage -d && xcrun simctl delete unavailable && sudo rm -rf ~/.Trash/*";
 
         # Prevent overwriting or deleting by accident
         mv = "mv -iv";
@@ -218,6 +215,25 @@ in
       '';
 
       functions = {
+        free-up-disk = {
+          description = "Free disk: brew/container prune, rebuild, GC, trim trash";
+          # `darwin-rebuild switch` BEFORE `nix-collect-garbage -d` so /etc/static
+          # gets repointed at the current-system etc (a GC root) — otherwise GC
+          # leaves a dangling /etc/static and breaks Touch ID / GUI-launched
+          # zsh / ssh config injection.
+          body = ''
+            brew cleanup --prune=all; or return
+            container prune; or return
+            sudo darwin-rebuild switch --flake ~/.dotfiles/; or return
+            nix-collect-garbage -d; or return
+            if not test -e (readlink -f /etc/static)
+              echo 'WARNING: /etc/static dangling — run sudo darwin-rebuild switch'
+            end
+            xcrun simctl delete unavailable; or return
+            sudo rm -rf ~/.Trash/*
+          '';
+        };
+
         cpg = {
           description = "Copy directory excluding .gitignore'd files";
           body = ''
@@ -432,11 +448,11 @@ in
     enable = true;
     shellAliases = {
       # Update this config
-      update-nix = "sudo darwin-rebuild switch --impure --flake ~/.dotfiles/";
+      update-nix = "sudo darwin-rebuild switch --flake ~/.dotfiles/";
 
       update-all = ''
         nix flake update --flake ~/.dotfiles && \
-        sudo darwin-rebuild switch --impure --flake ~/.dotfiles/ && \
+        sudo darwin-rebuild switch --flake ~/.dotfiles/ && \
         duckdb -c "UPDATE EXTENSIONS;"
       '';
 

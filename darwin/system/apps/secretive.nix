@@ -14,7 +14,7 @@ in
       inherit SSH_AUTH_SOCK;
     };
 
-    programs.ssh.matchBlocks."*".extraOptions."IdentityAgent" = SSH_AUTH_SOCK;
+    programs.ssh.settings."*".IdentityAgent = SSH_AUTH_SOCK;
 
     home.file.".ssh/google_compute_engine".text = ''
       # Fake file to allow gcloud to work with secretive

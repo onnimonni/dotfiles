@@ -31,7 +31,6 @@
     let
       # Default user config (can be overridden via local-user.nix)
       defaultUser = {
-        hostname = "Onnis-MacBook-Pro";
         username = "onnimonni";
         fullName = "Onni Hakala";
         email = "onni@flaky.build";
@@ -39,7 +38,22 @@
 
       # Load local override if exists (gitignored)
       localUserPath = ./local-user.nix;
-      userConfig = if builtins.pathExists localUserPath then import localUserPath else defaultUser;
+      localUser = if builtins.pathExists localUserPath then import localUserPath else { };
+      userConfig = defaultUser // (builtins.removeAttrs localUser [ "hostname" ]);
+      baseHostnames = [
+        "Onnis-MacBook-Pro"
+        "Onnis-Mac-Studio"
+      ];
+      hostnames =
+        if localUser ? hostname && !(builtins.elem localUser.hostname baseHostnames) then
+          baseHostnames ++ [ localUser.hostname ]
+        else
+          baseHostnames;
+      selectedHostname =
+        if localUser ? hostname && builtins.elem localUser.hostname hostnames then
+          localUser.hostname
+        else
+          builtins.head hostnames;
 
       mkDarwinConfig =
         {
@@ -65,13 +79,20 @@
             ./darwin/system
           ];
         };
+
+      mkHostConfig = hostname: userConfig // { inherit hostname; };
     in
     {
       # Build darwin flake using:
       # $ darwin-rebuild build --flake .#<hostname>
-      darwinConfigurations.${userConfig.hostname} = mkDarwinConfig userConfig;
+      darwinConfigurations = builtins.listToAttrs (
+        map (hostname: {
+          name = hostname;
+          value = mkDarwinConfig (mkHostConfig hostname);
+        }) hostnames
+      );
 
       # Expose the package set, including overlays, for convenience.
-      darwinPackages = self.darwinConfigurations.${userConfig.hostname}.pkgs;
+      darwinPackages = self.darwinConfigurations.${selectedHostname}.pkgs;
     };
 }

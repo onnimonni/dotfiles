@@ -15,16 +15,18 @@
           LogLevel ERROR
       '';
 
-      # Use ssh keys through secretive
-      matchBlocks."*" = {
-        identityAgent = "/Users/${username}/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh";
-      };
+      settings = {
+        # Use ssh keys through secretive
+        "*" = {
+          IdentityAgent = "/Users/${username}/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh";
+        };
 
-      # Use specific key for GitHub (no biometric prompts)
-      matchBlocks."github.com" = {
-        hostname = "github.com";
-        identityFile = "~/.ssh/github_secretive.pub";
-        identitiesOnly = true;
+        # Use specific key for GitHub (no biometric prompts)
+        "github.com" = {
+          HostName = "github.com";
+          IdentityFile = "~/.ssh/github_secretive.pub";
+          IdentitiesOnly = true;
+        };
       };
     };
 

@@ -47,6 +47,9 @@ Then rebuild:
 sudo darwin-rebuild switch --flake ~/.dotfiles
 ```
 
+This flake always exports `Onnis-MacBook-Pro` and `Onnis-Mac-Studio`.
+`local-user.nix` selects the default host for convenience but does not hide the other one.
+
 ## To update everything
 This command updates flake dependencies, nix, brew and duckdb extensions:
 ```
@@ -120,6 +123,7 @@ Codex itself is installed via Homebrew cask.
 Interactive shell sessions auto-handoff into `fish`.
 Non-interactive shell entry via the login shell falls back to `bash`.
 `claude`, `codex`, `gemini`, and `opencode` are wrapped via nix so they launch under bash with `SHELL=/bin/bash` instead of inheriting fish.
+`consult-llm` is installed via nix and configured on activation to use `gemini-cli` and `codex-cli` backends.
 
 ## UNLICENSE
 Use these dotfiles as you want to. Sharing is caring!
