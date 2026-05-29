@@ -24,29 +24,6 @@ let
       DISABLE_ERROR_REPORTING = "1";
       DISABLE_NON_ESSENTIAL_MODEL_CALLS = "1";
     };
-    hooks = {
-      UserPromptSubmit = [
-        {
-          hooks = [
-            {
-              type = "command";
-              command = "~/.claude/hooks/claudeception-activator.sh";
-            }
-          ];
-        }
-      ];
-      PreToolUse = [
-        {
-          matcher = "Bash";
-          hooks = [
-            {
-              type = "command";
-              command = "~/.claude/hooks/no-python-direct.sh";
-            }
-          ];
-        }
-      ];
-    };
   };
 in
 {
