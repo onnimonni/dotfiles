@@ -34,6 +34,10 @@
         username = "onnimonni";
         fullName = "Onni Hakala";
         email = "onni@flaky.build";
+        # Cloudflare zone used by the Mac Studio tunnel (ssh-mac.<domain>,
+        # vnc-mac.<domain>, et-mac.<domain>). null = tunnel module stays dormant.
+        # Set in gitignored local-user.nix to keep the zone out of the repo.
+        shareMacDomain = null;
       };
 
       # Load local override if exists (gitignored)
@@ -61,6 +65,7 @@
           username,
           fullName,
           email,
+          shareMacDomain ? null,
         }:
         nix-darwin.lib.darwinSystem {
           specialArgs = {
@@ -70,6 +75,7 @@
               username
               fullName
               email
+              shareMacDomain
               ;
           };
           modules = [

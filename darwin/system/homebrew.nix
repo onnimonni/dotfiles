@@ -95,6 +95,9 @@
       # OpenAI Codex CLI
       "codex"
 
+      # Google Antigravity CLI (provides `agy` binary; not in nixpkgs)
+      "antigravity-cli"
+
       # Docker/container process viewer
       "container-ps"
 

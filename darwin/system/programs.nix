@@ -59,9 +59,6 @@
     # JavaScript/TypeScript runtime
     bun
 
-    # Google Antigravity CLI
-    antigravity-cli
-
     # Read overturemaps data from azure blob storage with 'azcopy'
     azure-storage-azcopy
     # Docker/container management

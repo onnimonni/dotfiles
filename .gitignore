@@ -7,6 +7,10 @@ ssh/google_compute_engine.pub
 # Add IP-addresses which you don't want reveal publicly here
 ssh/secret_config
 
+# Per-machine identity + secrets (hostname, shareMacDomain, etc.).
+# Tracked template: local-user.nix.example
+local-user.nix
+
 # Cached version of https://github.com/elixir-lang/expert/releases
 .bin/expert
 

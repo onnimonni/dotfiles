@@ -1,0 +1,7 @@
+# Snapshot of github.com/onnimonni.keys — used as Mac Studio authorized_keys
+# when shareMacDomain is set. Refresh with:
+#   curl -fsSL https://github.com/onnimonni.keys > share-mac/github-onnimonni-keys.pub
+ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMsvLc6BEB556NzZU0TarX9WkStle3+tFfvdFLZIco999VEYgnVBIdT37qaQlwhN5K8u+4KFe+P0MlQG7yGgd70=
+ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBFe8dFpz/yH77+938Mu1GaDv9jR4GoBXEFeBN+xA5Uhn4ze+96A0cRsMv9jOhMAYwr5Uuj17KXich9X8pT4/nGBnGNNWlqsiMCzdqgI0nRX7vOj4nBYS0zE0pThZQYUi1A==
+ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAtmx7DefUb2YrHZs2iQVPMW6F9E6/fZjfiWaogyYTF0RFj4AdXR0SbfkGrPDh1DhfBm5n64hlw55Pq/bpXuSUU=
+ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPgnN4B6ztAUCRu0j7SuI0M7hpPRxZ4m8onoT7IP9Qm9TAtrSR8zYN2bGYnpgwON6I8XTnotAcxMer0GmCCUsCc=

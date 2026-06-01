@@ -9,6 +9,13 @@ username=$(whoami)
 fullName=$(id -F)
 
 read -rp "Email address: " email
+read -rp "Cloudflare zone for Mac Studio share tunnel (empty = disable): " shareDomain
+
+if [ -n "${shareDomain}" ]; then
+  shareLine="  shareMacDomain = \"${shareDomain}\";"
+else
+  shareLine="  shareMacDomain = null;"
+fi
 
 cat > "$OUTPUT_FILE" << EOF
 {
@@ -16,6 +23,7 @@ cat > "$OUTPUT_FILE" << EOF
   username = "${username}";
   fullName = "${fullName}";
   email = "${email}";
+${shareLine}
 }
 EOF
 

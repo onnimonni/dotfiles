@@ -1,0 +1,20 @@
+{
+  # The darwin configuration to build. Must match a key under
+  # `darwinConfigurations` in flake.nix (default: "Onnis-MacBook-Pro" or
+  # "Onnis-Mac-Studio").
+  hostname = "Onnis-MacBook-Pro";
+
+  # Personal identity defaults — flake.nix has fallback values so these
+  # fields are all optional.
+  username = "onnimonni";
+  fullName = "Onni Hakala";
+  email = "onni@flaky.build";
+
+  # Cloudflare zone for the Mac Studio share tunnel. Generates the public
+  # hostnames ssh-mac.<domain>, vnc-mac.<domain>, et-mac.<domain>. Names
+  # stay single-level so they fit under *.<domain> Universal SSL on Free.
+  #
+  # Leave as null to keep the tunnel module dormant.
+  # Set to your zone (e.g. "example.com") to enable.
+  shareMacDomain = null;
+}

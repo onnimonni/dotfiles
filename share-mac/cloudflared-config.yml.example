@@ -1,0 +1,20 @@
+# Template rendered into /etc/cloudflared/config.yml by cloudflared.nix.
+# @DOMAIN@ is replaced with shareMacDomain at evaluation time.
+# Hostnames are intentionally single-level (ssh-mac, vnc-mac, et-mac) so they
+# fit under Cloudflare Free plan's *.@DOMAIN@ Universal SSL cert.
+#
+# The credentials JSON is generated out-of-band by:
+#   cloudflared tunnel login
+#   cloudflared tunnel create mac-studio
+# then copied to /etc/cloudflared/mac-studio.json (chmod 600, root:wheel).
+tunnel: mac-studio
+credentials-file: /etc/cloudflared/mac-studio.json
+
+ingress:
+  - hostname: ssh-mac.@DOMAIN@
+    service: ssh://127.0.0.1:22
+  - hostname: vnc-mac.@DOMAIN@
+    service: tcp://127.0.0.1:5900
+  - hostname: et-mac.@DOMAIN@
+    service: tcp://127.0.0.1:2022
+  - service: http_status:404
