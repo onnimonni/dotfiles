@@ -48,21 +48,16 @@ let
   symbolicHotkeys = {
     # Keyboard > Keyboard Shortcuts... > Keyboard >
     # Move focus to next window = ⌥ + Tab
+    # macOS has no separate "previous window" hotkey ID — Shift + (next-window shortcut)
+    # auto-reverses, so ⌥+⇧+Tab cycles backward for free.
+    # WARNING: do NOT bind ID 28 here — ID 28 is "Save picture of selected area as a file"
+    # (the ⌘⇧4 screenshot), NOT "previous window". Binding it to ⌥⇧Tab triggers screenshots.
     "27" = {
       enabled = 1;
       parameters = [
         65535
         48
         524288
-      ];
-    };
-    # Move focus to previous window = ⌥ + ⇧ + Tab
-    "28" = {
-      enabled = 1;
-      parameters = [
-        65535
-        48
-        655360
       ];
     };
     # Keyboard > Keyboard Shortcuts... > Input Sources >
@@ -128,6 +123,10 @@ in
 
     # Symbolic hotkeys (PlistBuddy for nested dict structure)
     ${setHotkeyCmds}
+
+    # Clean up stale ID 28 binding (previously mis-labeled as "previous window";
+    # actually macOS screenshot-area-to-file). Restores default ⌘⇧4.
+    ${pb} -c "Delete :AppleSymbolicHotKeys:28" "${plist}" 2>/dev/null || true
 
     # HIToolbox: fn/🌐 key = Do Nothing (0), not "Change Input Source" (1)
     /usr/bin/defaults write com.apple.HIToolbox AppleFnUsageType -int 0

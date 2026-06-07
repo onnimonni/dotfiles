@@ -5,12 +5,14 @@
   ...
 }:
 {
-  # VS Code installed and configured via home-manager
+  # VS Code .app + `code` CLI installed via homebrew cask `visual-studio-code`
+  # (see homebrew.nix). home-manager only writes user settings — the package is
+  # stubbed so nothing gets linked into ~/Applications/Home Manager Apps (which
+  # would cause Finder to spam /Applications with "Visual Studio Code alias N" files).
   home-manager.users.${username} = {
     programs.vscode = {
       enable = true;
-      # Use the darwin package for proper macOS integration
-      package = pkgs.vscode;
+      package = pkgs.runCommand "vscode-stub" { } "mkdir -p $out";
 
       profiles.default.userSettings = {
         "editor.accessibilitySupport" = "off";

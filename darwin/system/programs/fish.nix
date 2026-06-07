@@ -47,7 +47,10 @@ in
     enable = true;
     interactiveShellInit = ''
       parent_command="$(/bin/ps -o comm= -p "$PPID" 2>/dev/null || true)"
-      if [[ "$parent_command" != "fish" && "$parent_command" != */fish && -z ''${BASH_EXECUTION_STRING-} ]]; then
+      if [[ "$parent_command" != "fish" && "$parent_command" != */fish \
+            && -z ''${BASH_EXECUTION_STRING-} \
+            && -z ''${DEVENV_PROFILE-} \
+            && -z ''${IN_NIX_SHELL-} ]]; then
         shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
         exec ${fishLoginShell}/bin/fish-login-shell $LOGIN_OPTION
       fi
@@ -215,6 +218,16 @@ in
       '';
 
       functions = {
+        # Force devenv to use BashDialect even when launched from fish.
+        # Without this, $SHELL=~/.nix-profile/bin/fish makes devenv launch
+        # bash → exec fish, and fish's interactive init (conf.d/nix-env.fish
+        # and friends) clobbers the nix store PATH so `mix`/etc. disappear.
+        devenv = {
+          body = ''
+            SHELL=/bin/bash command devenv $argv
+          '';
+        };
+
         free-up-disk = {
           description = "Free disk: brew/container prune, rebuild, GC, trim trash";
           # `darwin-rebuild switch` BEFORE `nix-collect-garbage -d` so /etc/static
@@ -230,6 +243,13 @@ in
               echo 'WARNING: /etc/static dangling — run sudo darwin-rebuild switch'
             end
             xcrun simctl delete unavailable; or return
+            # Dev tool caches (all regenerable)
+            go clean -cache 2>/dev/null
+            rm -rf ~/Library/Caches/Yarn ~/Library/Caches/mix ~/Library/Caches/pip
+            rm -rf ~/Library/Caches/node-gyp ~/Library/Caches/Mozilla.sccache
+            rm -rf ~/Library/Caches/pnpm ~/Library/Caches/typescript
+            rm -rf ~/Library/Caches/ms-playwright ~/Library/Caches/ms-playwright-go
+            rm -rf ~/.cache/uv ~/.cache/zig ~/.cache/vcpkg ~/.cache/puppeteer ~/.cache/nix
             sudo rm -rf ~/.Trash/*
           '';
         };
@@ -313,6 +333,13 @@ in
             while not echo '{"hostUp": true}' | nc -w 10 $argv > /dev/null
                 sleep 1
             end
+          '';
+        };
+
+        headers = {
+          description = "Print all headers of request (follows redirects, GET not HEAD)";
+          body = ''
+            curl -LsD - $argv -o /dev/null
           '';
         };
 

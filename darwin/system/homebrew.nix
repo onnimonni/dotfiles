@@ -36,6 +36,9 @@
       upgrade = true;
       extraFlags = [
         "--verbose"
+        # Required since Homebrew 4.5+: non-interactive `brew bundle install --cleanup`
+        # must pass --force-cleanup, --force, or set $HOMEBREW_ASK.
+        "--force-cleanup"
       ];
     };
 
@@ -55,7 +58,9 @@
       "spotify"
 
       # Editors
-      # VS Code is installed via home-manager in programs/vscode.nix
+      # VS Code .app + `code` CLI symlink in /opt/homebrew/bin.
+      # User settings are still managed by home-manager in programs/vscode.nix.
+      "visual-studio-code"
       "cursor"
 
       # To play with elixir

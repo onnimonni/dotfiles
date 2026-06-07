@@ -35,7 +35,10 @@ in
 
   home-manager.users.${username} = {
     home.activation.configureConsultLlmBackends = hm.dag.entryAfter [ "writeBoundary" ] ''
-      ${consultLlm}/bin/consult-llm config set openai.backend codex-cli
+      # TODO: re-enable once consult-llm supports an `openai.backend` config key.
+      # Current CLI only accepts `gemini.backend` / `default_model`.
+      # ${consultLlm}/bin/consult-llm config set openai.backend codex-cli
+      true
     '';
   };
 }
