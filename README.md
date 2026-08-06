@@ -45,8 +45,8 @@ The fields:
   username = "yourusername";       # from: whoami
   fullName = "Your Name";          # from: id -F
   email = "you@example.com";
-  # Optional: enables the Mac Studio share tunnel (see "Sharing the Mac Studio" below).
-  shareMacDomain = null;
+  # Optional override; fyff.ee is tracked in flake.nix for this repository.
+  shareMacDomain = "fyff.ee";
 }
 ```
 
@@ -109,8 +109,8 @@ launchctl kickstart -k gui/$(id -u)/org.pqrs.service.agent.karabiner_console_use
 
 ## Sharing the Mac Studio over Cloudflare Tunnel (SSH + VNC + Eternal Terminal)
 
-Set `shareMacDomain = "<your-zone>"` in `local-user.nix` and the Mac Studio
-becomes reachable at:
+`shareMacDomain = "fyff.ee"` is tracked in `flake.nix`, making the Mac Studio
+reachable at:
 
 | Service | Public hostname | Local backend |
 |---|---|---|
@@ -122,17 +122,16 @@ Outbound-only — no port forwarding, no public SSH/VNC/ET exposure. Two locks:
 Cloudflare Access (email OTP today, WebAuthn once Touch ID is enrolled) + SSH
 keys from `github.com/<your-handle>.keys`.
 
-`shareMacDomain` lives in gitignored `local-user.nix` so the zone never lands
-in the public repo. Hostnames are intentionally single-level so they fit under
-Cloudflare Free's `*.<DOMAIN>` Universal SSL cert.
+The zone is public configuration and must be tracked because git flakes omit
+gitignored files. Credentials remain root-only in
+`/etc/cloudflared/mac-studio.json`. Hostnames are intentionally single-level so
+they fit under Cloudflare Free's `*.<DOMAIN>` Universal SSL cert.
 
 ### Connect from another Mac → Mac Studio
 
 One-time setup on the client Mac:
 
 ```sh
-# Add to ~/.dotfiles/local-user.nix on the client:
-#   shareMacDomain = "<your-zone>";
 sudo darwin-rebuild switch --flake ~/.dotfiles    # installs cloudflared + et + ssh config
 
 # Pre-authenticate so the first remote-network attempt doesn't need a browser.
@@ -197,7 +196,6 @@ sudo install -m 600 -o root -g wheel \
 cloudflared tunnel route dns mac-studio ssh-mac.<DOMAIN>
 cloudflared tunnel route dns mac-studio vnc-mac.<DOMAIN>
 cloudflared tunnel route dns mac-studio et-mac.<DOMAIN>
-# add shareMacDomain = "<your-zone>"; into local-user.nix
 sudo darwin-rebuild switch --flake ~/.dotfiles
 # System Settings → Sharing → Remote Login = On (Only these users → onnimonni)
 # System Settings → Sharing → Screen Sharing = On + strong VNC password

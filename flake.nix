@@ -34,10 +34,9 @@
         username = "onnimonni";
         fullName = "Onni Hakala";
         email = "onni@flaky.build";
-        # Cloudflare zone used by the Mac Studio tunnel (ssh-mac.<domain>,
-        # vnc-mac.<domain>, et-mac.<domain>). null = tunnel module stays dormant.
-        # Set in gitignored local-user.nix to keep the zone out of the repo.
-        shareMacDomain = null;
+        # Public Cloudflare zone used by the Mac Studio tunnel. Keep this
+        # tracked: git flakes omit gitignored local-user.nix during evaluation.
+        shareMacDomain = "fyff.ee";
       };
 
       # Load local override if exists (gitignored)

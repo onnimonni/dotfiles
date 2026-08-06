@@ -5,7 +5,7 @@
 # - Client side (anything else): adds an `ssh mac-studio` host using
 #   `cloudflared access ssh` as ProxyCommand, plus an `et-mac-studio` wrapper
 #   that spawns a one-shot `cloudflared access tcp` listener for ET's TCP leg.
-# Active only when `shareMacDomain` is set in local-user.nix.
+# Active only when `shareMacDomain` is set in the flake user configuration.
 {
   pkgs,
   lib,
