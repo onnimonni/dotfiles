@@ -3,6 +3,7 @@ keys:
   - &user_onnimonni age1se1q2r6sc647nl3zp5cenuqclgj0e9czw43hq2y3amfyhv5yrnc326fusl30yv
   - &host_macbook_pro age1mv0fkqmh7tju54cgv05wvzn28p8zp4nfcx9yamu37w8hqcmqs3rs3l7mrv
   - &server age1se1qfptarnwfn4adk9n565afaejj8ghm2u7wyhzxe7dj7w8spu28wnuytaruzg
+  - &host_mac_studio age1z2kh0yjnmfetkxmm4wcqsgp43vrq6gz4das0lxxyfrrzgkww0v0qx0wlut
 
 creation_rules:
   # All secrets in the secrets directory can be decrypted with the user key
@@ -12,3 +13,4 @@ creation_rules:
       - *user_onnimonni
       - *host_macbook_pro
       - *server
+      - *host_mac_studio
