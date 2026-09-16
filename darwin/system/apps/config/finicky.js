@@ -10,14 +10,6 @@ export default {
       },
     },
     {
-      // Redirect all x.com urls to use xcancel.com
-      match: "x.com/*",
-      url: (url) => {
-        url.host = "xcancel.com";
-        return url;
-      },
-    },
-    {
       // Redirect Instagram reel links to vxinstagram.com
       match: "instagram.com/reel/*",
       url: (url) => {
