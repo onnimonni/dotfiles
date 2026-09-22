@@ -21,7 +21,7 @@ let
 in
 {
   environment.systemPackages = [
-    (mkBashWrappedCli "claude" [ "/opt/homebrew/bin/claude" ])
+    (mkBashWrappedCli "claude" [ (lib.getExe pkgs.claude-code) ])
     (mkBashWrappedCli "codex" [ "/opt/homebrew/bin/codex" ])
     (mkBashWrappedCli "opencode" [
       "/opt/homebrew/bin/opencode"

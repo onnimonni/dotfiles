@@ -1,5 +1,6 @@
 {
   pkgs,
+  inputs,
   username,
   ...
 }:
@@ -7,7 +8,7 @@ let
   # Base settings managed by nix - tools like nono can merge their own keys on top
   # See more in https://docs.claude.com/en/docs/claude-code/settings
   # Longer timeouts were needed to compile large programs like duckdb
-  # Disable telemetry and error reporting and feedback surveys
+  # Disable error reporting and feedback surveys
   # Source: https://www.vincentschmalbach.com/configuring-claude-code-for-privacy-and-noise-control/
   claudeSettingsBase = builtins.toJSON {
     "$schema" = "https://json.schemastore.org/claude-code-settings.json";
@@ -22,16 +23,26 @@ let
       BASH_DEFAULT_TIMEOUT_MS = "1800000";
       BASH_MAX_TIMEOUT_MS = "3600000";
       CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY = "1";
-      DISABLE_TELEMETRY = "1";
+      # Keep DISABLE_TELEMETRY and CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC unset
+      # for Remote Control and the Monitor tool.
+      # https://code.claude.com/docs/en/tools-reference#monitor-tool
       DISABLE_ERROR_REPORTING = "1";
       DISABLE_NON_ESSENTIAL_MODEL_CALLS = "1";
     };
   };
 in
 {
-  # Install claude-code via homebrew cask (newer than nixpkgs)
   homebrew.brews = [ "nono" ];
-  homebrew.casks = [ "claude-code" ];
+
+  # Use the newer npm release with nixpkgs' native-binary packaging.
+  # The bash wrapper in ./ai-cli-bash.nix exposes it on PATH.
+  nixpkgs.overlays = [
+    (final: prev: {
+      claude-code = final.callPackage ../packages/claude-code.nix {
+        inherit (prev) claude-code;
+      };
+    })
+  ];
 
   # Home-manager configuration for claude
   home-manager.users.${username} = {
@@ -72,9 +83,11 @@ in
     # Write settings.json as a regular writable file (not a symlink)
     # so tools like nono can modify it at runtime.
     # Uses jq to deep-merge: nix base settings * existing tool-added keys
-    home.activation.claudeSettings = ''
+    home.activation.claudeSettings = inputs.home-manager.lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       SETTINGS="$HOME/.claude/settings.json"
       BASE_SETTINGS='${claudeSettingsBase}'
+
+      mkdir -p "$(dirname "$SETTINGS")"
 
       # Remove stale nix-store symlink from previous config
       if [ -L "$SETTINGS" ]; then
@@ -83,7 +96,8 @@ in
 
       if [ -f "$SETTINGS" ]; then
         # Deep-merge: nix base wins for shared keys, preserve tool-added keys
-        MERGED=$(${pkgs.jq}/bin/jq -s '.[1] * .[0]' <(echo "$BASE_SETTINGS") "$SETTINGS")
+        # Remove old flags so Remote Control and Monitor remain available.
+        MERGED=$(${pkgs.jq}/bin/jq -s '.[1] * .[0] | del(.env.DISABLE_TELEMETRY, .env.CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC)' <(echo "$BASE_SETTINGS") "$SETTINGS")
         echo "$MERGED" | ${pkgs.jq}/bin/jq . > "$SETTINGS.tmp" && mv "$SETTINGS.tmp" "$SETTINGS"
       else
         echo "$BASE_SETTINGS" | ${pkgs.jq}/bin/jq . > "$SETTINGS"

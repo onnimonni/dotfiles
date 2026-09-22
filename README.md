@@ -59,9 +59,17 @@ This flake always exports `Onnis-MacBook-Pro` and `Onnis-Mac-Studio`.
 `local-user.nix` selects the default host for convenience but does not hide the other one.
 
 ## To update everything
-This command updates flake dependencies, nix, brew and duckdb extensions:
+This command updates flake dependencies, the pinned claude-code npm release, nix, brew and duckdb extensions:
 ```
 $ update-all
+```
+
+Claude Code uses nixpkgs' native-binary packaging with a pinned npm source
+(`darwin/packages/claude-code.nix`). This provides npm's newer release without
+waiting for nixpkgs or Homebrew. Node/npm aren't needed at runtime.
+Bump just that pin, then apply with `sudo darwin-rebuild switch --flake ~/.dotfiles/`:
+```
+$ ./scripts/update-claude-code.sh
 ```
 
 # After installation config

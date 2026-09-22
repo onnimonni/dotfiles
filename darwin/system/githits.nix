@@ -6,7 +6,8 @@
   ...
 }:
 let
-  realClaudeBin = "/opt/homebrew/bin/claude";
+  # Use the store path directly during activation, before PATH is updated.
+  realClaudeBin = lib.getExe pkgs.claude-code;
   hm = inputs.home-manager.lib.hm;
   hasSopsKey = builtins.pathExists "/Users/${username}/.config/sops/age/keys.txt";
 in
@@ -16,7 +17,7 @@ in
     {
       # Configure GitHits and Context7 MCP servers for Claude Code
       home.activation = lib.mkIf hasSopsKey {
-        configureClaudeMCP = hm.dag.entryAfter [ "writeBoundary" ] ''
+        configureClaudeMCP = hm.dag.entryAfter [ "claudeSettings" ] ''
           echo "Configuring Claude MCP servers..."
 
           echo "Configuring Githits..."

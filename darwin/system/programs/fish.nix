@@ -164,6 +164,7 @@ in
 
         update-all = ''
           nix flake update --flake ~/.dotfiles && \
+          ~/.dotfiles/scripts/update-claude-code.sh && \
           sudo darwin-rebuild switch --flake ~/.dotfiles/ && \
           duckdb -c "UPDATE EXTENSIONS;"
         '';
@@ -522,6 +523,7 @@ in
 
       update-all = ''
         nix flake update --flake ~/.dotfiles && \
+        ~/.dotfiles/scripts/update-claude-code.sh && \
         sudo darwin-rebuild switch --flake ~/.dotfiles/ && \
         duckdb -c "UPDATE EXTENSIONS;"
       '';

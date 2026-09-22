@@ -1,0 +1,13 @@
+{
+  "version": "2.1.280",
+  "platforms": {
+    "aarch64-darwin": {
+      "npm": "darwin-arm64",
+      "hash": "sha256-dhcM7veQFeEY/epl47EWYzQhU9NVnzAauOan3+zH9KM="
+    },
+    "x86_64-darwin": {
+      "npm": "darwin-x64",
+      "hash": "sha256-jhmVfOasJGd6PLKnsrcX+7422zhxo+hNU0+wy9/gLW8="
+    }
+  }
+}
