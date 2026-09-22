@@ -65,6 +65,26 @@ in
         # Disables last login from appearing in Terminal
       '';
 
+      # Repair PATH when nix-darwin's environment was skipped.
+      #
+      # /etc/fish/nixos-env-preinit.fish only sources set-environment when
+      # __NIX_DARWIN_SET_ENVIRONMENT_DONE is unset. GUI apps launched from a
+      # process that already had it exported (e.g. Terminal.app opened from a
+      # devenv/agent shell) inherit the flag but not the PATH, so fish starts
+      # with a bare /usr/bin:/bin -> no grc, no sysctl, no nix tools.
+      #
+      # Lives in ~/.config/fish/conf.d so it runs before the vendor conf.d
+      # snippets (grc/z/forgit) that probe for their binaries.
+      ".config/fish/conf.d/00-nix-path.fish".text = ''
+        if not contains -- /run/current-system/sw/bin $PATH
+            fish_add_path --path --global --prepend \
+                $HOME/.nix-profile/bin \
+                /run/current-system/sw/bin \
+                /nix/var/nix/profiles/default/bin \
+                /usr/local/bin /usr/bin /bin /usr/sbin /sbin
+        end
+      '';
+
       # Ghostty terminal config
       ".config/ghostty/config".text = ''
         command = ${fishLoginShell}/bin/fish-login-shell
@@ -165,11 +185,6 @@ in
         docker-compose = "container compose";
         wpscan = "container run --rm wpscanteam/wpscan";
 
-        # Empty the Trash on all mounted volumes and the main HDD.
-        # Also, clear Apple's System Logs to improve shell startup speed.
-        # Finally, clear download history from quarantine. https://mths.be/bum
-        emptytrash = "sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo rm -rfv /private/var/log/asl/*.asl; sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'";
-
         # Kill all the tabs in Chrome to free up memory
         # [C] explained: http://www.commandlinefu.com/commands/view/402/exclude-grep-from-your-grepped-output-of-ps-alias-included-in-description
         chromekill = "ps ux | grep '[C]hrome Helper --type=renderer' | grep -v extension-process | tr -s ' ' | cut -d ' ' -f2 | xargs kill";
@@ -208,8 +223,8 @@ in
         # Avoid repeated Spotlight auto-indexing during `mas` installs
         set -gx MAS_NO_AUTO_INDEX 1
 
-        # Number of CPU cores for devenv/build tools
-        set -gx DEVENV_CORES (sysctl -n hw.ncpu)
+        # DEVENV_CORES/DEVENV_MAX_JOBS come from environment.variables in
+        # devenv.nix (getconf, portable) -- do not duplicate them here.
 
         # Load secrets file if it exists
         if test -f ~/.secrets.fish
@@ -225,6 +240,30 @@ in
         devenv = {
           body = ''
             SHELL=/bin/bash command devenv $argv
+          '';
+        };
+
+        # Empty the Trash on all mounted volumes and the main HDD.
+        # Also, clear Apple's System Logs to improve shell startup speed.
+        # Finally, clear download history from quarantine. https://mths.be/bum
+        #
+        # Globs only expand lazily inside `for`/`set`; as a bare command
+        # argument (the old `rm -rf /Volumes/*/.Trashes` alias) fish aborts
+        # the whole function when nothing matches.
+        emptytrash = {
+          description = "Empty Trash on all volumes, clear ASL logs + quarantine history";
+          body = ''
+            for trash in ~/.Trash /Volumes/*/.Trashes
+              if test -d $trash
+                sudo find $trash -mindepth 1 -delete
+              end
+            end
+            if test -d /private/var/log/asl
+              sudo find /private/var/log/asl -name '*.asl' -delete
+            end
+            for db in ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV*
+              sqlite3 $db 'delete from LSQuarantineEvent'
+            end
           '';
         };
 
@@ -250,7 +289,11 @@ in
             rm -rf ~/Library/Caches/pnpm ~/Library/Caches/typescript
             rm -rf ~/Library/Caches/ms-playwright ~/Library/Caches/ms-playwright-go
             rm -rf ~/.cache/uv ~/.cache/zig ~/.cache/vcpkg ~/.cache/puppeteer ~/.cache/nix
-            sudo rm -rf ~/.Trash/*
+            # `sudo rm -rf ~/.Trash/*` aborts the whole function when the Trash
+            # is empty: fish errors out on globs with no matches.
+            if test -d ~/.Trash
+              sudo find ~/.Trash -mindepth 1 -delete
+            end
           '';
         };
 

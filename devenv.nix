@@ -26,7 +26,7 @@ rec {
 
   git-hooks.hooks = {
     # Nix files
-    nixfmt-rfc-style.enable = true;
+    nixfmt.enable = true;
 
     # Leaking secrets
     ripsecrets.enable = true;

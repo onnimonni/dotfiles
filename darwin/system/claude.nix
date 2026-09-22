@@ -11,6 +11,8 @@ let
   # Source: https://www.vincentschmalbach.com/configuring-claude-code-for-privacy-and-noise-control/
   claudeSettingsBase = builtins.toJSON {
     "$schema" = "https://json.schemastore.org/claude-code-settings.json";
+    # Detect terminal background so light iTerm themes stay readable
+    theme = "auto";
     alwaysThinkingEnabled = true;
     feedbackSurveyState = {
       lastShownTime = 1754109357477;

@@ -431,7 +431,11 @@ let
         key_code = from;
         modifiers = {
           mandatory = [ "shift" ];
-          optional = [ "caps_lock" "command" "control" ];
+          optional = [
+            "caps_lock"
+            "command"
+            "control"
+          ];
         };
       };
       to = toShifted;
@@ -440,7 +444,11 @@ let
       type = "basic";
       from = {
         key_code = from;
-        modifiers.optional = [ "caps_lock" "command" "control" ];
+        modifiers.optional = [
+          "caps_lock"
+          "command"
+          "control"
+        ];
       };
       to = toUnshifted;
     }
@@ -466,41 +474,53 @@ let
           # backslash('): unshifted→period(.), shifted→period(. dropping shift)
           (mkDvorakSplit "backslash" [ { key_code = "period"; } ] [ { key_code = "period"; } ])
           # q: unshifted→backslash('), shifted→shift+2(")
-          (mkDvorakSplit "q" [ { key_code = "backslash"; } ] [
-            {
-              key_code = "2";
-              modifiers = [ "shift" ];
-            }
-          ])
+          (mkDvorakSplit "q"
+            [ { key_code = "backslash"; } ]
+            [
+              {
+                key_code = "2";
+                modifiers = [ "shift" ];
+              }
+            ]
+          )
           # open_bracket(å): unshifted→shift+7(/), shifted→shift+hyphen(?)
-          (mkDvorakSplit "open_bracket" [
-            {
-              key_code = "7";
-              modifiers = [ "shift" ];
-            }
-          ] [
-            {
-              key_code = "hyphen";
-              modifiers = [ "shift" ];
-            }
-          ])
+          (mkDvorakSplit "open_bracket"
+            [
+              {
+                key_code = "7";
+                modifiers = [ "shift" ];
+              }
+            ]
+            [
+              {
+                key_code = "hyphen";
+                modifiers = [ "shift" ];
+              }
+            ]
+          )
           # close_bracket(¨): unshifted→shift+0(=), shifted→hyphen(+ dropping shift)
-          (mkDvorakSplit "close_bracket" [
-            {
-              key_code = "0";
-              modifiers = [ "shift" ];
-            }
-          ] [ { key_code = "hyphen"; } ])
+          (mkDvorakSplit "close_bracket"
+            [
+              {
+                key_code = "0";
+                modifiers = [ "shift" ];
+              }
+            ]
+            [ { key_code = "hyphen"; } ]
+          )
           # non_us_backslash(<): unshifted→hyphen(+), shifted→option+shift+7(\)
-          (mkDvorakSplit "non_us_backslash" [ { key_code = "hyphen"; } ] [
-            {
-              key_code = "7";
-              modifiers = [
-                "option"
-                "shift"
-              ];
-            }
-          ])
+          (mkDvorakSplit "non_us_backslash"
+            [ { key_code = "hyphen"; } ]
+            [
+              {
+                key_code = "7";
+                modifiers = [
+                  "option"
+                  "shift"
+                ];
+              }
+            ]
+          )
         ]
         ++ [
           # 20 letter-to-letter remaps (Dvorak positions)

@@ -1,4 +1,4 @@
-{...}:
+{ ... }:
 rec {
   homebrew.casks = [ "vivid-app" ];
 

@@ -26,6 +26,10 @@ in
               url = "https://mcp.context7.com/mcp";
               type = "http";
             };
+            linear-server = {
+              url = "https://mcp.linear.app/mcp";
+              type = "http";
+            };
             playwright = {
               type = "stdio";
               command = "bunx";

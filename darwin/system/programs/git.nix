@@ -12,7 +12,18 @@
       attributes = [ "*.lockb binary diff=lockb" ];
 
       settings = {
+        user = {
+          name = "Onni Hakala";
+          email = "onni@flaky.build";
+          # Sign with the Secretive-backed SSH key, not GPG (no gpg binary installed).
+          # Machine-specific file, created by .install.sh.
+          signingkey = "~/.ssh/github_secretive.pub";
+        };
+
         commit.gpgsign = true;
+        tag.gpgsign = true;
+        gpg.format = "ssh";
+        gpg.ssh.allowedSignersFile = "~/.ssh/allowed_signers";
 
         diff.lockb = {
           textconv = "bun";
