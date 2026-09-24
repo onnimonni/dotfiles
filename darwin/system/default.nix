@@ -33,9 +33,5 @@
   # The platform the configuration will be used on.
   nixpkgs.hostPlatform = "aarch64-darwin";
 
-  # Rosetta is installed — we can build x86_64-darwin too.
-  # `nix.extraOptions` is a no-op with `nix.enable = false` (Determinate Nix).
-  # Move into /etc/nix/nix.custom.conf instead:
-  #
-  #   extra-platforms = x86_64-darwin aarch64-darwin
+  # Rosetta: extra-platforms set in nix-core.nix (nix.custom.conf).
 }
