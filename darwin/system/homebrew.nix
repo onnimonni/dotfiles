@@ -123,7 +123,9 @@
       # To force machine to stay alive
       "Amphetamine" = 937984704;
 
-      # Keynote, Numbers, Pages are preinstalled on macOS — no need to manage via mas
+      # Keynote, Pages are preinstalled on macOS — no need to manage via mas
+      # Numbers ships as "Numbers Creator Studio.app"; unlisted, brew cleanup tries to remove it
+      "Numbers" = 361304891;
 
       # To use iOS simulator
       "Xcode" = 497799835;
