@@ -7,6 +7,8 @@
 }:
 
 rec {
+  packages = [ (pkgs.python3.withPackages (packages: [ packages.tomlkit ])) ];
+
   # Use VS Code as the default editor
   # To see all undocumented VS Code flags visit:
   # https://github.com/microsoft/vscode/blob/main/src/vs/platform/environment/node/argv.ts

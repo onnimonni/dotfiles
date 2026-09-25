@@ -1,11 +1,13 @@
 {
   inputs,
   lib,
+  pkgs,
   username,
   ...
 }:
 let
   codexBin = "/run/current-system/sw/bin/codex";
+  codexPython = pkgs.python3.withPackages (packages: [ packages.tomlkit ]);
   hm = inputs.home-manager.lib.hm;
   hasSopsKey = builtins.pathExists "/Users/${username}/.config/sops/age/keys.txt";
 in
@@ -40,17 +42,20 @@ in
     };
 
     home.activation.writeCodexConfig = hm.dag.entryAfter [ "writeBoundary" ] ''
-      echo "Writing mutable Codex config..."
+      echo "Merging mutable Codex config..."
 
       mkdir -p /Users/${username}/.codex
 
-      if [ -L /Users/${username}/.codex/config.toml ]; then
-        rm /Users/${username}/.codex/config.toml
-      fi
+      ${codexPython}/bin/python3 - <<'PY'
+      from collections.abc import Mapping
+      from pathlib import Path
+      import os
+      import tempfile
+      import tomlkit
 
-      cat > /Users/${username}/.codex/config.toml <<'EOF'
-      model = "gpt-5.3-codex"
-
+      config_path = Path("/Users/${username}/.codex/config.toml")
+      config = tomlkit.parse(config_path.read_text()) if config_path.exists() else tomlkit.document()
+      managed = tomlkit.parse("""
       [projects."/Users/${username}"]
       trust_level = "trusted"
 
@@ -70,9 +75,26 @@ in
 
       [mcp_servers.context7.env_http_headers]
       CONTEXT7_API_KEY = "CONTEXT7_API_KEY"
-      EOF
+      """)
 
-      chmod 600 /Users/${username}/.codex/config.toml
+      def merge(target, source):
+          for key, value in source.items():
+              if isinstance(value, Mapping) and isinstance(target.get(key), Mapping):
+                  merge(target[key], value)
+              else:
+                  target[key] = value
+
+      merge(config, managed)
+      config.pop("model", None)
+      with tempfile.NamedTemporaryFile(mode="w", dir=config_path.parent, delete=False) as output:
+          temporary_path = Path(output.name)
+          try:
+              output.write(tomlkit.dumps(config))
+              output.flush()
+              os.replace(temporary_path, config_path)
+          finally:
+              temporary_path.unlink(missing_ok=True)
+      PY
     '';
 
     home.activation.configureCodexPlaywright = hm.dag.entryAfter [ "writeCodexConfig" ] ''

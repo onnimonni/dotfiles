@@ -264,7 +264,7 @@ Requires Screen Recording permission. Uses Apple Development signing identity fo
 Githits and context7 MCP are configured for Claude and Codex via nix-darwin modules.
 Codex Playwright MCP is re-added on nix-darwin rebuild via `codex mcp add playwright -- npx @playwright/mcp@latest --headless`.
 Codex itself is installed via Homebrew cask.
-`~/.codex/config.toml` is generated as writable file so Codex can persist its own model prefs.
+`~/.codex/config.toml` stays writable; activation merges managed settings while preserving other preferences and removes the model override so Codex uses its default model.
 Interactive shell sessions auto-handoff into `fish`.
 Non-interactive shell entry via the login shell falls back to `bash`.
 `claude`, `codex`, `gemini`, and `opencode` are wrapped via nix so they launch under bash with `SHELL=/bin/bash` instead of inheriting fish.
