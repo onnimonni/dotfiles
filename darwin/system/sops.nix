@@ -6,11 +6,9 @@
 }:
 let
   keyFile = "/Users/${username}/.config/sops/age/keys.txt";
-  hasKeyFile = builtins.pathExists keyFile;
 in
 {
-  # Only enable sops when age key file exists on this machine
-  sops = lib.mkIf hasKeyFile {
+  sops = {
     defaultSopsFile = ../../secrets/secrets.yaml;
 
     # Prevents storing the sops files to the nix store

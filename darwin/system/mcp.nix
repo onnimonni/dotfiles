@@ -9,35 +9,31 @@ let
   codexBin = "/run/current-system/sw/bin/codex";
   codexPython = pkgs.python3.withPackages (packages: [ packages.tomlkit ]);
   hm = inputs.home-manager.lib.hm;
-  hasSopsKey = builtins.pathExists "/Users/${username}/.config/sops/age/keys.txt";
 in
 {
   # Home-manager configuration for mcp
   home-manager.users.${username} = {
     home.file = {
       ".mcp.json".text = builtins.toJSON {
-        mcpServers =
-          lib.optionalAttrs hasSopsKey {
-            GitHits = {
-              url = "https://mcp.githits.com";
-              type = "http";
-            };
-          }
-          // {
-            context7 = {
-              url = "https://mcp.context7.com/mcp";
-              type = "http";
-            };
-            linear-server = {
-              url = "https://mcp.linear.app/mcp";
-              type = "http";
-            };
-            playwright = {
-              type = "stdio";
-              command = "bunx";
-              args = [ "@playwright/mcp@latest" ];
-            };
+        mcpServers = {
+          GitHits = {
+            url = "https://mcp.githits.com";
+            type = "http";
           };
+          context7 = {
+            url = "https://mcp.context7.com/mcp";
+            type = "http";
+          };
+          linear-server = {
+            url = "https://mcp.linear.app/mcp";
+            type = "http";
+          };
+          playwright = {
+            type = "stdio";
+            command = "bunx";
+            args = [ "@playwright/mcp@latest" ];
+          };
+        };
       };
     };
 
@@ -61,20 +57,18 @@ in
 
       [projects."/Users/${username}/.dotfiles"]
       trust_level = "trusted"
-      ${lib.optionalString hasSopsKey ''
 
-        [mcp_servers.GitHits]
-        transport = "streamable_http"
-        url = "https://mcp.githits.com/"
-        bearer_token_env_var = "GITHITS_API_TOKEN"
+      [mcp_servers.GitHits]
+      transport = "streamable_http"
+      url = "https://mcp.githits.com/"
+      bearer_token_env_var = "GITHITS_API_TOKEN"
 
-        [mcp_servers.stitch]
-        transport = "streamable_http"
-        url = "https://stitch.googleapis.com/mcp"
+      [mcp_servers.stitch]
+      transport = "streamable_http"
+      url = "https://stitch.googleapis.com/mcp"
 
-        [mcp_servers.stitch.env_http_headers]
-        X-Goog-Api-Key = "STITCH_API_KEY"
-      ''}
+      [mcp_servers.stitch.env_http_headers]
+      X-Goog-Api-Key = "STITCH_API_KEY"
 
       [mcp_servers.context7]
       transport = "streamable_http"

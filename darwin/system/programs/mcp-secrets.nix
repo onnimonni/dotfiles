@@ -7,15 +7,13 @@
 }:
 let
   hm = inputs.home-manager.lib.hm;
-  hasSopsKey = builtins.pathExists "/Users/${username}/.config/sops/age/keys.txt";
 in
 {
   # Home-manager configuration to generate MCP env vars for shell tools
-  # Only enabled when sops age key exists on this machine
   home-manager.users.${username} =
     { osConfig, ... }:
     {
-      home.activation = lib.mkIf hasSopsKey {
+      home.activation = {
         writeMcpSecrets = hm.dag.entryAfter [ "writeBoundary" ] ''
           echo "Writing MCP secrets..."
 
