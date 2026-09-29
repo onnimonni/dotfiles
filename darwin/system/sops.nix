@@ -24,18 +24,12 @@ in
       sshKeyPaths = [ ];
     };
 
+    # Owned by user so home-manager activation can read them from /run/secrets/<name>
+    # MCP configuration: darwin/system/githits.nix, darwin/system/mcp.nix, darwin/system/programs/mcp-secrets.nix
     secrets = {
-      githits_api_key = {
-        # This secret will be available at /run/secrets-for-users/${username}/githits_api_key
-        # The MCP configuration is done in darwin/system/programs/claude.nix
-      };
-      context7_api_key = {
-        # This secret will be available at /run/secrets-for-users/${username}/context7_api_key
-        # The MCP configuration is done in darwin/system/programs/claude.nix
-      };
-      stitch_api_key = {
-        # Google Stitch MCP, configured in darwin/system/githits.nix and darwin/system/mcp.nix
-      };
+      githits_api_key.owner = username;
+      context7_api_key.owner = username;
+      stitch_api_key.owner = username;
     };
   };
 }

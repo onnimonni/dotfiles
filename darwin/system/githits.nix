@@ -19,32 +19,21 @@ in
         configureClaudeMCP = hm.dag.entryAfter [ "claudeSettings" ] ''
           echo "Configuring Claude MCP servers..."
 
-          echo "Configuring Githits..."
-          ${realClaudeBin} mcp get GitHits > /dev/null 2>&1 || \
-            ${realClaudeBin} mcp add \
-              --transport http \
-              GitHits \
-              --scope user \
-              https://mcp.githits.com/ \
-              --header "Authorization: Bearer $(cat ${osConfig.sops.secrets.githits_api_key.path})"
+          # Re-add on every activation so rotated keys take effect
+          configure_mcp() {
+            local name="$1" url="$2" header="$3"
+            echo "Configuring $name..."
+            ${realClaudeBin} mcp remove "$name" --scope user > /dev/null 2>&1 || true
+            ${realClaudeBin} mcp add --transport http "$name" --scope user "$url" --header "$header" > /dev/null
+          }
 
-          echo "Configuring Context7..."
-          ${realClaudeBin} mcp get context7 > /dev/null 2>&1 || \
-            ${realClaudeBin} mcp add \
-              --transport http \
-              context7 \
-              --scope user \
-              https://mcp.context7.com/mcp \
-              --header "CONTEXT7_API_KEY: $(cat ${osConfig.sops.secrets.context7_api_key.path})"
+          GITHITS_KEY=$(cat ${osConfig.sops.secrets.githits_api_key.path})
+          CONTEXT7_KEY=$(cat ${osConfig.sops.secrets.context7_api_key.path})
+          STITCH_KEY=$(cat ${osConfig.sops.secrets.stitch_api_key.path})
 
-          echo "Configuring Stitch..."
-          ${realClaudeBin} mcp get stitch > /dev/null 2>&1 || \
-            ${realClaudeBin} mcp add \
-              --transport http \
-              stitch \
-              --scope user \
-              https://stitch.googleapis.com/mcp \
-              --header "X-Goog-Api-Key: $(cat ${osConfig.sops.secrets.stitch_api_key.path})"
+          configure_mcp GitHits https://mcp.githits.com/ "Authorization: Bearer $GITHITS_KEY"
+          configure_mcp context7 https://mcp.context7.com/mcp "CONTEXT7_API_KEY: $CONTEXT7_KEY"
+          configure_mcp stitch https://stitch.googleapis.com/mcp "X-Goog-Api-Key: $STITCH_KEY"
         '';
       };
 
