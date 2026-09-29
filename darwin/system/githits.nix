@@ -9,31 +9,77 @@ let
   # Use the store path directly during activation, before PATH is updated.
   realClaudeBin = lib.getExe pkgs.claude-code;
   hm = inputs.home-manager.lib.hm;
+
+  # Claude Code runs headersHelper on each MCP connection, so the key is read from
+  # /run/secrets at runtime and never written into ~/.claude.json.
+  mkHeadersHelper =
+    name: header: prefix: secretPath:
+    pkgs.writeShellScript "claude-mcp-headers-${name}" ''
+      set -eu
+      secret_file=${lib.escapeShellArg secretPath}
+      if [ ! -r "$secret_file" ]; then
+        echo "claude-mcp-headers-${name}: $secret_file missing or unreadable" >&2
+        exit 1
+      fi
+      key=$(< "$secret_file")
+      if [ -z "$key" ]; then
+        echo "claude-mcp-headers-${name}: $secret_file is empty" >&2
+        exit 1
+      fi
+      ${lib.getExe pkgs.jq} -cn --arg v ${lib.escapeShellArg prefix}"$key" '{${builtins.toJSON header}: $v}'
+    '';
 in
 {
   home-manager.users.${username} =
     { osConfig, ... }:
+    let
+      servers = {
+        GitHits = {
+          url = "https://mcp.githits.com/";
+          helper =
+            mkHeadersHelper "githits" "Authorization" "Bearer "
+              osConfig.sops.secrets.githits_api_key.path;
+        };
+        context7 = {
+          url = "https://mcp.context7.com/mcp";
+          helper =
+            mkHeadersHelper "context7" "CONTEXT7_API_KEY" ""
+              osConfig.sops.secrets.context7_api_key.path;
+        };
+        stitch = {
+          url = "https://stitch.googleapis.com/mcp";
+          helper = mkHeadersHelper "stitch" "X-Goog-Api-Key" "" osConfig.sops.secrets.stitch_api_key.path;
+        };
+      };
+    in
     {
       # Configure GitHits, Context7 and Stitch MCP servers for Claude Code
       home.activation = {
         configureClaudeMCP = hm.dag.entryAfter [ "claudeSettings" ] ''
           echo "Configuring Claude MCP servers..."
 
-          # Re-add on every activation so rotated keys take effect
+          # Re-add on every activation so helper store paths stay current
           configure_mcp() {
-            local name="$1" url="$2" header="$3"
+            local name="$1" json="$2"
             echo "Configuring $name..."
             ${realClaudeBin} mcp remove "$name" --scope user > /dev/null 2>&1 || true
-            ${realClaudeBin} mcp add --transport http "$name" --scope user "$url" --header "$header" > /dev/null
+            ${realClaudeBin} mcp add-json "$name" "$json" --scope user > /dev/null
           }
 
-          GITHITS_KEY=$(cat ${osConfig.sops.secrets.githits_api_key.path})
-          CONTEXT7_KEY=$(cat ${osConfig.sops.secrets.context7_api_key.path})
-          STITCH_KEY=$(cat ${osConfig.sops.secrets.stitch_api_key.path})
-
-          configure_mcp GitHits https://mcp.githits.com/ "Authorization: Bearer $GITHITS_KEY"
-          configure_mcp context7 https://mcp.context7.com/mcp "CONTEXT7_API_KEY: $CONTEXT7_KEY"
-          configure_mcp stitch https://stitch.googleapis.com/mcp "X-Goog-Api-Key: $STITCH_KEY"
+          ${lib.concatStringsSep "\n" (
+            lib.mapAttrsToList (
+              name: server:
+              "configure_mcp ${name} ${
+                lib.escapeShellArg (
+                  builtins.toJSON {
+                    type = "http";
+                    inherit (server) url;
+                    headersHelper = "${server.helper}";
+                  }
+                )
+              }"
+            ) servers
+          )}
         '';
       };
 

@@ -16,14 +16,6 @@ in
     home.file = {
       ".mcp.json".text = builtins.toJSON {
         mcpServers = {
-          GitHits = {
-            url = "https://mcp.githits.com";
-            type = "http";
-          };
-          context7 = {
-            url = "https://mcp.context7.com/mcp";
-            type = "http";
-          };
           linear-server = {
             url = "https://mcp.linear.app/mcp";
             type = "http";
@@ -100,7 +92,7 @@ in
 
     home.activation.configureCodexPlaywright = hm.dag.entryAfter [ "writeCodexConfig" ] ''
       echo "Configuring Codex Playwright MCP..."
-      ${codexBin} mcp add playwright -- npx @playwright/mcp@latest --headless
+      ${codexBin} mcp add playwright -- bunx @playwright/mcp@latest --headless
     '';
   };
 }

@@ -24,7 +24,7 @@ in
       sshKeyPaths = [ ];
     };
 
-    # Owned by user so home-manager activation can read them from /run/secrets/<name>
+    # Owned by user so MCP header helpers and shells can read /run/secrets/<name> at runtime
     # MCP configuration: darwin/system/githits.nix, darwin/system/mcp.nix, darwin/system/programs/mcp-secrets.nix
     secrets = {
       githits_api_key.owner = username;
@@ -32,4 +32,11 @@ in
       stitch_api_key.owner = username;
     };
   };
+
+  # sops-nix installs secrets in postActivation (mkAfter), after home-manager has run.
+  # Install them first too, so this rebuild's owners/values are visible to home-manager.
+  system.activationScripts.preActivation.text = lib.mkBefore ''
+    echo "Setting up secrets before home-manager..."
+    ${config.sops.package}/bin/sops-install-secrets ${config.system.build.sops-nix-manifest}
+  '';
 }
