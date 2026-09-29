@@ -67,6 +67,13 @@ in
         transport = "streamable_http"
         url = "https://mcp.githits.com/"
         bearer_token_env_var = "GITHITS_API_TOKEN"
+
+        [mcp_servers.stitch]
+        transport = "streamable_http"
+        url = "https://stitch.googleapis.com/mcp"
+
+        [mcp_servers.stitch.env_http_headers]
+        X-Goog-Api-Key = "STITCH_API_KEY"
       ''}
 
       [mcp_servers.context7]

@@ -35,6 +35,9 @@ in
         # This secret will be available at /run/secrets-for-users/${username}/context7_api_key
         # The MCP configuration is done in darwin/system/programs/claude.nix
       };
+      stitch_api_key = {
+        # Google Stitch MCP, configured in darwin/system/githits.nix and darwin/system/mcp.nix
+      };
     };
   };
 }

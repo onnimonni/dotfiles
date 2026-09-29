@@ -100,17 +100,11 @@
       # OpenAI Codex CLI
       "codex"
 
-      # Cursor Agent CLI (`cursor-agent` binary)
-      "cursor-cli"
-
       # Google Antigravity CLI (provides `agy` binary; not in nixpkgs)
       "antigravity-cli"
 
       # Docker/container process viewer
       "container-ps"
-
-      # Run multiple Claude Code instances parallel
-      "conductor"
 
       # Speak to create text into any field
       "handy"

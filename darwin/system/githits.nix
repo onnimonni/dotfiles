@@ -15,7 +15,7 @@ in
   home-manager.users.${username} =
     { osConfig, ... }:
     {
-      # Configure GitHits and Context7 MCP servers for Claude Code
+      # Configure GitHits, Context7 and Stitch MCP servers for Claude Code
       home.activation = lib.mkIf hasSopsKey {
         configureClaudeMCP = hm.dag.entryAfter [ "claudeSettings" ] ''
           echo "Configuring Claude MCP servers..."
@@ -37,6 +37,15 @@ in
               --scope user \
               https://mcp.context7.com/mcp \
               --header "CONTEXT7_API_KEY: $(cat ${osConfig.sops.secrets.context7_api_key.path})"
+
+          echo "Configuring Stitch..."
+          ${realClaudeBin} mcp get stitch > /dev/null 2>&1 || \
+            ${realClaudeBin} mcp add \
+              --transport http \
+              stitch \
+              --scope user \
+              https://stitch.googleapis.com/mcp \
+              --header "X-Goog-Api-Key: $(cat ${osConfig.sops.secrets.stitch_api_key.path})"
         '';
       };
 
