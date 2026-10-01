@@ -282,27 +282,85 @@ in
           # gets repointed at the current-system etc (a GC root) — otherwise GC
           # leaves a dangling /etc/static and breaks Touch ID / GUI-launched
           # zsh / ssh config injection.
+          #
+          # Fish gotcha used throughout: an unmatched glob as a command argument
+          # aborts the function, so globs only appear in `for`/`set`/`count`
+          # (which tolerate no matches) and deletions go through `find`.
           body = ''
+            set -l before (df -g / | awk 'NR==2 {print $4}')
             brew cleanup --prune=all; or return
-            container prune; or return
+            # Apple `container` fails with an XPC error when its service is not
+            # running — skip instead of aborting the whole run.
+            if container system status >/dev/null 2>&1
+              container prune; or echo 'WARN: container prune failed, continuing'
+            else
+              echo 'skip: container system service not running'
+            end
             sudo darwin-rebuild switch --flake ~/.dotfiles/; or return
+
+            # devenv keeps GC roots per project under .devenv/gc: `shell` is the
+            # current env, `shell-N-link` are old generations that pin whole
+            # toolchains in /nix/store. Drop old generations everywhere, and all
+            # roots for projects whose shell hasn't been rebuilt in 90 days
+            # (devenv recreates them on the next `devenv shell`).
+            for gc in ~/Projects/*/.devenv/gc ~/Projects/*/*/.devenv/gc
+              test -d $gc; or continue
+              if test (count (find $gc -maxdepth 1 -name shell -mtime +90)) -gt 0
+                echo "devenv: dropping stale GC roots in $gc"
+                rm -rf $gc
+              else
+                find $gc -maxdepth 1 -name 'shell-*-link' -delete
+              end
+            end
+
+            # Unprivileged run drops this user's old profile generations; the
+            # sudo run is needed for /nix/var/nix/profiles/system-*-link, which
+            # otherwise keep every past system closure alive.
             nix-collect-garbage -d; or return
+            sudo nix-collect-garbage -d; or return
             if not test -e (readlink -f /etc/static)
               echo 'WARNING: /etc/static dangling — run sudo darwin-rebuild switch'
             end
-            xcrun simctl delete unavailable; or return
+            xcrun simctl delete unavailable 2>/dev/null
+
+            # Cargo target dirs untouched for 30 days (rebuilt on next build)
+            for t in ~/Projects/*/target
+              test -f (dirname $t)/Cargo.toml; or continue
+              if test (count (find $t -mtime -30 -print -quit)) -eq 0
+                echo "cargo: removing stale $t ("(du -sh $t | cut -f1)")"
+                rm -rf $t
+              end
+            end
+
             # Dev tool caches (all regenerable)
             go clean -cache 2>/dev/null
+            rm -rf ~/Library/Caches/go-build
             rm -rf ~/Library/Caches/Yarn ~/Library/Caches/mix ~/Library/Caches/pip
             rm -rf ~/Library/Caches/node-gyp ~/Library/Caches/Mozilla.sccache
             rm -rf ~/Library/Caches/pnpm ~/Library/Caches/typescript
             rm -rf ~/Library/Caches/ms-playwright ~/Library/Caches/ms-playwright-go
+            rm -rf ~/Library/Caches/ms-playwright-mcp
             rm -rf ~/.cache/uv ~/.cache/zig ~/.cache/vcpkg ~/.cache/puppeteer ~/.cache/nix
+            # Electron/Squirrel staged auto-updates (*.ShipIt) — re-downloaded
+            # on the next update check.
+            find ~/Library/Caches -maxdepth 2 -path '*.ShipIt/*' -prune -exec rm -rf {} +
+            # Headless Chrome profile in ~/.cache/trc-chrome: service-worker
+            # CacheStorage and the on-device Gemini Nano model grow to >10G and
+            # are regenerated. Skip if that Chrome is running.
+            if test -d ~/.cache/trc-chrome; and not pgrep -qf trc-chrome
+              rm -rf ~/.cache/trc-chrome/Default/{"Service Worker",Cache,"Code Cache",GPUCache}
+              rm -rf ~/.cache/trc-chrome/OptGuideOnDeviceModel
+            end
             # `sudo rm -rf ~/.Trash/*` aborts the whole function when the Trash
             # is empty: fish errors out on globs with no matches.
             if test -d ~/.Trash
               sudo find ~/.Trash -mindepth 1 -delete
             end
+
+            set -l after (df -g / | awk 'NR==2 {print $4}')
+            echo "Freed "(math $after - $before)"G — $after G free now."
+            echo "Not touched automatically (check by hand):"
+            du -sh ~/Downloads ~/Library/Caches/Google/Chrome ~/Library/Caches/com.spotify.client ~/Library/Caches/net.whatsapp.WhatsApp 2>/dev/null
           '';
         };
 
