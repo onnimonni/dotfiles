@@ -159,8 +159,16 @@ in
     programs.fish = {
       enable = true;
       shellAliases = {
-        # Update this config
-        update-nix = "sudo darwin-rebuild switch --flake ~/.dotfiles/";
+        # Install current config without updating inputs
+        install-nix = "sudo darwin-rebuild switch --flake ~/.dotfiles/";
+
+        # Update ALL flake inputs, then install: partial updates
+        # (e.g. only nixpkgs) leave inputs like sops-nix pinned to removed
+        # builders (buildGo125Module removal broke eval on 2026-10-01)
+        update-nix = ''
+          nix flake update --flake ~/.dotfiles && \
+          sudo darwin-rebuild switch --flake ~/.dotfiles/
+        '';
 
         update-all = ''
           nix flake update --flake ~/.dotfiles && \
@@ -518,8 +526,13 @@ in
   programs.fish = {
     enable = true;
     shellAliases = {
-      # Update this config
-      update-nix = "sudo darwin-rebuild switch --flake ~/.dotfiles/";
+      # Keep in sync with home-manager aliases above
+      install-nix = "sudo darwin-rebuild switch --flake ~/.dotfiles/";
+
+      update-nix = ''
+        nix flake update --flake ~/.dotfiles && \
+        sudo darwin-rebuild switch --flake ~/.dotfiles/
+      '';
 
       update-all = ''
         nix flake update --flake ~/.dotfiles && \
