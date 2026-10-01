@@ -1,15 +1,16 @@
 # Local DNS ad/tracker blocking (Pi-hole equivalent) with blocky.
 #
 # - blocky: root launchd daemon on 127.0.0.1:53. hagezi Multi PRO blocklist,
-#   encrypted (DoH) upstreams, so the ISP/hotspot never sees plaintext DNS.
+#   encrypted (DoH) upstreams; fallback DNS bypasses encryption and blocking.
 # - networking.dns: nix-darwin points every known network service at
-#   127.0.0.1 on each `darwin-rebuild switch`.
+#   127.0.0.1, then 8.8.8.8 on each `darwin-rebuild switch`.
 # - blocky-captive-guard: root launchd daemon, polls every 15s (+ on resolver
 #   change). Probes http://captive.apple.com/hotspot-detect.html through the
 #   DHCP-provided DNS (bypassing blocky) and checks blocky itself can resolve.
-#     * portal page / blocky cannot resolve  -> system DNS = DHCP (passthrough)
-#     * "Success" via DHCP AND blocky works  -> system DNS = 127.0.0.1
-#     * no connectivity at all               -> leave as is (no flapping)
+#     * portal page                         -> system DNS = DHCP (passthrough)
+#     * blocky cannot resolve               -> system DNS = 8.8.8.8
+#     * "Success" AND blocky works           -> system DNS = 127.0.0.1, 8.8.8.8
+#     * probe inconclusive, blocky works     -> leave as is
 #   Covers captive portals and networks that block DoH. Only calls
 #   networksetup when the state actually changes.
 # - `adblock on|off [duration]|status|log`: manual override via blocky's
@@ -31,6 +32,11 @@ let
   ];
 
   localDns = "127.0.0.1";
+  fallbackDns = "8.8.8.8";
+  systemDns = [
+    localDns
+    fallbackDns
+  ];
   httpPort = 4000;
 
   blockyConfig = (pkgs.formats.yaml { }).generate "blocky.yml" {
@@ -88,6 +94,7 @@ let
     PATH=/usr/bin:/bin:/usr/sbin:/sbin
 
     LOCAL_DNS=${localDns}
+    FALLBACK_DNS=${fallbackDns}
     PROBE_HOST=captive.apple.com
     PROBE_URL="http://$PROBE_HOST/hotspot-detect.html"
     EXPECT='<HTML><HEAD><TITLE>Success</TITLE></HEAD><BODY>Success</BODY></HTML>'
@@ -102,14 +109,11 @@ let
       exit 0
     fi
     dhcp_dns=$(ipconfig getoption "$iface" domain_name_server 2>/dev/null | head -n1)
-    if [ -z "$dhcp_dns" ]; then
-      [ -n "$DRY_RUN" ] && log "no DHCP DNS on $iface; leaving DNS unchanged"
-      exit 0
-    fi
+    probe_dns="''${dhcp_dns:-$FALLBACK_DNS}"
 
     # 1. Internet / portal probe through DHCP DNS, never through blocky.
     probe=unknown
-    probe_ip=$(dig +short +time=2 +tries=1 @"$dhcp_dns" "$PROBE_HOST" A 2>/dev/null \
+    probe_ip=$(dig +short +time=2 +tries=1 @"$probe_dns" "$PROBE_HOST" A 2>/dev/null \
       | grep -E '^[0-9]+(\.[0-9]+){3}$' | head -n1)
     if [ -n "$probe_ip" ]; then
       body=$(curl -s -m 5 --noproxy '*' --resolve "$PROBE_HOST:80:$probe_ip" "$PROBE_URL" 2>/dev/null)
@@ -128,8 +132,8 @@ let
 
     case "$probe:$blocky_ok" in
       success:1) want=local ;;
-      success:0) want=dhcp ;;   # internet fine but DoH blocked / blocky down
       portal:*)  want=dhcp ;;
+      *:0)       want=fallback ;; # also recover when the portal probe fails
       *)
         [ -n "$DRY_RUN" ] && log "no connectivity via $dhcp_dns; leaving DNS unchanged"
         exit 0
@@ -137,24 +141,24 @@ let
     esac
     [ -n "$DRY_RUN" ] && log "iface=$iface dhcp_dns=$dhcp_dns probe=$probe blocky_ok=$blocky_ok -> want=$want"
 
+    case "$want" in
+      local) desired_dns=("$LOCAL_DNS" "$FALLBACK_DNS") ;;
+      fallback) desired_dns=("$FALLBACK_DNS") ;;
+      dhcp) desired_dns=(Empty) ;;
+    esac
+    desired=$(printf '%s\n' "''${desired_dns[@]}")
     all_services=$(networksetup -listallnetworkservices 2>/dev/null)
     for svc in "''${SERVICES[@]}"; do
-      case "$all_services" in
-        *"$svc"*) ;;
-        *) continue ;;
-      esac
-      current=$(networksetup -getdnsservers "$svc" 2>/dev/null | head -n1)
-      if [ "$current" = "$LOCAL_DNS" ]; then cur=local; else cur=dhcp; fi
-      [ "$cur" = "$want" ] && continue
+      printf '%s\n' "$all_services" | grep -Fxq "$svc" || continue
+      current=$(networksetup -getdnsservers "$svc" 2>/dev/null) || continue
+      [[ "$current" = "There aren't any DNS Servers set on "* ]] && current=Empty
+      [ "$current" = "$desired" ] && continue
+      cur=$(printf '%s' "$current" | tr '\n' ',')
       if [ -n "$DRY_RUN" ]; then
         log "would set $svc: $cur -> $want"
         continue
       fi
-      if [ "$want" = local ]; then
-        networksetup -setdnsservers "$svc" "$LOCAL_DNS"
-      else
-        networksetup -setdnsservers "$svc" Empty
-      fi
+      networksetup -setdnsservers "$svc" "''${desired_dns[@]}" || continue
       log "$svc DNS: $cur -> $want (probe=$probe blocky_ok=$blocky_ok)"
     done
   '';
@@ -185,12 +189,18 @@ in
   ];
 
   networking.knownNetworkServices = dnsServices;
-  networking.dns = [ localDns ];
+  networking.dns = systemDns;
 
   launchd.daemons.blocky = {
     serviceConfig = {
       Label = "org.blocky.dns";
+      # launchd runs before the /nix volume mounts. The initial executable
+      # must be on the system volume, or launchd can get stuck at EX_CONFIG.
       ProgramArguments = [
+        "/bin/sh"
+        "-c"
+        ''/bin/wait4path "$1" && /bin/wait4path "$3" && exec "$@"''
+        "blocky"
         "${pkgs.blocky}/bin/blocky"
         "--config"
         "${blockyConfig}"
@@ -205,7 +215,13 @@ in
   launchd.daemons.blocky-captive-guard = {
     serviceConfig = {
       Label = "org.blocky.captive-guard";
-      ProgramArguments = [ "${captiveGuard}" ];
+      ProgramArguments = [
+        "/bin/sh"
+        "-c"
+        ''/bin/wait4path "$1" && exec "$@"''
+        "blocky-captive-guard"
+        "${captiveGuard}"
+      ];
       RunAtLoad = true;
       StartInterval = 15;
       # configd rewrites this on resolver changes (network join, VPN, DHCP).

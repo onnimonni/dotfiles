@@ -116,6 +116,14 @@ launchctl kickstart -k gui/$(id -u)/org.pqrs.service.agent.karabiner_console_use
 
 System DNS points at a local [blocky](https://github.com/0xERR0R/blocky)
 daemon (`darwin/system/programs/blocky.nix`) using the hagezi Multi PRO list.
+DNS lists `127.0.0.1` first, then `8.8.8.8` as fallback. macOS controls resolver
+selection, so this is not strict failover: Google DNS can bypass blocking and
+encrypted upstreams. The guard selects Google alone when Blocky cannot resolve,
+then restores the normal list after recovery.
+
+Both daemons start through the macOS shell and wait for their Nix store paths.
+Without this, launchd can try starting them before `/nix` mounts and leave both
+stuck at `EX_CONFIG` after reboot.
 
 ```sh
 adblock status       # blocking on/off + which services use blocky
