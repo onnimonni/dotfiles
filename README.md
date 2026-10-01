@@ -112,6 +112,24 @@ Restart it by running ([source](https://karabiner-elements.pqrs.org/docs/manual/
 launchctl kickstart -k gui/$(id -u)/org.pqrs.service.agent.karabiner_console_user_server
 ```
 
+### Site broken by DNS ad blocking
+
+System DNS points at a local [blocky](https://github.com/0xERR0R/blocky)
+daemon (`darwin/system/programs/blocky.nix`) using the hagezi Multi PRO list.
+
+```sh
+adblock status       # blocking on/off + which services use blocky
+adblock off 10m      # pause blocking (auto re-enables)
+adblock on
+adblock log          # blocky + captive-portal guard logs
+adblock check        # dry-run the guard: shows probe result and intended DNS state
+```
+
+Captive portals (hotel/airport Wi-Fi): a guard daemon switches system DNS back
+to DHCP automatically while the portal is active and restores blocky once
+`captive.apple.com` reports success. Nothing manual needed; if the portal popup
+doesn't appear, open http://captive.apple.com in a browser.
+
 ## Docs for common procedures
 * [Using Estonian ID-card as ssh public key](docs/estonian-id-card.md)
 
