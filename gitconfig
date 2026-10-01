@@ -15,7 +15,6 @@
   smudge = git media smudge %f
   required = true
 [init]
-  templatedir = ~/.git_template
 	defaultBranch = main
 [filter "lfs"]
   clean = git-lfs clean %f
