@@ -5,10 +5,6 @@ in
 {
   homebrew.casks = [ "secretive" ];
 
-  system.defaults.CustomUserPreferences."com.maxgoedjen.Secretive.Host" = {
-    defaultsHasRunSetup = true;
-  };
-
   home-manager.users.${username} = {
     home.sessionVariables = {
       inherit SSH_AUTH_SOCK;

@@ -1,26 +1,14 @@
-{ ... }:
-{
+_: {
   homebrew.casks = [
     "maccy"
   ];
 
-  system.defaults.CustomUserPreferences."org.p0deje.Maccy" = {
-    launchAtLogin = true;
-    SUEnableAutomaticChecks = true;
-
-    # Activate with: ⌥ + ⌘ + space (carbonModifiers: opt=2048 + cmd=256 = 2304, carbonKeyCode: space=49)
-    KeyboardShortcuts_popup = "{\"carbonModifiers\":2304,\"carbonKeyCode\":49}";
-    # Delete with: ⌘ + backspace
-    KeyboardShortcuts_delete = "{\"carbonKeyCode\":51,\"carbonModifiers\":2048}";
-    # Pin with: ⌘ + p
-    KeyboardShortcuts_pin = "{\"carbonKeyCode\":35,\"carbonModifiers\":2048}";
-
-    # Store 1000 clipboard history items
-    historySize = 1000;
-
-    # Hide menu bar icon (use hotkey instead)
-    "NSStatusItem VisibleCC Item-1" = false;
-  };
+  # Prefs can't be managed here: Maccy is sandboxed and macOS blocks
+  # `defaults write` into ~/Library/Containers without Full Disk Access.
+  # Set manually in Maccy settings:
+  # - launch at login, auto update checks
+  # - popup: ⌥⌘space, delete: ⌘⌫, pin: ⌘P
+  # - history size 1000, hide menu bar icon
 
   # FIXME: Disable notifications programmatically for Maccy and Tips.app
   # Manual: System Settings > Notifications > [App] > Allow Notifications = off
