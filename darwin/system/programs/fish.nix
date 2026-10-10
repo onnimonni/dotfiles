@@ -289,12 +289,24 @@ in
           body = ''
             set -l before (df -g / | awk 'NR==2 {print $4}')
             brew cleanup --prune=all; or return
-            # Apple `container` fails with an XPC error when its service is not
-            # running — skip instead of aborting the whole run.
-            if container system status >/dev/null 2>&1
-              container prune; or echo 'WARN: container prune failed, continuing'
-            else
-              echo 'skip: container system service not running'
+            # Prune needs the apiserver; start it if down, stop again after.
+            set -l started_container 0
+            if not container system status >/dev/null 2>&1
+              container system start --disable-kernel-install; or return
+              set started_container 1
+            end
+            container prune; or return
+            container image prune --all; or return
+            # Container disks only grow: no TRIM passthrough (FITRIM EPERM in
+            # guest), so deleted guest files stay on host. Only fix: recreate.
+            set -l croot ~/Library/Application\ Support/com.apple.container/containers
+            for c in (container list --quiet)
+              set -l host (du -sh $croot/$c | cut -f1 | string trim)
+              set -l guest (container exec $c df -h / | tail -1 | awk '{print $3}')
+              echo "container $c: host $host vs guest $guest used — recreate to reclaim the gap"
+            end
+            if test $started_container -eq 1
+              container system stop
             end
             sudo darwin-rebuild switch --flake ~/.dotfiles/; or return
 

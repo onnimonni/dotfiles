@@ -1,0 +1,3 @@
+# macOS dotfiles: /bin/bash, /usr/bin/osascript, /opt/homebrew are intentional
+disabled = ["impure_host_path"]
+ignore = [".direnv"]
