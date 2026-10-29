@@ -17,4 +17,8 @@
   # Leave as null to keep the tunnel module dormant.
   # Set to your zone (e.g. "example.com") to enable.
   shareMacDomain = null;
+
+  # Install DwarfStar (antirez/ds4) local LLM. Needs Apple Silicon, macOS 26+
+  # and >= 96 GB RAM. Detected by scripts/detect-ds4-support.sh.
+  ds4Supported = false;
 }

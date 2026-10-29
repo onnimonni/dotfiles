@@ -65,6 +65,7 @@
           fullName,
           email,
           shareMacDomain ? null,
+          ds4Supported ? false,
         }:
         nix-darwin.lib.darwinSystem {
           specialArgs = {
@@ -75,6 +76,7 @@
               fullName
               email
               shareMacDomain
+              ds4Supported
               ;
           };
           modules = [

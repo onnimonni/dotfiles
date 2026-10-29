@@ -47,8 +47,24 @@ The fields:
   email = "you@example.com";
   # Optional override; fyff.ee is tracked in flake.nix for this repository.
   shareMacDomain = "fyff.ee";
+  # Install ds4 local LLM; from: scripts/detect-ds4-support.sh
+  ds4Supported = true;
 }
 ```
+
+### Local LLM (ds4)
+[DwarfStar](https://github.com/antirez/ds4) is installed only when `ds4Supported = true`
+(Apple Silicon, macOS 26+, >= 96 GB RAM). On an existing machine add the field manually:
+```sh
+echo "ds4Supported = $(~/.dotfiles/scripts/detect-ds4-support.sh)"
+```
+Models are big and not managed by nix. Download one into `~/.local/share/ds4` and run it:
+```sh
+ds4-download-model ds4f-q2   # DeepSeek V4 Flash Q2, ~81 GiB
+ds4 -m ~/.local/share/ds4/ds4flash.gguf
+ds4-server -m ~/.local/share/ds4/ds4flash.gguf --ctx 32768
+```
+Bump the pinned commit with `./scripts/update-ds4.sh`.
 
 Then rebuild:
 ```sh
