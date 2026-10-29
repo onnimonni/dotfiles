@@ -11,6 +11,9 @@
   gnused,
   apple-sdk_26,
   darwinMinVersionHook,
+  # Shell words prepended to ds4, ds4-agent and ds4-server args (expanded at
+  # runtime, so $HOME works). Later -m/--ctx on the command line win.
+  defaultFlags ? [ ],
 }:
 let
   pin = lib.importJSON ./ds4.json;
@@ -56,9 +59,14 @@ stdenv.mkDerivation {
       sed -E 's/@"([^"]+)", *@"([^"]+)"/\1 \2/')
     [ ''${#metalArgs[@]} -gt 0 ] || { echo "no Metal sources found" >&2; exit 1; }
 
-    for bin in ds4 ds4-server ds4-bench ds4-eval ds4-agent; do
+    for bin in ds4-bench ds4-eval; do
       install -Dm755 $bin $out/libexec/ds4/$bin
       makeWrapper $out/libexec/ds4/$bin $out/bin/$bin "''${metalArgs[@]}"
+    done
+    for bin in ds4 ds4-server ds4-agent; do
+      install -Dm755 $bin $out/libexec/ds4/$bin
+      makeWrapper $out/libexec/ds4/$bin $out/bin/$bin "''${metalArgs[@]}" \
+        --add-flags ${lib.escapeShellArg (lib.concatStringsSep " " defaultFlags)}
     done
 
     # Store is read-only: keep models in a per-user dir instead of next to the script

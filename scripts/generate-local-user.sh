@@ -7,7 +7,7 @@ OUTPUT_FILE="${SCRIPT_DIR}/../local-user.nix"
 hostname=$(scutil --get LocalHostName)
 username=$(whoami)
 fullName=$(id -F)
-ds4Supported=$("${SCRIPT_DIR}/detect-ds4-support.sh")
+memoryGiB=$(($(sysctl -n hw.memsize) / 1024 / 1024 / 1024))
 
 read -rp "Email address: " email
 read -rp "Cloudflare zone for Mac Studio share tunnel (empty = disable): " shareDomain
@@ -25,7 +25,7 @@ cat > "$OUTPUT_FILE" << EOF
   fullName = "${fullName}";
   email = "${email}";
 ${shareLine}
-  ds4Supported = ${ds4Supported};
+  memoryGiB = ${memoryGiB};
 }
 EOF
 

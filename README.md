@@ -47,23 +47,28 @@ The fields:
   email = "you@example.com";
   # Optional override; fyff.ee is tracked in flake.nix for this repository.
   shareMacDomain = "fyff.ee";
-  # Install ds4 local LLM; from: scripts/detect-ds4-support.sh
-  ds4Supported = true;
+  memoryGiB = 128;                 # from: sysctl -n hw.memsize / 2^30
 }
 ```
 
 ### Local LLM (ds4)
-[DwarfStar](https://github.com/antirez/ds4) is installed only when `ds4Supported = true`
-(Apple Silicon, macOS 26+, >= 96 GB RAM). On an existing machine add the field manually:
+[DwarfStar](https://github.com/antirez/ds4) is installed based on `memoryGiB`
+(see `darwin/system/ds4.nix`):
+
+| memoryGiB | Model | Download |
+| --- | --- | --- |
+| < 64 | not installed | |
+| 64–95 | Qwen3.8 Flash Next Q2, 8K ctx | 137 GiB (95 GiB n-grams stay on SSD) |
+| 96–255 | DeepSeek V4 Flash Q2, 32K ctx | 81 GiB |
+| ≥ 256 | DeepSeek V4 Flash Q4, 64K ctx | larger |
+
+On an existing machine add the field manually:
 ```sh
-echo "ds4Supported = $(~/.dotfiles/scripts/detect-ds4-support.sh)"
+echo "memoryGiB = $(($(sysctl -n hw.memsize) / 1024 / 1024 / 1024));"
 ```
-Models are big and not managed by nix. Download one into `~/.local/share/ds4` and run it:
-```sh
-ds4-download-model ds4f-q2   # DeepSeek V4 Flash Q2, ~81 GiB
-ds4 -m ~/.local/share/ds4/ds4flash.gguf
-ds4-server -m ~/.local/share/ds4/ds4flash.gguf --ctx 32768
-```
+A launchd agent downloads the model into `~/.local/share/ds4` in the background
+(log: `~/Library/Logs/ds4-model-download.log`). `ds4`, `ds4-agent` and `ds4-server`
+default to that model; pass `-m`/`--ctx` to override.
 Bump the pinned commit with `./scripts/update-ds4.sh`.
 
 Then rebuild:

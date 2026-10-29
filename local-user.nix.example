@@ -18,7 +18,7 @@
   # Set to your zone (e.g. "example.com") to enable.
   shareMacDomain = null;
 
-  # Install DwarfStar (antirez/ds4) local LLM. Needs Apple Silicon, macOS 26+
-  # and >= 96 GB RAM. Detected by scripts/detect-ds4-support.sh.
-  ds4Supported = false;
+  # Unified memory in GiB, detected by scripts/generate-local-user.sh.
+  # Picks the DwarfStar (antirez/ds4) local LLM model; < 64 skips ds4.
+  memoryGiB = 128;
 }
