@@ -65,6 +65,7 @@
           fullName,
           email,
           shareMacDomain ? null,
+          memoryGiB ? 0,
         }:
         nix-darwin.lib.darwinSystem {
           specialArgs = {
@@ -75,6 +76,7 @@
               fullName
               email
               shareMacDomain
+              memoryGiB
               ;
           };
           modules = [

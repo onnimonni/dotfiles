@@ -47,8 +47,29 @@ The fields:
   email = "you@example.com";
   # Optional override; fyff.ee is tracked in flake.nix for this repository.
   shareMacDomain = "fyff.ee";
+  memoryGiB = 128;                 # from: sysctl -n hw.memsize / 2^30
 }
 ```
+
+### Local LLM (ds4)
+[DwarfStar](https://github.com/antirez/ds4) is installed based on `memoryGiB`
+(see `darwin/system/ds4.nix`):
+
+| memoryGiB | Model | Download |
+| --- | --- | --- |
+| < 64 | not installed | |
+| 64–95 | Qwen3.8 Flash Next Q2, 8K ctx | 137 GiB (95 GiB n-grams stay on SSD) |
+| 96–255 | DeepSeek V4 Flash Q2, 32K ctx | 81 GiB |
+| ≥ 256 | DeepSeek V4 Flash Q4, 64K ctx | larger |
+
+On an existing machine add the field manually:
+```sh
+echo "memoryGiB = $(($(sysctl -n hw.memsize) / 1024 / 1024 / 1024));"
+```
+A launchd agent downloads the model into `~/.local/share/ds4` in the background
+(log: `~/Library/Logs/ds4-model-download.log`). `ds4`, `ds4-agent` and `ds4-server`
+default to that model; pass `-m`/`--ctx` to override.
+Bump the pinned commit with `./scripts/update-ds4.sh`.
 
 Then rebuild:
 ```sh
