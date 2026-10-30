@@ -10,6 +10,9 @@ rec {
     ./config/iterm2-profile.json;
 
   system.defaults.CustomUserPreferences."com.googlecode.iterm2" = {
+    # Use dotfiles dynamic profile (bigger font, fish, theme) for new windows
+    "Default Bookmark Guid" = "dotfiles-managed-profile-001";
+
     QuitWhenAllWindowsClosed = true;
     PromptOnQuit = false;
 
