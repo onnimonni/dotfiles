@@ -34,7 +34,7 @@
     # Hetzner cloud management
     hcloud
     # AWS cli for terraform, public s3 buckets, SES, etc
-    awscli
+    awscli2
     # Download youtube videos offline
     yt-dlp
     # Download files areena.yle.fi for personal archiving
