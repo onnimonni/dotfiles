@@ -13,6 +13,8 @@
     nixos-rebuild
     # To interact with Estonian ID card
     opensc
+    # YubiKey management cli (ykman)
+    yubikey-manager
     # To format nix files properly
     nixfmt
     # To find nix packages
@@ -67,6 +69,8 @@
     # Secret management
     sops
     age-plugin-se
+    # YubiKey PIV identities for sops
+    age-plugin-yubikey
     age
 
     # For converting AI generated png images to svg

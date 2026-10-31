@@ -9,6 +9,7 @@ I hope someday I will learn to play [vimgolf](http://www.vimgolf.com/) but until
 ### Stuff which is probably useful only for me
 - Custom keyboard mappings with [karabiner-elements](https://karabiner-elements.pqrs.org)
 - This includes my own keyboard layout based on Dvorak ( I implemented small tweaks for finnish language ).
+- Finicky rewrites `xcancel.com` links to `xxcancel.com`, preserving paths, queries, and fragments.
 
 ## Installation on fresh MacOS
 ```sh

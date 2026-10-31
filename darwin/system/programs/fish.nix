@@ -262,7 +262,10 @@ in
         emptytrash = {
           description = "Empty Trash on all volumes, clear ASL logs + quarantine history";
           body = ''
-            for trash in ~/.Trash /Volumes/*/.Trashes
+            # ~/.Trash is TCC-protected (EPERM even for sudo w/o Full Disk
+            # Access); Finder empties it instead.
+            osascript -e 'tell application "Finder" to if (count items of trash) > 0 then empty trash' >/dev/null
+            for trash in /Volumes/*/.Trashes
               if test -d $trash
                 sudo find $trash -mindepth 1 -delete
               end
@@ -291,19 +294,33 @@ in
             brew cleanup --prune=all; or return
             # Prune needs the apiserver; start it if down, stop again after.
             set -l started_container 0
+            # Non-fatal: `start` returns before apiserver accepts XPC, so poll
+            # until `container list` works; on failure skip, don't abort.
             if not container system status >/dev/null 2>&1
-              container system start --disable-kernel-install; or return
-              set started_container 1
+              container system start --disable-kernel-install
+              and set started_container 1
             end
-            container prune; or return
-            container image prune --all; or return
-            # Container disks only grow: no TRIM passthrough (FITRIM EPERM in
-            # guest), so deleted guest files stay on host. Only fix: recreate.
-            set -l croot ~/Library/Application\ Support/com.apple.container/containers
-            for c in (container list --quiet)
-              set -l host (du -sh $croot/$c | cut -f1 | string trim)
-              set -l guest (container exec $c df -h / | tail -1 | awk '{print $3}')
-              echo "container $c: host $host vs guest $guest used — recreate to reclaim the gap"
+            set -l container_ok 0
+            for i in (seq 30)
+              if container list --quiet >/dev/null 2>&1
+                set container_ok 1
+                break
+              end
+              sleep 1
+            end
+            if test $container_ok -eq 1
+              container prune
+              container image prune --all
+              # Container disks only grow: no TRIM passthrough (FITRIM EPERM in
+              # guest), so deleted guest files stay on host. Only fix: recreate.
+              set -l croot ~/Library/Application\ Support/com.apple.container/containers
+              for c in (container list --quiet)
+                set -l host (du -sh $croot/$c | cut -f1 | string trim)
+                set -l guest (container exec $c df -h / | tail -1 | awk '{print $3}')
+                echo "container $c: host $host vs guest $guest used — recreate to reclaim the gap"
+              end
+            else
+              echo 'WARNING: container apiserver unreachable — skipping container prune'
             end
             if test $started_container -eq 1
               container system stop
@@ -363,11 +380,9 @@ in
               rm -rf ~/.cache/trc-chrome/Default/{"Service Worker",Cache,"Code Cache",GPUCache}
               rm -rf ~/.cache/trc-chrome/OptGuideOnDeviceModel
             end
-            # `sudo rm -rf ~/.Trash/*` aborts the whole function when the Trash
-            # is empty: fish errors out on globs with no matches.
-            if test -d ~/.Trash
-              sudo find ~/.Trash -mindepth 1 -delete
-            end
+            # ~/.Trash is TCC-protected: even sudo gets EPERM without Full Disk
+            # Access. Finder can empty it (needs one-time Automation consent).
+            osascript -e 'tell application "Finder" to if (count items of trash) > 0 then empty trash' >/dev/null
 
             set -l after (df -g / | awk 'NR==2 {print $4}')
             echo "Freed "(math $after - $before)"G — $after G free now."

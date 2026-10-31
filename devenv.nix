@@ -6,7 +6,14 @@
   ...
 }:
 
+let
+  # statix with shellcheck and ruff for the script lints
+  statix = inputs.statix.packages.${pkgs.stdenv.system}.statix-scripts;
+in
 rec {
+  # prebuilt statix binaries, pushed by CI
+  cachix.pull = [ "onnimonni" ];
+
   packages = [ (pkgs.python3.withPackages (packages: [ packages.tomlkit ])) ];
 
   # Use VS Code as the default editor
@@ -29,6 +36,20 @@ rec {
   git-hooks.hooks = {
     # Nix files
     nixfmt.enable = true;
+
+    # Nix lints, incl. shellcheck/ruff for scripts in Nix strings
+    # Fix what can be fixed in staged files, then fail on anything left or changed
+    statix = {
+      enable = true;
+      package = statix;
+      entry = toString (
+        pkgs.writeShellScript "statix-hook" ''
+          ${statix}/bin/statix fix --staged
+          ${statix}/bin/statix check --staged
+        ''
+      );
+      files = "\\.(nix|sh|bash|py)$";
+    };
 
     # Leaking secrets
     ripsecrets.enable = true;

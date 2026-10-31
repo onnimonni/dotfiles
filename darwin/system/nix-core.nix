@@ -20,12 +20,15 @@
     # Managed by nix-darwin: ~/.dotfiles/darwin/system/nix-core.nix
     # trusted-users lets devenv pass substituters/keys without warnings
     trusted-users = root ${username}
-    extra-substituters = https://devenv.cachix.org
-    extra-trusted-public-keys = devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=
+    extra-substituters = https://devenv.cachix.org https://lazy-cow-tree.cachix.org
+    extra-trusted-public-keys = devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw= lazy-cow-tree.cachix.org-1:gpaT7lT1g7NZo5Na9qKQ5d6g4attS53Lm3A8rtZOjuw=
     extra-platforms = x86_64-darwin aarch64-darwin
     keep-outputs = true
     keep-derivations = true
     builders-use-substitutes = true
+    # nix-rosetta-builder VM (rosetta-builder.nix; ssh config from its module).
+    # Overrides the older builders line in /etc/nix/nix.conf (included before).
+    builders = ssh-ng://rosetta-builder aarch64-linux,x86_64-linux - 10 1 benchmark,big-parallel,kvm,nixos-test
     warn-dirty = false
     # Parallel builds: one job per core; each job may use all cores
     max-jobs = auto

@@ -2,6 +2,14 @@ export default {
   defaultBrowser: "Safari",
   rewrite: [
     {
+      // Redirect XCancel links through XXCancel's Nitter instance selector
+      match: "xcancel.com/*",
+      url: (url) => {
+        url.host = "xxcancel.com";
+        return url;
+      },
+    },
+    {
       // Redirect Tiktok video links to use offtiktok.com
       match: "tiktok.com/*",
       url: (url) => {

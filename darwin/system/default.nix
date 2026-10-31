@@ -14,6 +14,7 @@
     ./agents.nix
     ./mcp.nix
     ./githits.nix
+    ./rosetta-builder.nix
   ];
 
   # Pretty nice examples for setting up nix-darwin: https://github.com/thurstonsand/nixonomicon

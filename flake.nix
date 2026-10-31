@@ -13,8 +13,24 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # devenv from upstream: nixos-unstable lags releases. No nixpkgs follows
+    # so binaries hit devenv.cachix.org.
+    devenv.url = "github:cachix/devenv/v2.4.0";
     sops-nix = {
       url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    # Linux builder VM with Rosetta 2 (x86_64-linux at near-native speed)
+    nix-rosetta-builder = {
+      url = "github:cpick/nix-rosetta-builder";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    # Shared worktree/HTTPS daemon; also serves devenv's proxy routes. No
+    # nixpkgs follows so binaries hit lazy-cow-tree.cachix.org.
+    lazy-cow-tree.url = "github:onnimonni/devenv-lazy-cow-worktrees";
+    # `project` CLI + herdr plugin for devenv worktrees
+    devenv-agents = {
+      url = "github:wyattjoh/devenv-agents";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -80,6 +96,7 @@
           modules = [
             home-manager.darwinModules.home-manager
             sops-nix.darwinModules.sops
+            inputs.nix-rosetta-builder.darwinModules.default
             { system.configurationRevision = self.rev or self.dirtyRev or null; }
             ./darwin/system
           ];
