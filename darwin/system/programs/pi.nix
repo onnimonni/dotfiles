@@ -23,7 +23,7 @@ let
   ];
 
   # Provider settings from ~/Projects/ds4/docs/CLIENTS.md
-  contextWindow = 100000;
+  contextWindow = 262144;
   ds4Provider = {
     baseUrl = "http://127.0.0.1:8000/v1";
     api = "openai-completions";
