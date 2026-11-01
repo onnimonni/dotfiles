@@ -3,6 +3,11 @@
 # read their Metal kernel sources and default model (ds4flash.gguf) relative
 # to the current directory. These wrappers point both at the checkout so the
 # commands work from any directory. DS4_HOME overrides the checkout path.
+#
+# Local feature: Ctrl+C twice closes both ds4 and ds4-agent (one press is the
+# usual interrupt/cancel). The source patch lives in
+# patches/ds4-ctrl-c-twice.patch and is applied with
+# scripts/apply-ds4-ctrl-c-twice.sh.
 { pkgs, lib, ... }:
 let
   binaries = [

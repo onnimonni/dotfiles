@@ -1,0 +1,190 @@
+diff --git a/ds4_agent.c b/ds4_agent.c
+index deadc45..ae57ec4 100644
+--- a/ds4_agent.c
++++ b/ds4_agent.c
+@@ -12603,8 +12603,8 @@ static void editor_cancel_input_with_hint(agent_editor *ed,
+     if (ed->hidden) editor_show(ed);
+     linenoiseEditClear(&ed->edit);
+     const char *msg = stdout_is_tty() ?
+-        "\x1b[1;33mpress Ctrl+D to exit\x1b[0m\n" :
+-        "press Ctrl+D to exit\n";
++        "\x1b[1;33mpress Ctrl+D, or Ctrl+C twice, to exit\x1b[0m\n" :
++        "press Ctrl+D, or Ctrl+C twice, to exit\n";
+     editor_write_async(ed, msg, strlen(msg), prompt, status, true);
+ }
+ 
+@@ -12623,7 +12623,7 @@ static void runtime_help(void) {
+     puts("  /steer [F]   Show or set FFN steering for subsequent tokens.");
+     puts("  /new         Start a fresh session from the system prompt.");
+     puts("  /quit, /exit Exit.");
+-    puts("  Ctrl+C       Interrupt generation; clear edited text.");
++    puts("  Ctrl+C       Interrupt generation; clear edited text. Ctrl+C twice exits.");
+     puts("  Enter        Queue text while the agent is busy.");
+     puts("  Ctrl+X       Edit the first queued prompt.");
+     puts("  ESC          Interrupt and send queued prompt immediately.");
+@@ -13033,6 +13033,41 @@ static int run_agent_non_interactive(ds4_engine *engine, agent_config *cfg) {
+     return rc;
+ }
+ 
++/* A single Ctrl+C is the usual interrupt-generation / edit-cancel key.  A
++ * second Ctrl+C within AGENT_CTRL_C_DOUBLE_MS quits the whole agent; the
++ * teardown after the UI loop frees the worker and the caller closes the ds4
++ * engine, so one process exit shuts down both ds4-agent and the embedded ds4.
++ * State is touched only from the UI thread, so no locking is needed. */
++#define AGENT_CTRL_C_DOUBLE_MS 500
++static struct timespec agent_ctrl_c_last;
++static bool agent_ctrl_c_armed;
++
++static void agent_handle_ctrl_c(agent_editor *editor, agent_worker *worker,
++                                const char *prompt, const char *statusline,
++                                bool *running) {
++    struct timespec now;
++    clock_gettime(CLOCK_MONOTONIC, &now);
++    bool double_press = false;
++    if (agent_ctrl_c_armed) {
++        long long ms = (now.tv_sec - agent_ctrl_c_last.tv_sec) * 1000 +
++                       (now.tv_nsec - agent_ctrl_c_last.tv_nsec) / 1000000;
++        double_press = ms >= 0 && ms <= AGENT_CTRL_C_DOUBLE_MS;
++    }
++    agent_ctrl_c_armed = false;
++    if (double_press) {
++        /* Second Ctrl+C: quit the agent, closing the ds4 engine too. */
++        *running = false;
++        return;
++    }
++    agent_ctrl_c_last = now;
++    agent_ctrl_c_armed = true;
++    if (!worker_is_idle(worker)) {
++        worker_interrupt(worker);
++    } else {
++        editor_cancel_input_with_hint(editor, prompt, statusline);
++    }
++}
++
+ /* Main UI loop.  poll() multiplexes stdin with the worker wake pipe; all
+  * terminal writes go through editor_write_async() so linenoise, status footer,
+  * model output, and tool output never race each other. */
+@@ -13095,11 +13130,7 @@ static int run_agent(ds4_engine *engine, agent_config *cfg) {
+ 
+         if (agent_sigint) {
+             agent_sigint = 0;
+-            if (worker_is_idle(&worker)) {
+-                editor_cancel_input_with_hint(&editor, prompt, statusline);
+-            } else {
+-                worker_interrupt(&worker);
+-            }
++            agent_handle_ctrl_c(&editor, &worker, prompt, statusline, &running);
+         }
+ 
+         if (rc > 0 && (pfd[0].revents & POLLIN)) editor_read_stdin(&editor);
+@@ -13109,11 +13140,7 @@ static int run_agent(ds4_engine *engine, agent_config *cfg) {
+          * drained and repainted; otherwise a busy decoding stream can leave the
+          * interrupt waiting behind a large terminal-output backlog. */
+         if (editor_take_queued_byte(&editor, 3)) { /* Ctrl+C */
+-            if (!worker_is_idle(&worker)) {
+-                worker_interrupt(&worker);
+-            } else {
+-                editor_cancel_input_with_hint(&editor, prompt, statusline);
+-            }
++            agent_handle_ctrl_c(&editor, &worker, prompt, statusline, &running);
+         }
+ 
+         if (rc > 0 && (pfd[1].revents & POLLIN)) drain_wake_fd(worker.wake_fd[0]);
+diff --git a/ds4_cli.c b/ds4_cli.c
+index af4e2b6..abf4ab4 100644
+--- a/ds4_cli.c
++++ b/ds4_cli.c
+@@ -108,11 +108,31 @@ static volatile sig_atomic_t cli_interrupted;
+ static volatile sig_atomic_t cli_dist_busy;
+ static volatile sig_atomic_t cli_dist_notice_printed;
+ 
++/* Two Ctrl+C presses within CLI_CTRL_C_DOUBLE_MS quit the whole ds4 process
++ * (the CLI and the engine it hosts); a single press is the usual interrupt /
++ * cancel.  cli_ctrl_c_last is written by the SIGINT handler (clock_gettime is
++ * async-signal-safe) and by the UI thread for raw-mode byte 3; the UI thread
++ * owns the reads, and the latched cli_ctrl_c_double flag below keeps the
++ * non-atomic struct write/read race benign. */
++#define CLI_CTRL_C_DOUBLE_MS 500
++static struct timespec cli_ctrl_c_last;
++static volatile sig_atomic_t cli_ctrl_c_last_set;
++static volatile sig_atomic_t cli_ctrl_c_double;
++
+ static const char cli_dist_drain_msg[] =
+     "\nds4: stopping after the distributed cluster finishes the current token/chunk...\n";
+ 
+ static void cli_sigint_handler(int sig) {
+     (void)sig;
++    struct timespec now;
++    clock_gettime(CLOCK_MONOTONIC, &now);
++    if (cli_ctrl_c_last_set) {
++        long long ms = (now.tv_sec - cli_ctrl_c_last.tv_sec) * 1000 +
++                       (now.tv_nsec - cli_ctrl_c_last.tv_nsec) / 1000000;
++        if (ms >= 0 && ms <= CLI_CTRL_C_DOUBLE_MS) cli_ctrl_c_double = 1;
++    }
++    cli_ctrl_c_last = now;
++    cli_ctrl_c_last_set = 1;
+     cli_interrupted = 1;
+     if (cli_dist_busy && !cli_dist_notice_printed) {
+         cli_dist_notice_printed = 1;
+@@ -132,6 +152,29 @@ static void cli_interrupt_clear(void) {
+     cli_dist_notice_printed = 0;
+ }
+ 
++/* Record a raw-mode byte-3 Ctrl+C (UI thread) and latch the double-press flag
++ * when it falls inside the window of the previous press.  SIGINT presses are
++ * already timestamped by cli_sigint_handler, so this path only records. */
++static void cli_prompt_ctrl_c(void) {
++    struct timespec now;
++    clock_gettime(CLOCK_MONOTONIC, &now);
++    if (cli_ctrl_c_last_set) {
++        long long ms = (now.tv_sec - cli_ctrl_c_last.tv_sec) * 1000 +
++                       (now.tv_nsec - cli_ctrl_c_last.tv_nsec) / 1000000;
++        if (ms >= 0 && ms <= CLI_CTRL_C_DOUBLE_MS) cli_ctrl_c_double = 1;
++    }
++    cli_ctrl_c_last = now;
++    cli_ctrl_c_last_set = 1;
++}
++
++static bool cli_ctrl_c_double_take(void) {
++    if (cli_ctrl_c_double) {
++        cli_ctrl_c_double = 0;
++        return true;
++    }
++    return false;
++}
++
+ static bool cli_distributed_coordinator(const cli_config *cfg) {
+     return cfg && cfg->engine.distributed.role == DS4_DISTRIBUTED_COORDINATOR;
+ }
+@@ -1294,7 +1337,7 @@ static void print_repl_help(void) {
+     puts("  /steer F       Set FFN steering for subsequent tokens; no value shows it.");
+     puts("  /read FILE     Submit a text file, PNG, or JPEG.");
+     puts("  /quit, /exit   Leave the prompt.");
+-    puts("  Ctrl+C         Stop generation and return to the prompt.");
++    puts("  Ctrl+C         Stop generation and return to the prompt; Ctrl+C twice exits.");
+ }
+ 
+ static bool parse_power_percent(const char *arg, int *out) {
+@@ -1731,7 +1774,13 @@ static int run_repl(ds4_engine *engine, cli_config *cfg) {
+         char *line = linenoise("ds4> ");
+         if (!line) {
+             if (errno == EAGAIN || cli_interrupt_requested()) {
++                /* Ctrl+C: a raw-mode byte 3 is timestamped here; a cooked-mode
++                 * SIGINT was already timestamped by cli_sigint_handler. */
++                if (errno == EAGAIN && !cli_interrupt_requested()) {
++                    cli_prompt_ctrl_c();
++                }
+                 cli_interrupt_clear();
++                if (cli_ctrl_c_double_take()) break; /* 2nd Ctrl+C: exit */
+                 continue;
+             }
+             break;
+@@ -1857,6 +1906,8 @@ static int run_repl(ds4_engine *engine, cli_config *cfg) {
+             rc = run_chat_turn(engine, cfg, &chat, cmd, NULL);
+         }
+         linenoiseFree(line);
++        /* Two Ctrl+C presses during generation quit the whole ds4 process. */
++        if (cli_ctrl_c_double_take()) break;
+     }
+     if (sigint_installed) sigaction(SIGINT, &old_int, NULL);
+     repl_chat_free(&chat);
