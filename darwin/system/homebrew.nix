@@ -1,5 +1,16 @@
 # Homebrew casks, brews, and Mac App Store apps managed by nix-darwin
-{ lib, pkgs, ... }:
+{
+  lib,
+  pkgs,
+  hostname,
+  ...
+}:
+let
+  # Onnis-MacBook-Pro is managed by work MDM: its App Store is signed in with a
+  # Managed Apple Account, which can't get apps ("This Apple Account cannot be
+  # used to make purchases"), so masApps would fail every rebuild there.
+  appStore = !(builtins.elem hostname [ "Onnis-MacBook-Pro" ]);
+in
 {
   # Import all nix files from the 'apps' directory
   # Source: https://www.reddit.com/r/NixOS/comments/1gcmce1/recursively_import_nix_files_from_a_directory/
@@ -110,7 +121,7 @@
       "handy"
     ];
 
-    masApps = {
+    masApps = lib.optionalAttrs appStore {
       # Remove stupid cookie banners etc
       "1Blocker" = 1365531024;
 
