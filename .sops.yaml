@@ -4,6 +4,8 @@ keys:
   - &host_macbook_pro age1mv0fkqmh7tju54cgv05wvzn28p8zp4nfcx9yamu37w8hqcmqs3rs3l7mrv
   - &server age1se1qfptarnwfn4adk9n565afaejj8ghm2u7wyhzxe7dj7w8spu28wnuytaruzg
   - &host_mac_studio age1z2kh0yjnmfetkxmm4wcqsgp43vrq6gz4das0lxxyfrrzgkww0v0qx0wlut
+  # ~/.config/sops/age/keys.txt on Onnis-MacBook-Pro, created 2026-10-27
+  - &host_macbook_pro_2026 age15xsnj85wnt6qnx0une3qcm3jgt9dsfgrhknsf8d62us3thcmwg8q02g94v
   # YubiKey (serial 32438368, PIV slot 2, PIN+touch always) via age-plugin-yubikey
   - &yubikey_onnimonni age1yubikey1qvu4f8perk5ncklxfecl09tgjytdfrn3y5k8q8jacmp8sptqx3nw6d28pcl
 
@@ -16,4 +18,5 @@ creation_rules:
       - *host_macbook_pro
       - *server
       - *host_mac_studio
+      - *host_macbook_pro_2026
       - *yubikey_onnimonni

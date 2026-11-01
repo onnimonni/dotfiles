@@ -51,6 +51,10 @@ else
   read -r
 fi
 
+# Let this machine decrypt the sops secrets; darwin-rebuild activation fails
+# without it. Asks to plug in the YubiKey when the key is new.
+~/.dotfiles/scripts/add-sops-age-key.sh
+
 # Setup MacOS with nix
 # --inputs-from reuses the locked nix-darwin rev from flake.lock instead of
 # fetching nix-darwin/master from GitHub (avoids API rate limits)
