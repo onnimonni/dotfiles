@@ -1,5 +1,11 @@
 # macOS system preferences managed by nix-darwin
-{ pkgs, username, ... }:
+{
+  pkgs,
+  lib,
+  username,
+  mdmManaged,
+  ...
+}:
 {
   # Set locale so terminal apps (iTerm2, etc.) don't complain about missing UNIX locale
   environment.variables = {
@@ -7,8 +13,9 @@
     LC_ALL = "en_US.UTF-8";
   };
 
-  # Firewall with stealth mode
-  networking.applicationFirewall = {
+  # Firewall with stealth mode. MDM-managed Macs refuse firewall changes from
+  # the command line, so leave it to the MDM profile there.
+  networking.applicationFirewall = lib.mkIf (!mdmManaged) {
     enable = true;
     enableStealthMode = true;
     allowSigned = true;

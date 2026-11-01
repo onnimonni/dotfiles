@@ -92,6 +92,9 @@
               email
               shareMacDomain
               ;
+            # Work MDM owns these Macs: no App Store purchases (Managed Apple
+            # Account) and no firewall changes from the command line
+            mdmManaged = builtins.elem hostname [ "Onnis-MacBook-Pro" ];
           };
           modules = [
             home-manager.darwinModules.home-manager

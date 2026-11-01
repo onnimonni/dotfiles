@@ -2,14 +2,14 @@
 {
   lib,
   pkgs,
-  hostname,
+  mdmManaged,
   ...
 }:
 let
-  # Onnis-MacBook-Pro is managed by work MDM: its App Store is signed in with a
-  # Managed Apple Account, which can't get apps ("This Apple Account cannot be
-  # used to make purchases"), so masApps would fail every rebuild there.
-  appStore = !(builtins.elem hostname [ "Onnis-MacBook-Pro" ]);
+  # On MDM-managed Macs the App Store is signed in with a Managed Apple Account,
+  # which can't get apps ("This Apple Account cannot be used to make
+  # purchases"), so masApps would fail every rebuild there.
+  appStore = !mdmManaged;
 in
 {
   # Import all nix files from the 'apps' directory
