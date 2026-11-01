@@ -26,9 +26,7 @@
     keep-outputs = true
     keep-derivations = true
     builders-use-substitutes = true
-    # nix-rosetta-builder VM (rosetta-builder.nix; ssh config from its module).
-    # Overrides the older builders line in /etc/nix/nix.conf (included before).
-    builders = ssh-ng://rosetta-builder aarch64-linux,x86_64-linux - 10 1 benchmark,big-parallel,kvm,nixos-test
+    # builders: see rosetta-builder.nix
     warn-dirty = false
     # Parallel builds: one job per core; each job may use all cores
     max-jobs = auto
