@@ -28,6 +28,11 @@
     # Shared worktree/HTTPS daemon; also serves devenv's proxy routes. No
     # nixpkgs follows so binaries hit lazy-cow-tree.cachix.org.
     lazy-cow-tree.url = "github:onnimonni/devenv-lazy-cow-worktrees";
+    # antirez DwarfStar inference engine + coding agent; `nix flake update ds4`
+    ds4 = {
+      url = "github:antirez/ds4";
+      flake = false;
+    };
     # `project` CLI + herdr plugin for devenv worktrees
     devenv-agents = {
       url = "github:wyattjoh/devenv-agents";
