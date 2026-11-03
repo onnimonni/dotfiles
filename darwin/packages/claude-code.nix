@@ -11,6 +11,10 @@ let
   pin = lib.importJSON ./claude-code.json;
   platform = pin.platforms.${stdenv.hostPlatform.system};
   upstreamInstall = "unzstd -q $src -o $out/bin/claude";
+  # nixpkgs defaults to the macOS system store only, which fails TLS to
+  # api.anthropic.com (UNABLE_TO_GET_ISSUER_CERT_LOCALLY). Keep the bundled
+  # roots; "system" still adds keychain CAs such as lazy-cow-tree's.
+  upstreamCertStore = "--set-default CLAUDE_CODE_CERT_STORE system";
 in
 claude-code.overrideAttrs (old: {
   inherit (pin) version;
@@ -26,7 +30,12 @@ claude-code.overrideAttrs (old: {
   installPhase =
     assert lib.assertMsg (lib.hasInfix upstreamInstall old.installPhase)
       "claude-code: nixpkgs installer changed; review the npm override";
-    lib.replaceStrings [ upstreamInstall ] [ "cp claude $out/bin/claude" ] old.installPhase;
+    assert lib.assertMsg (lib.hasInfix upstreamCertStore old.installPhase)
+      "claude-code: nixpkgs cert store default changed; review the override";
+    lib.replaceStrings
+      [ upstreamInstall upstreamCertStore ]
+      [ "cp claude $out/bin/claude" "--set-default CLAUDE_CODE_CERT_STORE bundled,system" ]
+      old.installPhase;
 
   passthru = old.passthru // {
     updateScript = [
