@@ -231,24 +231,6 @@
         "type": "github"
       }
     },
-    "lazy-cow-tree": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_2"
-      },
-      "locked": {
-        "lastModified": 1793851152,
-        "narHash": "sha256-YVGwlqwWg8O2DOjBi9a46kBCEZl74D0YJRiN2lrojdA=",
-        "owner": "onnimonni",
-        "repo": "devenv-lazy-cow-worktrees",
-        "rev": "0b7581302ea644b5cb9171fdbd8b22399de35c09",
-        "type": "github"
-      },
-      "original": {
-        "owner": "onnimonni",
-        "repo": "devenv-lazy-cow-worktrees",
-        "type": "github"
-      }
-    },
     "nix": {
       "inputs": {
         "flake-compat": [
@@ -393,22 +375,6 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1790510107,
-        "narHash": "sha256-EVMNYv7hYDDD9TGVT/hIyTYgpiXA8y3m5xIEIxuGNU0=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "3181085bfd08663b6b9e60bc7a8395c2aaa741bd",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_3": {
-      "locked": {
         "lastModified": 1793726008,
         "narHash": "sha256-jQp1wKvbwWdLBASTXkSi/VYmDJ5AbBi1WvcMt9HWJC8=",
         "owner": "nixos",
@@ -429,10 +395,9 @@
         "devenv-agents": "devenv-agents",
         "ds4": "ds4",
         "home-manager": "home-manager",
-        "lazy-cow-tree": "lazy-cow-tree",
         "nix-darwin": "nix-darwin",
         "nix-rosetta-builder": "nix-rosetta-builder",
-        "nixpkgs": "nixpkgs_3",
+        "nixpkgs": "nixpkgs_2",
         "sops-nix": "sops-nix"
       }
     },
