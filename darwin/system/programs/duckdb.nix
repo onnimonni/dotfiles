@@ -13,8 +13,6 @@
     ".duckdbrc".text = ''
       INSTALL netquack FROM community;
       LOAD netquack;
-      -- DNS is builtin in the project's DuckDB 1.5.6 CLI; community's binary targets 1.5.5.
-      LOAD dns;
       INSTALL httpfs;
       LOAD httpfs;
       INSTALL zipfs FROM community;
