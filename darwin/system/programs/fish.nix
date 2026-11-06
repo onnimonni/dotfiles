@@ -161,6 +161,8 @@ in
       shellAliases = {
         # Install current config without updating inputs
         install-nix = "sudo darwin-rebuild switch --flake ~/.dotfiles/";
+        # Same but skip Homebrew bundle (no cask installs/upgrades) for fast iteration
+        install-nix-fast = "sudo sh -c 'touch /var/run/nix-darwin-skip-homebrew; darwin-rebuild switch --flake \"$0\"; rc=$?; rm -f /var/run/nix-darwin-skip-homebrew; exit $rc' ~/.dotfiles/";
 
         # Update ALL flake inputs, then install: partial updates
         # (e.g. only nixpkgs) leave inputs like sops-nix pinned to removed

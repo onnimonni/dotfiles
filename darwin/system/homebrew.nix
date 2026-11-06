@@ -36,6 +36,18 @@ in
     fi
   '';
 
+  # `install-nix-fast` creates this root-owned marker to skip slow `brew bundle`
+  # for quick config iteration. Env vars don't work: `activate` runs under `env -i`.
+  system.activationScripts.homebrew.text = lib.mkMerge [
+    (lib.mkBefore ''
+      if [ -e /var/run/nix-darwin-skip-homebrew ]; then
+        rm -f /var/run/nix-darwin-skip-homebrew
+        echo >&2 "Skipping Homebrew bundle (install-nix-fast)"
+      else
+    '')
+    (lib.mkAfter "fi")
+  ];
+
   homebrew = {
     enable = true;
 
