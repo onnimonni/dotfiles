@@ -15,6 +15,11 @@ let
     # Detect terminal background so light iTerm themes stay readable
     theme = "auto";
     alwaysThinkingEnabled = true;
+    # Voice dictation on at startup; tap § to start/send (see keybindings.json)
+    voice = {
+      enabled = true;
+      mode = "tap";
+    };
     feedbackSurveyState = {
       lastShownTime = 1754109357477;
     };
@@ -45,8 +50,8 @@ in
   ];
 
   # Home-manager configuration for claude
-  home-manager.users.${username} = {
-    home.file = {
+  home-manager.users.${username}.home = {
+    file = {
       # Global instructions for Claude Code
       ".claude/CLAUDE.md".text = ''
         # More instructions in
@@ -66,14 +71,14 @@ in
     };
 
     # Keybindings: § key (next to Tab) for push-to-talk, unbind space
-    home.file.".claude/keybindings.json".text = builtins.toJSON {
+    file.".claude/keybindings.json".text = builtins.toJSON {
       "$schema" = "https://www.schemastore.org/claude-code-keybindings.json";
       "$docs" = "https://code.claude.com/docs/en/keybindings";
       bindings = [
         {
           context = "Chat";
           bindings = {
-            "\`" = "voice:pushToTalk";
+            "§" = "voice:pushToTalk";
             space = null;
           };
         }
@@ -83,7 +88,7 @@ in
     # Write settings.json as a regular writable file (not a symlink)
     # so tools like nono can modify it at runtime.
     # Uses jq to deep-merge: nix base settings * existing tool-added keys
-    home.activation.claudeSettings = inputs.home-manager.lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    activation.claudeSettings = inputs.home-manager.lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       SETTINGS="$HOME/.claude/settings.json"
       BASE_SETTINGS='${claudeSettingsBase}'
 
