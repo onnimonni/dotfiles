@@ -6,6 +6,11 @@
       enableGitIntegration = true;
     };
 
+    programs.gh = {
+      enable = true;
+      gitCredentialHelper.enable = true; # git uses gh's token for github.com
+    };
+
     programs.git = {
       enable = true;
 
