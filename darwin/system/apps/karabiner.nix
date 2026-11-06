@@ -540,6 +540,8 @@ let
           (mkDvorakRemap "slash" "z") # -→z
           (mkDvorakRemap "w" "semicolon") # w→ö
           (mkDvorakRemap "e" "quote") # e→ä
+          # §-key reports as non_us_backslash on Apple ISO; emit grave to get §/°
+          (mkDvorakRemap "non_us_backslash" "grave_accent_and_tilde")
         ];
     }
     {
