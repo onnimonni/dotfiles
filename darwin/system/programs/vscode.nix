@@ -22,7 +22,7 @@
 
     programs.vscode = {
       enable = true;
-      package = pkgs.runCommand "vscode-stub" { } "mkdir -p $out";
+      package = pkgs.runCommand "vscode-stub" { meta.mainProgram = "code"; } "mkdir -p \"$out\"";
 
       profiles.default.userSettings = {
         "editor.accessibilitySupport" = "off";
