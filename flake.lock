@@ -202,11 +202,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793757180,
-        "narHash": "sha256-gyV7AtCwLnOImcrfSETP4J3Ie96bz19DY47B7m7Y3HM=",
+        "lastModified": 1793979366,
+        "narHash": "sha256-7OoWDsYO9teiPxl0QdlS5lYE20Pue8/5mpscSL32FUA=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "b787c48e2ec57a9d098f5c2721882a3bc1e16f97",
+        "rev": "2c0c1f01521469cf0271180c453c79782d53c2f6",
         "type": "github"
       },
       "original": {
@@ -220,11 +220,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1793785537,
-        "narHash": "sha256-TDxWioc+bdvNUhL3JuT5hBsPJ9CrEiScEMGL7UBjSL0=",
+        "lastModified": 1793851152,
+        "narHash": "sha256-YVGwlqwWg8O2DOjBi9a46kBCEZl74D0YJRiN2lrojdA=",
         "owner": "onnimonni",
         "repo": "devenv-lazy-cow-worktrees",
-        "rev": "ced95a4b27254f919cefab93ea90ed57812c8873",
+        "rev": "0b7581302ea644b5cb9171fdbd8b22399de35c09",
         "type": "github"
       },
       "original": {
