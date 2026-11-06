@@ -508,19 +508,6 @@ let
             ]
             [ { key_code = "hyphen"; } ]
           )
-          # non_us_backslash(<): unshifted→hyphen(+), shifted→option+shift+7(\)
-          (mkDvorakSplit "non_us_backslash"
-            [ { key_code = "hyphen"; } ]
-            [
-              {
-                key_code = "7";
-                modifiers = [
-                  "option"
-                  "shift"
-                ];
-              }
-            ]
-          )
         ]
         ++ [
           # 20 letter-to-letter remaps (Dvorak positions)
