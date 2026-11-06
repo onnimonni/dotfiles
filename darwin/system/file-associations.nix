@@ -1,33 +1,90 @@
-{ pkgs, lib, ... }:
-let
-  # Extensions with no registered UTI -> macOS makes dyn.* UTIs that duti
-  # cannot bind. Use LaunchServices LSHandlers with
-  # LSHandlerContentTagClass = "public.filename-extension" instead, which
-  # binds by extension directly. Bundle IDs must be lower-case to match
-  # what `lsregister` stores.
-  extHandlers = {
-    "com.microsoft.vscode" = [
-      "ex"
-      "exs"
-      "tf"
-      "test"
-    ];
-  };
-
-  extHandlersJson = builtins.toJSON extHandlers;
-in
+# Default apps, declared next to each app:
+#
+#   fileAssociations."abnerworks.Typora" = [ "md" "markdown" ];
+#   urlHandlers."se.johnste.finicky" = [ "http" ];
+#
+# fileAssociations entries are either file extensions ("md") or, when they
+# contain a dot, Uniform Type Identifiers covering many extensions at once
+# ("public.source-code"). Routing to duti / LSHandlers happens here.
 {
-  home.packages = [
-    pkgs.duti
+  pkgs,
+  lib,
+  config,
+  ...
+}:
+let
+  pairs =
+    attrs:
+    lib.concatLists (
+      lib.mapAttrsToList (
+        bid:
+        map (entry: {
+          inherit bid entry;
+        })
+      ) attrs
+    );
+  isUti = p: lib.hasInfix "." p.entry;
+  lines = l: lib.concatStringsSep "\n" l + "\n";
+
+  fileEntries = pairs config.fileAssociations;
+
+  dutiConf = lines (
+    map (p: "${p.bid} ${p.entry}") (pairs config.urlHandlers)
+    ++ map (p: "${p.bid} ${p.entry} all") (lib.filter isUti fileEntries)
+  );
+
+  # Extensions whose system UTI belongs to an unrelated format: binding the UTI
+  # would also steal its other extensions, so bind by extension only.
+  extensionOnly = [
+    "exs" # Elixir script vs Logic sampler UTI com.apple.logic.exs (shared with .sbk)
   ];
 
-  # Create a home activation script to apply duti settings
-  home.activation = {
-    setFileAssociation = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      echo "Setting file associations with duti..."
-      ${pkgs.duti}/bin/duti ~/.duti.conf
+  # Bundle IDs must be lower-case to match what `lsregister` stores
+  extensionsTsv = lines (
+    map (
+      p: "${lib.toLower p.bid}\t${p.entry}\t${if lib.elem p.entry extensionOnly then "ext" else "uti"}"
+    ) (lib.filter (p: !isUti p) fileEntries)
+  );
 
-      echo "Setting file associations via LSHandlers for extensions without UTIs..."
+  appList =
+    example:
+    lib.mkOption {
+      type = with lib.types; attrsOf (listOf str);
+      default = { };
+      inherit example;
+    };
+in
+{
+  options = {
+    fileAssociations = appList { "abnerworks.Typora" = [ "md" ]; } // {
+      description = "App bundle id -> file extensions or UTIs it opens by default.";
+    };
+    urlHandlers = appList { "se.johnste.finicky" = [ "http" ]; } // {
+      description = "App bundle id -> URL schemes it opens by default.";
+    };
+  };
+
+  config = {
+    home.packages = [
+      pkgs.duti
+    ];
+
+    home.activation.setFileAssociation = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      echo "Setting file associations..."
+      ${pkgs.duti}/bin/duti ${pkgs.writeText "duti.conf" dutiConf}
+
+      # Extensions with no registered UTI -> macOS makes dyn.* UTIs that duti
+      # cannot bind (it exits non-zero). Bind those, and extensionOnly ones, via
+      # LaunchServices LSHandlers with LSHandlerContentTagClass =
+      # "public.filename-extension" instead.
+      FALLBACK="$(mktemp -t lshandlers.XXXXXX.tsv)"
+      while IFS=$'\t' read -r bid ext mode; do
+        [ -n "$ext" ] || continue
+        if [ "$mode" = ext ] || ! ${pkgs.duti}/bin/duti -s "$bid" ".$ext" all >/dev/null 2>&1; then
+          printf '%s\t%s\n' "$bid" "$ext" >> "$FALLBACK"
+        fi
+      done < ${pkgs.writeText "file-extensions.tsv" extensionsTsv}
+
       PLIST="$HOME/Library/Preferences/com.apple.LaunchServices/com.apple.launchservices.secure.plist"
       TMP="$(mktemp -t lshandlers.XXXXXX.json)"
       TMP_NEW="$TMP.new"
@@ -40,8 +97,8 @@ in
       fi
 
       ${pkgs.jq}/bin/jq \
-        --argjson map '${extHandlersJson}' '
-        ( [ $map | to_entries[] | .key as $bid | .value[] | { bid: $bid, ext: . } ] ) as $desired
+        --rawfile fallback "$FALLBACK" '
+        ( $fallback | split("\n") | map(select(length > 0) | split("\t") | { bid: .[0], ext: .[1] }) ) as $desired
         | .LSHandlers = (
             ( (.LSHandlers // []) | map(
                 select(
@@ -59,36 +116,10 @@ in
       ' "$TMP" > "$TMP_NEW"
 
       /usr/bin/plutil -convert binary1 -o "$PLIST" "$TMP_NEW"
-      rm -f "$TMP" "$TMP_NEW"
+      rm -f "$TMP" "$TMP_NEW" "$FALLBACK"
 
       /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister \
         -kill -r -domain local -domain system -domain user >/dev/null 2>&1 || true
-    '';
-  };
-  home.file = {
-    ".duti.conf".text = ''
-      # Open links in Finicky
-      se.johnste.finicky http
-      se.johnste.finicky com.apple.default-app.web-browser
-
-      # VLC
-      org.videolan.vlc mkv all
-      org.videolan.vlc mp4 all
-      org.videolan.vlc avi all
-      org.videolan.vlc mp3 all
-      org.videolan.vlc mov all
-      org.videolan.vlc wav all
-      org.videolan.vlc flac all
-      org.videolan.vlc ogg all
-      org.videolan.vlc webm all
-      org.videolan.vlc webp all
-
-      # VS Code (only UTIs / extensions macOS already knows about)
-      com.microsoft.VSCode public.source-code	all
-      com.microsoft.VSCode public.plain-text all
-      com.microsoft.VSCode .xml all
-      com.microsoft.VSCode .md all
-      # .ex .exs .tf .test handled via LSHandlers in setFileAssociation above
     '';
   };
 }

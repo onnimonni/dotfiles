@@ -86,12 +86,6 @@ in
       # Notes and releasing blogs to https://flaky.build
       "notion"
 
-      # Easier markdown editing with nice copy paste
-      "typora"
-
-      # For video playback
-      "vlc"
-
       # Forcing newer MacOS on old Macbooks
       "opencore-patcher"
 

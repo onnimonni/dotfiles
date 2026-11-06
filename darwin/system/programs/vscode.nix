@@ -10,6 +10,16 @@
   # stubbed so nothing gets linked into ~/Applications/Home Manager Apps (which
   # would cause Finder to spam /Applications with "Visual Studio Code alias N" files).
   home-manager.users.${username} = {
+    fileAssociations."com.microsoft.VSCode" = [
+      "public.source-code"
+      "public.plain-text"
+      "xml"
+      "ex"
+      "exs"
+      "tf"
+      "test"
+    ];
+
     programs.vscode = {
       enable = true;
       package = pkgs.runCommand "vscode-stub" { } "mkdir -p $out";

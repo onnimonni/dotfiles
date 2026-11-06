@@ -5,7 +5,7 @@
     "vlc"
   ];
 
-  home-manager.users.${username}.fileAssociations.duti."org.videolan.vlc" = [
+  home-manager.users.${username}.fileAssociations."org.videolan.vlc" = [
     "mkv"
     "mp4"
     "avi"

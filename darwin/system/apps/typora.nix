@@ -5,9 +5,8 @@
     "typora"
   ];
 
-  home-manager.users.${username}.fileAssociations.duti."abnerworks.Typora" = [
-    "net.daringfireball.markdown"
-    ".md"
-    ".markdown"
+  home-manager.users.${username}.fileAssociations."abnerworks.Typora" = [
+    "md"
+    "markdown"
   ];
 }
