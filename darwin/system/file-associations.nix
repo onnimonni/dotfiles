@@ -28,9 +28,11 @@ let
 
   fileEntries = pairs config.fileAssociations;
 
-  dutiConf = lines (
-    map (p: "${p.bid} ${p.entry}") (pairs config.urlHandlers)
-    ++ map (p: "${p.bid} ${p.entry} all") (lib.filter isUti fileEntries)
+  # Set one by one, skipping unchanged: macOS asks "open with X or keep Y?"
+  # on every duti -s, even when nothing changes.
+  dutiTsv = lines (
+    map (p: "${p.bid}\t${p.entry}") (pairs config.urlHandlers)
+    ++ map (p: "${p.bid}\t${p.entry}\tall") (lib.filter isUti fileEntries)
   );
 
   # Extensions whose system UTI belongs to an unrelated format: binding the UTI
@@ -71,7 +73,11 @@ in
 
     home.activation.setFileAssociation = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       echo "Setting file associations..."
-      ${pkgs.duti}/bin/duti ${pkgs.writeText "duti.conf" dutiConf}
+      while IFS=$'\t' read -r bid target role; do
+        [ -n "$target" ] || continue
+        current="$(${pkgs.duti}/bin/duti -d "$target" 2>/dev/null || true)"
+        [ "''${current,,}" = "''${bid,,}" ] || ${pkgs.duti}/bin/duti -s "$bid" "$target" $role || true
+      done < ${pkgs.writeText "duti.tsv" dutiTsv}
 
       # Extensions with no registered UTI -> macOS makes dyn.* UTIs that duti
       # cannot bind (it exits non-zero). Bind those, and extensionOnly ones, via
@@ -80,6 +86,11 @@ in
       FALLBACK="$(mktemp -t lshandlers.XXXXXX.tsv)"
       while IFS=$'\t' read -r bid ext mode; do
         [ -n "$ext" ] || continue
+        # Already handled -> skip duti -s (it would prompt again)
+        current="$(${pkgs.duti}/bin/duti -x "$ext" 2>/dev/null | ${pkgs.coreutils}/bin/tail -n1 || true)"
+        if [ "$mode" != ext ] && [ "''${current,,}" = "$bid" ]; then
+          continue
+        fi
         if [ "$mode" = ext ] || ! ${pkgs.duti}/bin/duti -s "$bid" ".$ext" all >/dev/null 2>&1; then
           printf '%s\t%s\n' "$bid" "$ext" >> "$FALLBACK"
         fi
