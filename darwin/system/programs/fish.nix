@@ -164,21 +164,6 @@ in
         # Same but skip Homebrew bundle (no cask installs/upgrades) for fast iteration
         install-nix-fast = "sudo sh -c 'touch /var/run/nix-darwin-skip-homebrew; darwin-rebuild switch --flake \"$0\"; rc=$?; rm -f /var/run/nix-darwin-skip-homebrew; exit $rc' ~/.dotfiles/";
 
-        # Update ALL flake inputs, then install: partial updates
-        # (e.g. only nixpkgs) leave inputs like sops-nix pinned to removed
-        # builders (buildGo125Module removal broke eval on 2026-10-01)
-        update-nix = ''
-          nix flake update --flake ~/.dotfiles && \
-          sudo darwin-rebuild switch --flake ~/.dotfiles/
-        '';
-
-        update-all = ''
-          nix flake update --flake ~/.dotfiles && \
-          ~/.dotfiles/scripts/update-claude-code.sh && \
-          sudo darwin-rebuild switch --flake ~/.dotfiles/ && \
-          duckdb -c "UPDATE EXTENSIONS;"
-        '';
-
         # Reload fish config
         reload-fish = "source ~/.config/fish/config.fish";
 
@@ -244,6 +229,29 @@ in
       '';
 
       functions = {
+        # Functions, not aliases: a multi-line alias puts the appended $argv
+        # on its own line -> "The expanded command was empty".
+        # Update ALL flake inputs, then install: partial updates
+        # (e.g. only nixpkgs) leave inputs like sops-nix pinned to removed
+        # builders (buildGo125Module removal broke eval on 2026-10-01)
+        update-nix = {
+          description = "Update all flake inputs and switch";
+          body = ''
+            nix flake update --flake ~/.dotfiles
+            and sudo darwin-rebuild switch --flake ~/.dotfiles/
+          '';
+        };
+
+        update-all = {
+          description = "Update flake inputs, Claude Code, switch, DuckDB extensions";
+          body = ''
+            nix flake update --flake ~/.dotfiles
+            and ~/.dotfiles/scripts/update-claude-code.sh
+            and sudo darwin-rebuild switch --flake ~/.dotfiles/
+            and duckdb -c "UPDATE EXTENSIONS;"
+          '';
+        };
+
         # Force devenv to use BashDialect even when launched from fish.
         # Without this, $SHELL=~/.nix-profile/bin/fish makes devenv launch
         # bash → exec fish, and fish's interactive init (conf.d/nix-env.fish
@@ -282,7 +290,11 @@ in
         };
 
         free-up-disk = {
-          description = "Free disk: brew/container prune, rebuild, GC, trim trash";
+          description = "Free disk: cleanup, rebuild+upgrade, GC, prune old versions";
+          # Order: cheap cleanups first (frees space for the upgrade downloads),
+          # then `darwin-rebuild switch` (brew autoUpdate+upgrade), then prune
+          # what the upgrade left behind (old kegs, old cask versions, downloads).
+          #
           # `darwin-rebuild switch` BEFORE `nix-collect-garbage -d` so /etc/static
           # gets repointed at the current-system etc (a GC root) — otherwise GC
           # leaves a dangling /etc/static and breaks Touch ID / GUI-launched
@@ -293,6 +305,14 @@ in
           # (which tolerate no matches) and deletions go through `find`.
           body = ''
             set -l before (df -g / | awk 'NR==2 {print $4}')
+
+            # --- Cleanup (before upgrading) ---
+            # Unrooted store paths, in background alongside the cleanups below.
+            # Keeps all generations, so /etc/static stays rooted (and switch
+            # repoints it anyway). Unprivileged: daemon does the deleting.
+            set -l nixgc_log (mktemp -t nix-gc)
+            nix store gc >$nixgc_log 2>&1 &
+            set -l nixgc_pid $last_pid
             brew cleanup --prune=all; or return
             # Prune needs the apiserver; start it if down, stop again after.
             set -l started_container 0
@@ -327,7 +347,6 @@ in
             if test $started_container -eq 1
               container system stop
             end
-            sudo darwin-rebuild switch --flake ~/.dotfiles/; or return
 
             # devenv keeps GC roots per project under .devenv/gc: `shell` is the
             # current env, `shell-N-link` are old generations that pin whole
@@ -344,14 +363,6 @@ in
               end
             end
 
-            # Unprivileged run drops this user's old profile generations; the
-            # sudo run is needed for /nix/var/nix/profiles/system-*-link, which
-            # otherwise keep every past system closure alive.
-            nix-collect-garbage -d; or return
-            sudo nix-collect-garbage -d; or return
-            if not test -e (readlink -f /etc/static)
-              echo 'WARNING: /etc/static dangling — run sudo darwin-rebuild switch'
-            end
             xcrun simctl delete unavailable 2>/dev/null
 
             # Cargo target dirs untouched for 30 days (rebuilt on next build)
@@ -385,6 +396,40 @@ in
             # ~/.Trash is TCC-protected: even sudo gets EPERM without Full Disk
             # Access. Finder can empty it (needs one-time Automation consent).
             osascript -e 'tell application "Finder" to if (count items of trash) > 0 then empty trash' >/dev/null
+
+            wait $nixgc_pid
+            echo "nix store gc: "(tail -1 $nixgc_log)
+            rm -f $nixgc_log
+
+            # --- Update (brew autoUpdate+upgrade run on activation) ---
+            sudo darwin-rebuild switch --flake ~/.dotfiles/; or return
+
+            # --- Cleanup leftovers from the update ---
+            # Unprivileged run drops this user's old profile generations; the
+            # sudo run is needed for /nix/var/nix/profiles/system-*-link, which
+            # otherwise keep every past system closure alive.
+            nix-collect-garbage -d; or return
+            sudo nix-collect-garbage -d; or return
+            if not test -e (readlink -f /etc/static)
+              echo 'WARNING: /etc/static dangling — run sudo darwin-rebuild switch'
+            end
+
+            # Old kegs + every cached download (incl. the just-installed ones).
+            brew autoremove
+            brew cleanup --prune=all
+            # `brew cleanup` never touches Caskroom/<cask>/<version> dirs; upgrade
+            # usually drops the old one, but auto_updates casks and interrupted
+            # upgrades leave stale versions behind. Keep only the installed one.
+            set -l caskroom (brew --prefix)/Caskroom
+            brew list --cask --versions | while read -l token version extra
+              # Multiple versions listed or installed dir missing: don't guess.
+              test -z "$extra"; and test -d $caskroom/$token/$version; or continue
+              for v in $caskroom/$token/*
+                test (basename $v) = $version; and continue
+                echo "brew: removing stale cask $token "(basename $v)" ("(du -sh $v | cut -f1)")"
+                rm -rf $v
+              end
+            end
 
             set -l after (df -g / | awk 'NR==2 {print $4}')
             echo "Freed "(math $after - $before)"G — $after G free now."
