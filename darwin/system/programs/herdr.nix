@@ -39,8 +39,13 @@ in
 
       # Link devenv-agents plugin; relinks when the store path changes.
       # Needs a running herdr server, otherwise run `project plugin install`.
-      PATH="${lib.makeBinPath [ herdr ]}:$PATH" ${lib.getExe' project "project"} plugin install \
-        || echo "herdr not running: run 'project plugin install' after starting herdr"
+      # `herdr status server` exits 0 either way, so match its output.
+      if ${lib.getExe herdr} status server 2>/dev/null | grep -qx 'status: not running'; then
+        echo "herdr not running: skipped plugin link, run 'project plugin install' after starting herdr"
+      else
+        PATH="${lib.makeBinPath [ herdr ]}:$PATH" ${lib.getExe' project "project"} plugin install \
+          || echo "herdr plugin link failed: run 'project plugin install' after starting herdr"
+      fi
     '';
   };
 }
