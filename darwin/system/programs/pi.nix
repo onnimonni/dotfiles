@@ -22,7 +22,7 @@ let
     "npm:pi-claude-subscription"
   ];
 
-  # Provider settings from ~/Projects/ds4/docs/CLIENTS.md
+  # Provider settings from https://github.com/antirez/ds4/blob/main/docs/CLIENTS.md
   contextWindow = 262144;
   ds4Provider = {
     baseUrl = "http://127.0.0.1:8000/v1";

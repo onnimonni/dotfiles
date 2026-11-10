@@ -119,9 +119,6 @@ in
 
       # Google Antigravity CLI (provides `agy` binary; not in nixpkgs)
       "antigravity-cli"
-
-      # Speak to create text into any field
-      "handy"
     ];
 
     masApps = lib.optionalAttrs appStore {

@@ -73,6 +73,14 @@ Bump just that pin, then apply with `sudo darwin-rebuild switch --flake ~/.dotfi
 $ ./scripts/update-claude-code.sh
 ```
 
+## Local LLM coding agent (ds4)
+[antirez/ds4](https://github.com/antirez/ds4) is built from the `ds4` flake input
+(`darwin/packages/ds4.nix`); `nix flake update ds4` bumps it to latest.
+`ds4-agent` / `ds4-server` pick a model by installed RAM (64 GB → `qwen38-q2`,
+96 GB+ → `ds4f-q2`, 256 GB+ → `ds4f-q4`) and offer to download it into
+`~/.ds4/gguf` on first run (refused unless 500 GiB disk is free). Override with `DS4_MODEL=<target>`, download manually
+with `ds4-download <target>`.
+
 # After installation config
 1. Create new ssh key in Secretive
 2. Copy the public key into `~/.ssh/secretive.pub`
