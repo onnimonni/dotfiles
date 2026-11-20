@@ -15,19 +15,9 @@
           LogLevel ERROR
       '';
 
-      settings = {
-        # Use ssh keys through secretive
-        "*" = {
-          IdentityAgent = "/Users/${username}/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh";
-        };
-
-        # Use specific key for GitHub (no biometric prompts)
-        "github.com" = {
-          HostName = "github.com";
-          IdentityFile = "~/.ssh/github_secretive.pub";
-          IdentitiesOnly = true;
-        };
-      };
+      # IdentityAgent comes from keyfob's included ssh_config (programs/keyfob.nix);
+      # home-manager wants a "*" block declared alongside extraConfig
+      settings."*" = { };
     };
 
   };

@@ -21,9 +21,8 @@ git clone https://github.com/onnimonni/dotfiles ~/.dotfiles
 
 ~/.dotfiles/.install.sh
 
-# Then create age key with secure enclave
-mkdir -p ~/.config/sops/age/
-age-plugin-se keygen --access-control none -o ~/.config/sops/age/secure-enclave-key.txt
+# Then create Secure Enclave keys (SSH, age, git credentials) with keyfob
+keyfob init
 ```
 
 ## Using this config with your own user
@@ -82,9 +81,9 @@ $ ./scripts/update-claude-code.sh
 with `ds4-download <target>`.
 
 # After installation config
-1. Create new ssh key in Secretive
-2. Copy the public key into `~/.ssh/secretive.pub`
-3. Add it [into Github as new SSH key](https://github.com/settings/ssh/new) both as signing key and authentication key
+1. `keyfob init` creates Secure Enclave keys unlocked with Touch ID ([keyfob](https://github.com/onnimonni/keyfob))
+2. Add `~/.config/keyfob/ssh/default.pub` [into Github as new SSH key](https://github.com/settings/ssh/new) both as signing key and authentication key
+3. Add `keyfob age-recipient` to `.sops.yaml` and run `sops updatekeys` so this Mac can decrypt secrets (older `age1se1…` identities keep working: keyfob is also `age-plugin-se`)
 
 ## Add API key for Gemini
 You can create a new API key to use Gemini from command line here: https://aistudio.google.com/app/apikey
@@ -222,7 +221,7 @@ rebuilt with `shareMacDomain` set yet — re-run `sudo darwin-rebuild switch
 
 | Command | What it does |
 |---|---|
-| `ssh mac-studio` | Shell on the Mac Studio. ProxyCommand is the cloudflared tunnel; auth is your Secretive key. |
+| `ssh mac-studio` | Shell on the Mac Studio. ProxyCommand is the cloudflared tunnel; auth is your keyfob SSH key. |
 | `et-mac-studio` | Same shell, but over Eternal Terminal — resumes after network drops/sleep. Best with `tmux`/`zellij` on the far side for full session persistence. |
 | `scp mac-studio:foo ./` | File copy. Same path, same auth. |
 | `cloudflared access login <host>` | Refresh the Access session (browser flow). Cached at `~/.cloudflared/<host>-…-token`. |

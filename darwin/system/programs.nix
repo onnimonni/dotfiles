@@ -68,7 +68,7 @@
 
     # Secret management
     sops
-    age-plugin-se
+    # age-plugin-se comes from keyfob (programs/keyfob.nix), same identities
     # YubiKey PIV identities for sops
     age-plugin-yubikey
     age

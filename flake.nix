@@ -30,6 +30,11 @@
       url = "github:antirez/ds4";
       flake = false;
     };
+    # Secure Enclave keys for SSH, git, age and sudo, unlocked with Touch ID
+    keyfob = {
+      url = "github:onnimonni/keyfob";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # `project` CLI + herdr plugin for devenv worktrees
     devenv-agents = {
       url = "github:wyattjoh/devenv-agents";
@@ -102,6 +107,7 @@
             home-manager.darwinModules.home-manager
             sops-nix.darwinModules.sops
             inputs.nix-rosetta-builder.darwinModules.default
+            inputs.keyfob.darwinModules.default
             { system.configurationRevision = self.rev or self.dirtyRev or null; }
             ./darwin/system
           ];

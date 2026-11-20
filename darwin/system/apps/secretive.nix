@@ -1,19 +1,7 @@
-{ username, ... }:
-let
-  SSH_AUTH_SOCK = "/Users/${username}/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh";
-in
-{
+_: {
+  # TODO: remove once the keyfob 'default' SSH key is on GitHub and on every
+  # server that only trusts the Secretive keys. keyfob is the SSH agent now
+  # (programs/keyfob.nix); with homebrew cleanup = "uninstall", dropping this
+  # line uninstalls Secretive on the next rebuild.
   homebrew.casks = [ "secretive" ];
-
-  home-manager.users.${username} = {
-    home.sessionVariables = {
-      inherit SSH_AUTH_SOCK;
-    };
-
-    programs.ssh.settings."*".IdentityAgent = SSH_AUTH_SOCK;
-
-    home.file.".ssh/google_compute_engine".text = ''
-      # Fake file to allow gcloud to work with secretive
-    '';
-  };
 }
