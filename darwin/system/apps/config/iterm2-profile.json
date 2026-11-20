@@ -5,7 +5,7 @@
       "Guid": "dotfiles-managed-profile-001",
       "Dynamic Profile Parent Name": "Default",
       "Custom Command": "Custom Shell",
-      "Command": "fish",
+      "Command": "/run/current-system/sw/bin/fish",
       "Normal Font": "Monaco 14",
       "Non Ascii Font": "Monaco 14",
       "Use Non-ASCII Font": false,
